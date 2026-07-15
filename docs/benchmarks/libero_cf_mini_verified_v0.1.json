@@ -1,0 +1,65 @@
+{
+  "schema_version": "0.1",
+  "benchmark_id": "libero-cf-mini-v0.1",
+  "verified_on": "2026-07-15",
+  "manifest_sha256": "1660ab49ec0e5aac58f4801f0ec9a12326053f21f5f1974dd3b6ea63260f78c3",
+  "artifact_bundle_published": false,
+  "tasks": [
+    {
+      "task_key": "spatial-task0",
+      "context_id": "libero-spatial-task0-init0-wait30-seed42",
+      "snapshot_sha256": "22f220ce36eb42d3770d5a657452218beb690744ceed4ec516537826ece82e36",
+      "group_sha256": "5dfc75878b3807f7e612f2eb37f411ddf96cd83a820320442c92e4a53a172bff",
+      "artifact_sha256": "73014e3d079fcef7c8c3b4a8a5524d9c2e26e7e584c6ba95c3176b02eaacae97",
+      "mean_final_eef_pairwise_distance": 0.03959486715327739,
+      "mean_final_object_pairwise_distance": 0.09790671954798946,
+      "noop_final_eef_drift": 0.0000246710317476801,
+      "return_spread": 0.0,
+      "success_rate": 0.0,
+      "max_state_abs_error": 0.0,
+      "validation_passed": true
+    },
+    {
+      "task_key": "object-task0",
+      "context_id": "libero-object-task0-init0-wait30-seed43",
+      "snapshot_sha256": "d73e2f594d207095f8d0ade12006646d8cd003905c748f9ef70d73256b3548d3",
+      "group_sha256": "13e315747794370985511a4a228b04e01a54bcb619796398c8b961235326a5e8",
+      "artifact_sha256": "2bfda04f514e353977158c46306aa058517a56f890c5066e2aa69e57558ccdb1",
+      "mean_final_eef_pairwise_distance": 0.03957809886870484,
+      "mean_final_object_pairwise_distance": 0.11350344931133359,
+      "noop_final_eef_drift": 0.0000762307974349324,
+      "return_spread": 0.0,
+      "success_rate": 0.0,
+      "max_state_abs_error": 0.0,
+      "validation_passed": true
+    },
+    {
+      "task_key": "goal-task0",
+      "context_id": "libero-goal-task0-init0-wait30-seed44",
+      "snapshot_sha256": "aadc9f6f6a21e190c5793675d22866f341016c4fd98574e6f45ffae44d55bef9",
+      "group_sha256": "a07a54e94302371b44ddef955b43ecbb72e7c2f8e38bd7a8bbe37cbc38e4162e",
+      "artifact_sha256": "9e34e5df4cb50bba38ecde068096ccbadc8852a6b9c1c3f98bcc61d0a524bac3",
+      "mean_final_eef_pairwise_distance": 0.039591519347864125,
+      "mean_final_object_pairwise_distance": 0.08730143622876134,
+      "noop_final_eef_drift": 0.00003402985862670911,
+      "return_spread": 0.0,
+      "success_rate": 0.0,
+      "max_state_abs_error": 0.0,
+      "validation_passed": true
+    },
+    {
+      "task_key": "long-horizon-task0",
+      "context_id": "libero-10-task0-init0-wait30-seed45",
+      "snapshot_sha256": "ae5737d2947014272cce8236efb0d68389fb30c59a3165a9a94e9dd355e9a082",
+      "group_sha256": "36b78b842ada76c36b5c528df8f12add408dfc9ce7ab9fa739ed1d03c22acf45",
+      "artifact_sha256": "014aea0cf738521b91b60e14ace0b61b8561fe73de295a3702c878713a7fdf3a",
+      "mean_final_eef_pairwise_distance": 0.03962585963458628,
+      "mean_final_object_pairwise_distance": 0.12343427103714627,
+      "noop_final_eef_drift": 0.00006053874090315244,
+      "return_spread": 0.0,
+      "success_rate": 0.0,
+      "max_state_abs_error": 0.0,
+      "validation_passed": true
+    }
+  ]
+}

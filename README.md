@@ -20,7 +20,7 @@ the same initial state
 
 The project is in an early alpha. Its dependency-free core includes an analytic
 PointMass-2D benchmark, while opt-in isolated runners now cover one released StarWAM
-observation-to-action path and one real paired LIBERO simulator pilot.
+observation-to-action path and a four-family paired LIBERO-CF-Mini simulator pilot.
 
 ## Why another evaluation project?
 
@@ -113,16 +113,16 @@ PYTHONPATH=src python -m wamprobe demo --output runs/pointmass-demo
 - `wamprobe doctor` model layout, revision, size, Git LFS pointer, and SHA256 checks;
 - typed robot observations, action predictions, deterministic prediction artifacts, and a
   pinned StarWAM/LIBERO smoke runner;
-- dependency-free robot action-branch/future contracts plus a four-branch, eight-step
-  LIBERO snapshot/restore pilot with exact branch-order validation;
+- dependency-free robot action-branch/future contracts plus four task families × four
+  branches × eight steps in LIBERO-CF-Mini, with exact restore and branch-order validation;
 - Python 3.11–3.13 CI with linting, strict typing, and coverage.
 
 ## Roadmap
 
 The next milestones are:
 
-1. expand the LIBERO-CF-Mini pilot from one context to 3–5 task families;
-2. execute cached StarWAM candidate actions, then add LingBot-VA as a published reference;
+1. execute cached StarWAM candidate actions across LIBERO-CF-Mini;
+2. run action-mask/shuffle, seed, horizon, and NFE ablations;
 3. add a GPU nightly workflow for the isolated real-model integration;
 4. add the Occluded-Object memory diagnostic to the broader Toy tier.
 

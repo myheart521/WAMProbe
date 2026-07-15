@@ -117,21 +117,23 @@ This step uses the same isolated simulator environment but loads no model weight
 
 ```bash
 environments/starwam/.venv/bin/python environments/libero/generate_cf_pilot.py \
-  --gpu-index 0 --horizon 8
+  --gpu-index 0 --horizon 8 --run-dir runs/libero-cf-mini-v0.1
 ```
 
-The runner restores one fixed snapshot before `no-op`, positive/negative end-effector X,
-and gripper-close branches. It stores two camera views and state descriptors for all eight
+The runner restores one fixed snapshot in each of four task families before `no-op`,
+positive/negative end-effector X, and gripper-close branches. It stores two camera views
+and state descriptors for all eight
 future steps, repeats no-op, and executes all branches in reverse order. A successful run
 requires byte-identical MuJoCo integration states, force-refreshed initial observations,
 repeated rollouts, and order-independent branch results. See
 [`environments/libero/README.md`](../environments/libero/README.md) for the output layout
-and the required Python-side gripper-state restoration.
+and the required Python-side gripper-state restoration. Repeat `--task-key` to select a
+subset; verified outputs resume without reopening the simulator.
 
 ## What this demo does not prove
 
 PointMass-2D validates the evaluator and guards against metric bugs. The current LIBERO
-pilot validates paired data generation for one context, not policy quality: its diagnostic
-actions do not solve the task. Transfer claims still require multiple manipulation tasks,
-WAM future predictions, stochastic generation analysis, and correlation with closed-loop
-return.
+pilot validates paired data generation across four task families, not policy quality: its
+diagnostic actions do not solve the tasks. Transfer claims still require more initial
+states, WAM future predictions, stochastic generation analysis, and correlation with
+closed-loop return.

@@ -1065,6 +1065,14 @@ context-ID 对齐的 paired comparison；三个 benchmark 都能生成 JSON、Ma
 
 ### Phase 3：LIBERO-CF-Mini（第 8–10 周）
 
+当前进度（2026-07-15）：已固定 spatial/object/goal/long-horizon 四类任务的 BDDL、
+init-state 与上游 commit，批量生成 4 task × 4 branch × 8 step 的真实模拟器数据。每个任务
+均通过两次独立 restore、重复 no-op 与正反 branch order 检查，最大 integration-state 误差
+为 `0.0`；第二次整套运行在校验 JSON、snapshot、sidecar 和全部 PNG 后得到 4/4 cache hit。
+任务选择、MIT 许可证、完整 hash、零稀疏回报和适用边界见
+[`docs/benchmarks/LIBERO_CF_MINI.md`](benchmarks/LIBERO_CF_MINI.md)。扩大 init-state 数量、
+接入真实 WAM 预测与外部全新环境复现仍属于后续工作。
+
 任务：
 
 - simulator snapshot/restore；

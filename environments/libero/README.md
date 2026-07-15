@@ -1,15 +1,16 @@
-# LIBERO counterfactual pilot
+# LIBERO-CF-Mini counterfactual pilot
 
-This isolated runner generates four real action branches from one pinned LIBERO state. It
+This isolated runner generates four real action branches from four pinned LIBERO states. It
 does not load StarWAM or any other model weights; it reuses the existing Python 3.11
 environment because that environment already pins LIBERO, robosuite, MuJoCo, and Pillow.
 
 ```bash
 environments/starwam/.venv/bin/python environments/libero/generate_cf_pilot.py \
-  --gpu-index 0 --horizon 8
+  --gpu-index 0 --horizon 8 --run-dir runs/libero-cf-mini-v0.1
 ```
 
-The default output is ignored by Git and written below `runs/libero-cf-pilot/`:
+The default output is ignored by Git and written below `runs/libero-cf-mini/`. Each fixed
+task key gets the following directory, and the root receives a resumable `index.json`:
 
 ```text
 benchmark_provenance.json
@@ -28,16 +29,25 @@ clock state, controller state, Python and NumPy RNG state, and each gripper's st
 `current_action`. Omitting `current_action` makes branch results depend on execution order
 even when MuJoCo state restoration is exact.
 
-The runner executes the branch set in forward and reverse order and repeats the no-op
+The pinned manifest covers spatial-relation, object-identity, articulated-goal, and
+long-horizon-composition families. Use repeatable `--task-key` arguments to select a
+subset. The runner executes each branch set in forward and reverse order and repeats the no-op
 branch. It fails after writing `validation.json` if restored state/observations, repeated
-rollouts, or branch-order invariance are not exact.
+rollouts, or branch-order invariance are not exact. Failures remain structured in the root
+index; verified existing JSON, snapshots, sidecars, and PNGs resume as cache hits.
 
 The canonical initial observation is force-refreshed from the restored end-of-control
 state. It is intentionally compared against a second independent restore, not against the
 camera value returned by the preceding `step()`: robosuite can sample camera observables
 inside the control interval before the final simulator state is reached.
 
-## Verified fixed pilot
+## Verified multi-family pilot
+
+The four-task v0.1 evidence and limitations are recorded in the
+[LIBERO-CF-Mini benchmark card](../../docs/benchmarks/LIBERO_CF_MINI.md). The earlier
+single-task pilot below remains as a historical fixed-point check.
+
+### Earlier single-task fixed point
 
 The pinned 4-branch × 8-step run was repeated twice on 2026-07-15 with identical hashes:
 

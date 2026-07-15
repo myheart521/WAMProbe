@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Generate one pinned LIBERO counterfactual intervention group.
+"""Generate the pinned multi-family LIBERO-CF-Mini intervention suite.
 
 This runner needs the isolated StarWAM virtual environment only for its already-pinned
 LIBERO, robosuite, MuJoCo, PyTorch, and image dependencies. It does not load a WAM or any
@@ -25,17 +25,8 @@ from typing import Any
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 SOURCE_ROOT = REPOSITORY_ROOT / "src"
 LIBERO_ROOT = REPOSITORY_ROOT / "vendor" / "upstream" / "libero"
+MANIFEST_PATH = REPOSITORY_ROOT / "configs" / "benchmarks" / "libero_cf_mini_v0.1.json"
 
-LIBERO_REVISION = "8f1084e3132a39270c3a13ebe37270a43ece2a01"
-TASK_SUITE = "libero_spatial"
-TASK_ID = 0
-INIT_STATE_INDEX = 0
-WAIT_STEPS = 30
-SEED = 42
-TASK = "pick up the black bowl between the plate and the ramekin and place it on the plate"
-CONTEXT_ID = "libero-spatial-task0-init0-wait30"
-BDDL_SHA256 = "9b59eb1287802868ad9bc78d58e6d36d4ba31134e679cfdbdf4b0feb660c959b"
-INIT_STATES_SHA256 = "cbbc73792ce546c9bec181fd328a411d3183074840b282671dee481511381d0a"
 ACTION_SPACE = "libero-eef-delta-pose-gripper-v1"
 RESTORE_POLICY = "libero-integration-and-python-side-state-v1"
 CAMERAS = (
@@ -64,6 +55,7 @@ from wamprobe.api.counterfactual import (  # noqa: E402
     SimulatorSnapshotDescriptor,
 )
 from wamprobe.counterfactual import CounterfactualArtifact  # noqa: E402
+from wamprobe.libero_cf import LiberoTaskSpec, load_libero_cf_manifest  # noqa: E402
 
 
 @dataclass(slots=True)
@@ -277,10 +269,14 @@ def _numpy_rng_payload(state: tuple[Any, ...]) -> dict[str, object]:
     }
 
 
-def _runtime_sidecar(snapshot: RuntimeSnapshot, state_uri: str) -> dict[str, object]:
+def _runtime_sidecar(
+    snapshot: RuntimeSnapshot,
+    state_uri: str,
+    spec: LiberoTaskSpec,
+) -> dict[str, object]:
     return {
         "schema_version": "0.1",
-        "context_id": CONTEXT_ID,
+        "context_id": spec.context_id,
         "state_uri": state_uri,
         "libero_wrapper_state": [float(value) for value in snapshot.libero_state],
         "timestep": snapshot.timestep,
@@ -484,6 +480,7 @@ def _rollout(
     persist: bool,
     run_dir: Path,
     initial_frame: RobotStateFrame,
+    context_id: str,
 ) -> tuple[RobotFuture | None, BranchTrace]:
     import numpy as np
 
@@ -526,7 +523,7 @@ def _rollout(
 
     future = (
         RobotFuture(
-            context_id=CONTEXT_ID,
+            context_id=context_id,
             branch_id=branch_id,
             initial_frame=initial_frame,
             frames=tuple(typed_frames),
@@ -581,6 +578,7 @@ def _snapshot_descriptor(
     *,
     run_dir: Path,
     simulator_version: str,
+    spec: LiberoTaskSpec,
 ) -> SimulatorSnapshotDescriptor:
     import numpy as np
 
@@ -592,11 +590,15 @@ def _snapshot_descriptor(
     sidecar_path = run_dir / "snapshots" / "runtime_state.json"
     _write_json(
         sidecar_path,
-        _runtime_sidecar(snapshot, state_path.relative_to(run_dir).as_posix()),
+        _runtime_sidecar(
+            snapshot,
+            state_path.relative_to(run_dir).as_posix(),
+            spec,
+        ),
     )
     return SimulatorSnapshotDescriptor(
-        snapshot_id=CONTEXT_ID,
-        context_id=CONTEXT_ID,
+        snapshot_id=spec.context_id,
+        context_id=spec.context_id,
         simulator="LIBERO/robosuite/MuJoCo",
         simulator_version=simulator_version,
         state_format="numpy-npy-mujoco-mjSTATE_INTEGRATION-float64-v1",
@@ -612,54 +614,74 @@ def _snapshot_descriptor(
     )
 
 
-def _prepare_environment(run_dir: Path) -> tuple[Any, Any, str]:
+def _prepare_environment(
+    run_dir: Path,
+    spec: LiberoTaskSpec,
+    *,
+    expected_libero_revision: str,
+    benchmark_id: str,
+) -> tuple[Any, Any, str]:
     import mujoco
     import robosuite
     from libero.libero import benchmark, get_libero_path
     from libero.libero.envs import OffScreenRenderEnv
 
     revision = _git_revision(LIBERO_ROOT)
-    if revision != LIBERO_REVISION:
-        raise RuntimeError(f"LIBERO revision mismatch: expected {LIBERO_REVISION}, got {revision}")
-    suite = benchmark.get_benchmark_dict()[TASK_SUITE]()
-    task = suite.get_task(TASK_ID)
-    if task.language != TASK:
-        raise RuntimeError(f"pinned LIBERO task changed: expected {TASK!r}, got {task.language!r}")
-    bddl_path = Path(suite.get_task_bddl_file_path(TASK_ID))
+    if revision != expected_libero_revision:
+        raise RuntimeError(
+            f"LIBERO revision mismatch: expected {expected_libero_revision}, got {revision}"
+        )
+    suite = benchmark.get_benchmark_dict()[spec.task_suite]()
+    task = suite.get_task(spec.task_id)
+    if task.language != spec.task:
+        raise RuntimeError(
+            f"pinned LIBERO task changed: expected {spec.task!r}, got {task.language!r}"
+        )
+    if task.problem_folder != spec.problem_folder:
+        raise RuntimeError("pinned LIBERO problem folder changed")
+    if task.bddl_file != spec.bddl_file or task.init_states_file != spec.init_states_file:
+        raise RuntimeError("pinned LIBERO task filenames changed")
+    bddl_path = Path(suite.get_task_bddl_file_path(spec.task_id))
     init_states_path = (
         Path(get_libero_path("init_states")) / task.problem_folder / task.init_states_file
     )
-    if _sha256_file(bddl_path) != BDDL_SHA256:
+    if _sha256_file(bddl_path) != spec.bddl_sha256:
         raise RuntimeError("LIBERO BDDL hash mismatch")
-    if _sha256_file(init_states_path) != INIT_STATES_SHA256:
+    if _sha256_file(init_states_path) != spec.init_states_sha256:
         raise RuntimeError("LIBERO init-state hash mismatch")
     init_states = _load_init_states(init_states_path)
-    if init_states.shape != (50, 92):
+    if init_states.shape != spec.init_states_shape:
         raise RuntimeError(f"unexpected LIBERO init-state shape: {init_states.shape}")
+    if str(init_states.dtype) != spec.init_states_dtype:
+        raise RuntimeError(f"unexpected LIBERO init-state dtype: {init_states.dtype}")
 
     environment = OffScreenRenderEnv(
         bddl_file_name=str(bddl_path),
         camera_heights=256,
         camera_widths=256,
     )
-    environment.seed(SEED)
+    environment.seed(spec.seed)
     version = f"libero@{revision}/robosuite@{robosuite.__version__}/mujoco@{mujoco.__version__}"
     _write_json(
         run_dir / "benchmark_provenance.json",
         {
+            "benchmark_id": benchmark_id,
+            "task_key": spec.key,
+            "task_family": spec.task_family,
             "libero_revision": revision,
             "robosuite_version": robosuite.__version__,
             "mujoco_version": mujoco.__version__,
-            "task_suite": TASK_SUITE,
-            "task_id": TASK_ID,
-            "task": TASK,
-            "init_state_index": INIT_STATE_INDEX,
-            "wait_steps": WAIT_STEPS,
-            "seed": SEED,
+            "task_suite": spec.task_suite,
+            "task_id": spec.task_id,
+            "task": spec.task,
+            "context_id": spec.context_id,
+            "init_state_index": spec.init_state_index,
+            "wait_steps": spec.wait_steps,
+            "seed": spec.seed,
             "bddl_uri": str(bddl_path),
-            "bddl_sha256": BDDL_SHA256,
+            "bddl_sha256": spec.bddl_sha256,
             "init_states_uri": str(init_states_path),
-            "init_states_sha256": INIT_STATES_SHA256,
+            "init_states_sha256": spec.init_states_sha256,
             "init_states_shape": list(init_states.shape),
             "action_space": ACTION_SPACE,
             "control_frequency_hz": environment.env.control_freq,
@@ -673,14 +695,26 @@ def _prepare_environment(run_dir: Path) -> tuple[Any, Any, str]:
     return environment, init_states, version
 
 
-def _generate(run_dir: Path, horizon: int) -> CounterfactualArtifact:
+def _generate(
+    run_dir: Path,
+    horizon: int,
+    spec: LiberoTaskSpec,
+    *,
+    expected_libero_revision: str,
+    benchmark_id: str,
+) -> CounterfactualArtifact:
     import numpy as np
 
-    environment, init_states, simulator_version = _prepare_environment(run_dir)
+    environment, init_states, simulator_version = _prepare_environment(
+        run_dir,
+        spec,
+        expected_libero_revision=expected_libero_revision,
+        benchmark_id=benchmark_id,
+    )
     try:
         environment.reset()
-        observation = environment.set_init_state(init_states[INIT_STATE_INDEX])
-        for _ in range(WAIT_STEPS):
+        observation = environment.set_init_state(init_states[spec.init_state_index])
+        for _ in range(spec.wait_steps):
             observation, _, _, _ = environment.step(DUMMY_ACTION)
 
         snapshot = _capture_runtime_snapshot(environment)
@@ -688,6 +722,7 @@ def _generate(run_dir: Path, horizon: int) -> CounterfactualArtifact:
             snapshot,
             run_dir=run_dir,
             simulator_version=simulator_version,
+            spec=spec,
         )
         original_state = snapshot.integration_state.copy()
 
@@ -718,6 +753,7 @@ def _generate(run_dir: Path, horizon: int) -> CounterfactualArtifact:
                 persist=True,
                 run_dir=run_dir,
                 initial_frame=initial_frame,
+                context_id=spec.context_id,
             )
             if future is None:
                 raise AssertionError("persisted rollout did not return a future")
@@ -746,6 +782,7 @@ def _generate(run_dir: Path, horizon: int) -> CounterfactualArtifact:
                 persist=False,
                 run_dir=run_dir,
                 initial_frame=initial_frame,
+                context_id=spec.context_id,
             )
             reverse_traces[branch_id] = trace
 
@@ -758,6 +795,7 @@ def _generate(run_dir: Path, horizon: int) -> CounterfactualArtifact:
             persist=False,
             run_dir=run_dir,
             initial_frame=initial_frame,
+            context_id=spec.context_id,
         )
         order_comparisons = [
             (primary_traces[branch_id], reverse_traces[branch_id])
@@ -786,8 +824,8 @@ def _generate(run_dir: Path, horizon: int) -> CounterfactualArtifact:
             ),
         )
         group = RobotInterventionGroup(
-            context_id=CONTEXT_ID,
-            task=TASK,
+            context_id=spec.context_id,
+            task=spec.task,
             snapshot=descriptor,
             branches=tuple(branches),
         )
@@ -803,15 +841,184 @@ def _generate(run_dir: Path, horizon: int) -> CounterfactualArtifact:
         environment.close()
 
 
+def _artifact_cache_summary(
+    run_dir: Path,
+    spec: LiberoTaskSpec,
+    horizon: int,
+) -> dict[str, object] | None:
+    """Return verified cached metadata, or ``None`` when regeneration is required."""
+
+    artifact_path = run_dir / "intervention_group.json"
+    if not artifact_path.is_file():
+        return None
+    try:
+        payload = json.loads(artifact_path.read_text(encoding="utf-8"))
+        if not isinstance(payload, dict):
+            return None
+        artifact_sha256 = payload.get("artifact_sha256")
+        unsigned = {key: value for key, value in payload.items() if key != "artifact_sha256"}
+        computed = hashlib.sha256(
+            json.dumps(
+                unsigned,
+                allow_nan=False,
+                ensure_ascii=False,
+                separators=(",", ":"),
+                sort_keys=True,
+            ).encode("utf-8")
+        ).hexdigest()
+        if artifact_sha256 != computed:
+            return None
+        group = payload["group"]
+        validation = payload["validation"]
+        if not isinstance(group, dict) or not isinstance(validation, dict):
+            return None
+        if group.get("context_id") != spec.context_id or group.get("horizon") != horizon:
+            return None
+        if validation.get("passed") is not True:
+            return None
+
+        snapshot = group["snapshot"]
+        if not isinstance(snapshot, dict):
+            return None
+        _verify_cached_file(
+            run_dir,
+            snapshot["state_uri"],
+            snapshot["state_sha256"],
+            snapshot["state_size_bytes"],
+        )
+        _verify_cached_file(
+            run_dir,
+            snapshot["sidecar_uri"],
+            snapshot["sidecar_sha256"],
+            snapshot["sidecar_size_bytes"],
+        )
+        branches = group["branches"]
+        if not isinstance(branches, list) or len(branches) != len(BRANCH_ACTIONS):
+            return None
+        for branch in branches:
+            if not isinstance(branch, dict):
+                return None
+            future = branch["future"]
+            if not isinstance(future, dict):
+                return None
+            frames = [future["initial_frame"], *future["frames"]]
+            for frame in frames:
+                if not isinstance(frame, dict):
+                    return None
+                rgb_frames = frame["rgb_frames"]
+                if not isinstance(rgb_frames, list):
+                    return None
+                for reference in rgb_frames:
+                    if not isinstance(reference, dict):
+                        return None
+                    _verify_cached_file(
+                        run_dir,
+                        reference["uri"],
+                        reference["sha256"],
+                        reference["size_bytes"],
+                    )
+        return {
+            "task_key": spec.key,
+            "task_family": spec.task_family,
+            "context_id": spec.context_id,
+            "artifact": str(artifact_path),
+            "artifact_sha256": artifact_sha256,
+            "group_sha256": payload.get("group_sha256"),
+            "snapshot_sha256": snapshot.get("content_sha256"),
+            "branches": len(branches),
+            "horizon": horizon,
+            "metrics": payload.get("metrics"),
+            "validation": validation,
+        }
+    except (KeyError, OSError, TypeError, ValueError, json.JSONDecodeError):
+        return None
+
+
+def _verify_cached_file(
+    run_dir: Path,
+    raw_uri: object,
+    raw_sha256: object,
+    raw_size: object,
+) -> None:
+    if not isinstance(raw_uri, str) or not isinstance(raw_sha256, str):
+        raise ValueError("cached external reference fields have invalid types")
+    if isinstance(raw_size, bool) or not isinstance(raw_size, int):
+        raise ValueError("cached external reference size has an invalid type")
+    path = (run_dir / raw_uri).resolve()
+    path.relative_to(run_dir.resolve())
+    if path.stat().st_size != raw_size or _sha256_file(path) != raw_sha256:
+        raise ValueError(f"cached external reference failed verification: {raw_uri}")
+
+
+def _generated_summary(
+    run_dir: Path,
+    spec: LiberoTaskSpec,
+    artifact: CounterfactualArtifact,
+) -> dict[str, object]:
+    return {
+        "task_key": spec.key,
+        "task_family": spec.task_family,
+        "context_id": spec.context_id,
+        "artifact": str(run_dir / "intervention_group.json"),
+        "artifact_sha256": artifact.artifact_sha256,
+        "group_sha256": artifact.group.content_sha256,
+        "snapshot_sha256": artifact.group.snapshot.content_sha256,
+        "branches": len(artifact.group.branches),
+        "horizon": artifact.group.horizon,
+        "metrics": artifact.metrics.to_dict(),
+        "validation": artifact.validation.to_dict(),
+    }
+
+
+def _write_index(
+    run_dir: Path,
+    *,
+    benchmark_id: str,
+    manifest_path: Path,
+    selected_tasks: tuple[LiberoTaskSpec, ...],
+    records: list[dict[str, object]],
+) -> None:
+    _write_json(
+        run_dir / "index.json",
+        {
+            "schema_version": "0.1",
+            "benchmark_id": benchmark_id,
+            "manifest_uri": str(manifest_path),
+            "manifest_sha256": _sha256_file(manifest_path),
+            "selected_task_keys": [task.key for task in selected_tasks],
+            "tasks": records,
+            "completed": sum(record["status"] in {"generated", "cache-hit"} for record in records),
+            "failed": sum(record["status"] == "failed" for record in records),
+        },
+    )
+
+
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--gpu-index", type=int, default=0, help="physical EGL GPU index")
     parser.add_argument(
         "--run-dir",
         type=Path,
-        default=REPOSITORY_ROOT / "runs" / "libero-cf-pilot",
+        default=REPOSITORY_ROOT / "runs" / "libero-cf-mini",
+    )
+    parser.add_argument(
+        "--manifest",
+        type=Path,
+        default=MANIFEST_PATH,
+        help="pinned LIBERO-CF-Mini task manifest",
+    )
+    parser.add_argument(
+        "--task-key",
+        action="append",
+        default=[],
+        help="generate one manifest task key; repeat to select several (default: all)",
     )
     parser.add_argument("--horizon", type=int, default=8, help="control steps per action branch")
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="regenerate even when all content-addressed files verify",
+    )
     return parser.parse_args()
 
 
@@ -822,25 +1029,55 @@ def main() -> None:
     if args.horizon <= 0:
         raise ValueError("horizon must be positive")
     run_dir = args.run_dir.expanduser().resolve()
+    manifest_path = args.manifest.expanduser().resolve()
+    manifest = load_libero_cf_manifest(manifest_path)
+    selected_tasks = manifest.select(args.task_key)
     _configure_process(args.gpu_index, run_dir)
-    _set_seed(SEED)
-    artifact = _generate(run_dir, args.horizon)
-    print(
-        json.dumps(
-            {
-                "artifact": str(run_dir / "intervention_group.json"),
-                "artifact_sha256": artifact.artifact_sha256,
-                "group_sha256": artifact.group.content_sha256,
-                "snapshot_sha256": artifact.group.snapshot.content_sha256,
-                "branches": len(artifact.group.branches),
-                "horizon": artifact.group.horizon,
-                "metrics": artifact.metrics.to_dict(),
-                "validation": artifact.validation.to_dict(),
-            },
-            indent=2,
-            sort_keys=True,
+    records: list[dict[str, object]] = []
+    failures = 0
+    for spec in selected_tasks:
+        task_run_dir = run_dir / spec.key
+        cached = None if args.force else _artifact_cache_summary(task_run_dir, spec, args.horizon)
+        if cached is not None:
+            record = {**cached, "status": "cache-hit"}
+        else:
+            try:
+                _set_seed(spec.seed)
+                artifact = _generate(
+                    task_run_dir,
+                    args.horizon,
+                    spec,
+                    expected_libero_revision=manifest.libero_revision,
+                    benchmark_id=manifest.benchmark_id,
+                )
+                record = {
+                    **_generated_summary(task_run_dir, spec, artifact),
+                    "status": "generated",
+                }
+            except Exception as error:
+                failures += 1
+                record = {
+                    "task_key": spec.key,
+                    "task_family": spec.task_family,
+                    "context_id": spec.context_id,
+                    "status": "failed",
+                    "error_type": type(error).__name__,
+                    "error": str(error),
+                }
+        records.append(record)
+        _write_index(
+            run_dir,
+            benchmark_id=manifest.benchmark_id,
+            manifest_path=manifest_path,
+            selected_tasks=selected_tasks,
+            records=records,
         )
-    )
+        print(json.dumps(record, indent=2, sort_keys=True))
+    if failures:
+        raise RuntimeError(
+            f"{failures}/{len(selected_tasks)} LIBERO-CF-Mini tasks failed; "
+            f"inspect {run_dir / 'index.json'}"
+        )
 
 
 if __name__ == "__main__":
