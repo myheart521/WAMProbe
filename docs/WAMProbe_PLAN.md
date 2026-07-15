@@ -1126,8 +1126,12 @@ return 的 5-profile 描述性 Pearson 分别为 0.9855/1.0。全部结果、con
 与 [`docs/experiments/TOY_CLOSED_LOOP_V0.1.md`](experiments/TOY_CLOSED_LOOP_V0.1.md)。
 `0.1.0rc1` 候选版本现已具备双构建 SHA 一致性、归档安全/metadata 审计、证据 manifest、
 离线干净 wheel 安装 smoke、手动 provenance attestation workflow，并提供可在 Overleaf
-直接编译的 5 页技术报告初稿。正式 PyPI/GitHub Release、上游 PR 和外部用户复现仍需
-维护者或第三方授权，未被自动触发。
+直接编译的 5 页技术报告初稿。`v0.1.0rc1` 已作为 GitHub pre-release 发布，wheel 与
+sdist 的 provenance attestation 已登记；外部复现请求见
+[`WAMProbe#2`](https://github.com/myheart521/WAMProbe/issues/2)，StarWAM 第三方评测入口见
+[`StarWAM#2`](https://github.com/shaohua-pan/StarWAM/pull/2)。PyPI 首次发布仍等待在 PyPI
+登记 Pending Trusted Publisher，Overleaf 上传仍等待可用的账户登录态；独立用户 smoke
+在收到真实第三方报告前保持未完成。
 
 任务：
 

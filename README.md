@@ -142,6 +142,15 @@ PYTHONPATH=src python -m wamprobe demo --output runs/pointmass-demo
 - Python 3.11–3.13 CI with linting, strict typing, coverage, public JSON Schema validation,
   repository-local Markdown link checking, and a strict documentation build.
 
+## Release candidate
+
+[`v0.1.0rc1`](https://github.com/myheart521/WAMProbe/releases/tag/v0.1.0rc1) is
+available as a GitHub pre-release with an audited wheel, source distribution, release
+manifest, and GitHub build-provenance attestations. Independent users can report a clean
+installation smoke in [Issue #2](https://github.com/myheart521/WAMProbe/issues/2). PyPI
+publication remains pending the one-time Trusted Publisher registration for this new
+project; until then, install the wheel attached to the GitHub pre-release.
+
 ## Roadmap
 
 The next milestones are:
@@ -149,8 +158,8 @@ The next milestones are:
 1. expand LIBERO initial states and evaluate action-conditioned real-WAM futures when an
    adapter exposes that capability;
 2. add the Occluded-Object memory diagnostic to the broader Toy tier;
-3. obtain an independent reproduction smoke, then review the candidate for explicit
-   maintainer-approved PyPI/GitHub publication.
+3. finish the one-time PyPI Trusted Publisher registration, obtain an independent
+   reproduction smoke, then review the candidate for a final `v0.1.0` release.
 
 See the [detailed Chinese project plan](docs/WAMProbe_PLAN.md),
 [quick-start notes](docs/QUICKSTART.md), [failure-case evidence map](docs/research/WAM_VLA_FAILURE_CASES.md),
