@@ -989,8 +989,9 @@ CLI 验收要求：
 
 当前进度（2026-07-15）：15 个文献失败模式和首个 Adapter 审计已经完成，见
 [`docs/research/WAM_VLA_FAILURE_CASES.md`](research/WAM_VLA_FAILURE_CASES.md) 与
-[`docs/research/ADAPTER_SELECTION.md`](research/ADAPTER_SELECTION.md)。外部研究者 README
-理解度检查仍需人工完成。
+[`docs/research/ADAPTER_SELECTION.md`](research/ADAPTER_SELECTION.md)。MkDocs 文档站、
+严格站点构建、仓库内 Markdown 链接检查和公开 JSON Schema/规范实例验证也已进入 CI；
+外部研究者 README 理解度检查仍需人工完成。
 
 任务：
 
@@ -1121,7 +1122,7 @@ snapshot 执行全部动作块，并在 horizon 8/16/32 记录状态、回报和
 只执行 1 步并重规划，oracle future scorer 两任务 success 均为 1，noisy future scorer
 分别为 1.0/0.9167，三个 action-ignorance/wrong-direction 对照均为 0；离线 CRC 与闭环
 return 的 5-profile 描述性 Pearson 分别为 0.9855/1.0。全部结果、context-block CI 和限制
-见 [`examples/video-control-study/`](../examples/video-control-study/video-control-study.md)
+见 [`examples/video-control-study/`](https://github.com/myheart521/WAMProbe/blob/main/examples/video-control-study/video-control-study.md)
 与 [`docs/experiments/TOY_CLOSED_LOOP_V0.1.md`](experiments/TOY_CLOSED_LOOP_V0.1.md)。
 `0.1.0rc1` 候选版本现已具备双构建 SHA 一致性、归档安全/metadata 审计、证据 manifest、
 离线干净 wheel 安装 smoke、手动 provenance attestation workflow，并提供可在 Overleaf

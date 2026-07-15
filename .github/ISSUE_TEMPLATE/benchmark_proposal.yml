@@ -1,0 +1,51 @@
+name: Benchmark proposal
+description: Propose a paired intervention benchmark or benchmark extension
+title: "[Benchmark]: "
+labels: ["area:benchmark", "needs-rfc"]
+body:
+  - type: textarea
+    id: diagnostic_scope
+    attributes:
+      label: Diagnostic scope
+      description: Name the WAM failure modes and capability tier this benchmark evaluates.
+    validations:
+      required: true
+  - type: textarea
+    id: intervention_contract
+    attributes:
+      label: Intervention and restore contract
+      description: Describe shared contexts, legal action branches, snapshot restore, and branch-order checks.
+    validations:
+      required: true
+  - type: textarea
+    id: data_license
+    attributes:
+      label: Data, simulator, and asset licenses
+      description: Include upstream versions, licenses, redistribution limits, and required hashes.
+    validations:
+      required: true
+  - type: textarea
+    id: splits
+    attributes:
+      label: Splits and leakage controls
+      description: Define ID/OOD splits and how train/evaluation overlap is prevented or reported.
+    validations:
+      required: true
+  - type: textarea
+    id: smoke
+    attributes:
+      label: Smallest reproducible smoke path
+      description: Give one bounded command, hardware requirements, runtime, and expected structured output.
+    validations:
+      required: true
+  - type: checkboxes
+    id: evidence
+    attributes:
+      label: Required evidence
+      options:
+        - label: Generation or conversion code is included.
+          required: true
+        - label: A benchmark card states supported and unsupported claims.
+          required: true
+        - label: Oracle and failure baselines have expected-ordering tests.
+          required: true

@@ -13,6 +13,11 @@
       "sha256": "169ff5e6767f47dfd49eef15f5bc7fec6494da82392fbbc8c08e42878686d1cf"
     },
     {
+      "path": "configs/models/starwam-capabilities-v0.1.json",
+      "kind": "model-capability-manifest",
+      "sha256": "736bb77b1edc87760b4a1e6640d8df15db3693c1fe1331821873bb359e41ea49"
+    },
+    {
       "path": "configs/benchmarks/libero_cf_mini_v0.1.json",
       "kind": "benchmark-manifest",
       "sha256": "1660ab49ec0e5aac58f4801f0ec9a12326053f21f5f1974dd3b6ea63260f78c3"
@@ -25,7 +30,7 @@
     {
       "path": "schemas/intervention-v0.1.schema.json",
       "kind": "public-schema",
-      "sha256": "0dfad48358608b523d2512b0e4f65111b4f0f07f106908463471f8d156702e60"
+      "sha256": "c842e6c3de0b9fa07347081e6dd4c90aaa5edc7c1abcfa7cb852ad30474eae52"
     },
     {
       "path": "schemas/result-v0.1.schema.json",

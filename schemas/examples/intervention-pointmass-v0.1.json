@@ -1,0 +1,15 @@
+{
+  "schema_version": "0.1",
+  "benchmark_id": "pointmass-2d-v0.1",
+  "state_kind": "pointmass-2d",
+  "context": {
+    "context_id": "schema-example-pointmass",
+    "position": [0.0, 0.0],
+    "goal": [1.0, 0.0]
+  },
+  "actions": [
+    {"name": "noop", "delta": [0.0, 0.0]},
+    {"name": "right", "delta": [0.25, 0.0]}
+  ],
+  "record_sha256": "707e01c332591ddf20f0218673744a5259be09282639ec7750379ba21e213c0d"
+}

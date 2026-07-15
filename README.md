@@ -6,6 +6,8 @@
 
 **Counterfactual evaluation for World Action Models.**
 
+Documentation: [myheart521.github.io/WAMProbe](https://myheart521.github.io/WAMProbe/)
+
 WAMProbe tests whether a World Action Model (WAM) predicts futures that are causally
 controlled by the input action and useful for choosing robot actions. It complements
 task-success and video-quality benchmarks with paired interventions:
@@ -137,7 +139,8 @@ PYTHONPATH=src python -m wamprobe demo --output runs/pointmass-demo
 - a versioned evidence manifest, byte-reproducible wheel/sdist builder, archive audit,
   offline clean-wheel demo smoke, manual provenance-attestation workflow, and LaTeX
   technical-report draft;
-- Python 3.11–3.13 CI with linting, strict typing, and coverage.
+- Python 3.11–3.13 CI with linting, strict typing, coverage, public JSON Schema validation,
+  repository-local Markdown link checking, and a strict documentation build.
 
 ## Roadmap
 
@@ -171,6 +174,8 @@ python -m pip install -e '.[dev]'
 ruff format --check .
 ruff check .
 mypy
+python scripts/validate_repository.py
+mkdocs build --strict
 pytest --cov=wamprobe --cov-report=term-missing
 ```
 

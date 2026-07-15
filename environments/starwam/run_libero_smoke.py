@@ -83,6 +83,7 @@ LIBERO_DUMMY_ACTION = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0]
 if str(SOURCE_ROOT) not in sys.path:
     sys.path.insert(0, str(SOURCE_ROOT))
 
+from wamprobe import __version__  # noqa: E402
 from wamprobe.adapters.starwam import (  # noqa: E402
     StarWAMAdapter,
     StarWAMBackendResult,
@@ -779,7 +780,7 @@ def _run_inference(
             observation=captured.observation,
             prediction=prediction,
             provenance=ModelProvenance(
-                adapter_version="0.1.0a0",
+                adapter_version=__version__,
                 upstream_code_revision=STARWAM_REVISION,
                 model_revision=MODEL_REVISION,
                 backbone_revision=BACKBONE_REVISION,
@@ -823,7 +824,7 @@ def _run_inference(
 
 def _provenance() -> ModelProvenance:
     return ModelProvenance(
-        adapter_version="0.1.0a0",
+        adapter_version=__version__,
         upstream_code_revision=STARWAM_REVISION,
         model_revision=MODEL_REVISION,
         backbone_revision=BACKBONE_REVISION,

@@ -8,6 +8,7 @@ __pycache__/
 .venv/
 build/
 dist/
+site/
 
 # Local data, model weights, generated predictions, and reports
 data/

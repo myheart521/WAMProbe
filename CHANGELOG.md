@@ -9,6 +9,8 @@ as a final GitHub Release.
 
 ### Added
 
+- Strict MkDocs documentation, GitHub Pages deployment, repository-local Markdown link
+  validation, and Draft 2020-12 validation of canonical public-schema instances.
 - Typed alpha `WAMAdapter` protocol and capability declaration.
 - Analytic PointMass-2D paired counterfactual benchmark.
 - Oracle, copy-last-frame, wrong-direction, and action-agnostic reference baselines.

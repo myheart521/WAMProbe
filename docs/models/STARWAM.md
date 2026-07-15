@@ -1,5 +1,9 @@
 # StarWAM adapter model card
 
+The machine-readable capability declaration is pinned in
+[`configs/models/starwam-capabilities-v0.1.json`](https://github.com/myheart521/WAMProbe/blob/main/configs/models/starwam-capabilities-v0.1.json)
+and validated against the public Draft 2020-12 capability schema in CI.
+
 ## Model and adapter identity
 
 | Field | Value |
@@ -9,7 +13,7 @@
 | Released model | `panshaohua/starwam@7d4bfe3ec76172ca17169fa959d21da099d386fe` |
 | Checkpoint SHA256 | `d24edea01579880327cfd9dc84d24adab82e420dca9652e614ad697bc8cc5378` |
 | Backbone | Wan2.2 TI2V-5B revision `921dbaf3f1674a56f47e83fb80a34bac8a8f203e` |
-| Adapter version | `0.1.0a0` |
+| Adapter version | `0.1.0rc1` |
 | Upstream code/model license | Apache-2.0 as declared by upstream repositories |
 
 The WAMProbe adapter is an isolated integration target, not a reimplementation or an

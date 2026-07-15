@@ -1,0 +1,21 @@
+{
+  "schema_version": "0.1",
+  "benchmark_id": "blockpush-2d-v0.1",
+  "state_kind": "manipulation-2d",
+  "context": {
+    "context_id": "schema-example-manipulation",
+    "initial_state": {
+      "effector_position": [-0.5, 0.0],
+      "object_position": [0.0, 0.0],
+      "gripper_closed": false,
+      "object_attached": false,
+      "in_contact": false
+    },
+    "goal": [0.5, 0.0]
+  },
+  "actions": [
+    {"name": "noop", "effector_delta": [0.0, 0.0], "close_gripper": false},
+    {"name": "push-right", "effector_delta": [0.25, 0.0], "close_gripper": false}
+  ],
+  "record_sha256": "46d0bd0e235afd6b992e04bffaa65564a14d63876b2afa306ca4c8b38a65b95c"
+}

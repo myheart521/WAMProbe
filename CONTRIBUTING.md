@@ -16,6 +16,8 @@ Before opening a pull request, run:
 ruff format --check .
 ruff check .
 mypy
+python scripts/validate_repository.py
+mkdocs build --strict
 pytest --cov=wamprobe --cov-report=term-missing --cov-fail-under=85
 ```
 

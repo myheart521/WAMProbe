@@ -1,44 +1,116 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/myheart521/WAMProbe/schemas/intervention-v0.1.schema.json",
-  "title": "WAMProbe 2D intervention suite v0.1",
-  "type": "object",
-  "additionalProperties": false,
-  "required": ["schema_version", "benchmark_id", "groups"],
-  "properties": {
-    "schema_version": {"const": "0.1"},
-    "benchmark_id": {"type": "string", "minLength": 1},
-    "groups": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "type": "object",
-        "required": ["context_id", "position", "goal", "actions"],
-        "properties": {
-          "context_id": {"type": "string", "minLength": 1},
-          "position": {"$ref": "#/$defs/vec2"},
-          "goal": {"$ref": "#/$defs/vec2"},
-          "actions": {
-            "type": "array",
-            "minItems": 2,
-            "items": {
-              "type": "object",
-              "required": ["name", "delta"],
-              "properties": {
-                "name": {"type": "string", "minLength": 1},
-                "delta": {"$ref": "#/$defs/vec2"}
-              }
-            }
-          }
-        }
-      }
-    }
-  },
+  "title": "WAMProbe intervention JSONL record v0.1",
+  "oneOf": [
+    {"$ref": "#/$defs/pointmass_record"},
+    {"$ref": "#/$defs/manipulation_record"}
+  ],
   "$defs": {
     "vec2": {
       "type": "array",
       "prefixItems": [{"type": "number"}, {"type": "number"}],
       "items": false
+    },
+    "pointmass_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "benchmark_id",
+        "state_kind",
+        "context",
+        "actions",
+        "record_sha256"
+      ],
+      "properties": {
+        "schema_version": {"const": "0.1"},
+        "benchmark_id": {"type": "string", "minLength": 1},
+        "state_kind": {"const": "pointmass-2d"},
+        "context": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["context_id", "position", "goal"],
+          "properties": {
+            "context_id": {"type": "string", "minLength": 1},
+            "position": {"$ref": "#/$defs/vec2"},
+            "goal": {"$ref": "#/$defs/vec2"}
+          }
+        },
+        "actions": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "delta"],
+            "properties": {
+              "name": {"type": "string", "minLength": 1},
+              "delta": {"$ref": "#/$defs/vec2"}
+            }
+          }
+        },
+        "record_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "manipulation_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "benchmark_id",
+        "state_kind",
+        "context",
+        "actions",
+        "record_sha256"
+      ],
+      "properties": {
+        "schema_version": {"const": "0.1"},
+        "benchmark_id": {"type": "string", "minLength": 1},
+        "state_kind": {"const": "manipulation-2d"},
+        "context": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["context_id", "initial_state", "goal"],
+          "properties": {
+            "context_id": {"type": "string", "minLength": 1},
+            "initial_state": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "effector_position",
+                "object_position",
+                "gripper_closed",
+                "object_attached",
+                "in_contact"
+              ],
+              "properties": {
+                "effector_position": {"$ref": "#/$defs/vec2"},
+                "object_position": {"$ref": "#/$defs/vec2"},
+                "gripper_closed": {"type": "boolean"},
+                "object_attached": {"type": "boolean"},
+                "in_contact": {"type": "boolean"}
+              }
+            },
+            "goal": {"$ref": "#/$defs/vec2"}
+          }
+        },
+        "actions": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "effector_delta", "close_gripper"],
+            "properties": {
+              "name": {"type": "string", "minLength": 1},
+              "effector_delta": {"$ref": "#/$defs/vec2"},
+              "close_gripper": {"type": "boolean"}
+            }
+          }
+        },
+        "record_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
     }
   }
 }

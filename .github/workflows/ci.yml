@@ -30,6 +30,12 @@ jobs:
         run: ruff check .
       - name: Type check
         run: mypy
+      - name: Validate JSON Schemas and Markdown links
+        if: matrix.python-version == '3.11'
+        run: python scripts/validate_repository.py
+      - name: Build documentation site
+        if: matrix.python-version == '3.11'
+        run: mkdocs build --strict
       - name: Test with coverage
         run: pytest --cov=wamprobe --cov-report=term-missing --cov-fail-under=85
 

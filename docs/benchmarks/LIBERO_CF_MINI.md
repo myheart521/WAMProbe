@@ -18,7 +18,7 @@ The fixed task manifest covers four intentionally different families:
 | `long-horizon-task0` | `libero_10` | long-horizon composition | two objects → basket |
 
 The source selection, task text, BDDL/init-state filenames and hashes are pinned in
-[`configs/benchmarks/libero_cf_mini_v0.1.json`](../../configs/benchmarks/libero_cf_mini_v0.1.json).
+[`configs/benchmarks/libero_cf_mini_v0.1.json`](https://github.com/myheart521/WAMProbe/blob/main/configs/benchmarks/libero_cf_mini_v0.1.json).
 The manifest's SHA256 is
 `1660ab49ec0e5aac58f4801f0ec9a12326053f21f5f1974dd3b6ea63260f78c3`.
 
@@ -69,7 +69,7 @@ reported four cache hits without opening a simulator.
 ## Reproduction
 
 Follow the isolated environment instructions in
-[`environments/libero/README.md`](../../environments/libero/README.md), then run:
+[`environments/libero/README.md`](https://github.com/myheart521/WAMProbe/blob/main/environments/libero/README.md), then run:
 
 ```bash
 environments/starwam/.venv/bin/python environments/libero/generate_cf_pilot.py \

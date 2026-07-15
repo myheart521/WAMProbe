@@ -90,7 +90,7 @@ Ranking Correlation, and Top-1 Regret. The `appearance-corrupted-oracle` deliber
 inverts rendered RGB while preserving exact dynamics: it therefore has FDE `0`, CRC `1`,
 and regret `0`, despite PSNR below `1 dB` in the committed run. This is a controlled metric
 counterexample, not a claim that visual fidelity is unimportant. See the
-[committed report](../examples/video-control-study/video-control-study.md).
+[committed report](https://github.com/myheart521/WAMProbe/blob/main/examples/video-control-study/video-control-study.md).
 
 ## Run minimal closed-loop replanning
 
@@ -119,7 +119,7 @@ policy, and deterministic random candidate selection. It preserves every context
 action sequence, final return, success, and gap to the simulator scorer. The committed
 12-context run found CRC/closed-return Pearson values of `0.9855` on BlockPush and `1.0000`
 on Gripper-Catch, but these are descriptive associations across only five future-scorer
-profiles. See the [report](../examples/closed-loop-study/closed-loop-study.md) and
+profiles. See the [report](https://github.com/myheart521/WAMProbe/blob/main/examples/closed-loop-study/closed-loop-study.md) and
 [experiment card](experiments/TOY_CLOSED_LOOP_V0.1.md).
 
 ## Audit a release candidate
@@ -135,7 +135,7 @@ uv sync --extra dev --locked
 
 The command writes ignored artifacts and `release-manifest.json` below
 `dist/release-candidate/`. It does not publish or tag anything. See the
-[release procedure](../release/README.md) and
+[release procedure](https://github.com/myheart521/WAMProbe/blob/main/release/README.md) and
 [reproducibility guide](reproducibility/REPRODUCIBILITY.md).
 
 Uncertainty is computed at the context level. Each bootstrap draw resamples whole shared
@@ -145,7 +145,7 @@ align exact context IDs and report the left-minus-right difference with a 95% in
 ## Validate real-model artifacts
 
 The first real adapter uses pinned StarWAM and Wan2.2 files stored outside Git. Follow
-[`checkpoints/README.md`](../checkpoints/README.md), then run:
+[`checkpoints/README.md`](https://github.com/myheart521/WAMProbe/blob/main/checkpoints/README.md), then run:
 
 ```bash
 wamprobe doctor
@@ -159,7 +159,7 @@ code `2` means the manifest itself could not be read safely. Use `--json` for au
 ## Run the opt-in StarWAM smoke probe
 
 After reproducing the isolated environment in
-[`environments/starwam/README.md`](../environments/starwam/README.md), select a physical
+[`environments/starwam/README.md`](https://github.com/myheart521/WAMProbe/blob/main/environments/starwam/README.md), select a physical
 GPU with enough free memory and run the text encoder and action model in separate
 processes:
 
@@ -192,7 +192,7 @@ and state descriptors for all eight
 future steps, repeats no-op, and executes all branches in reverse order. A successful run
 requires byte-identical MuJoCo integration states, force-refreshed initial observations,
 repeated rollouts, and order-independent branch results. See
-[`environments/libero/README.md`](../environments/libero/README.md) for the output layout
+[`environments/libero/README.md`](https://github.com/myheart521/WAMProbe/blob/main/environments/libero/README.md) for the output layout
 and the required Python-side gripper-state restoration. Repeat `--task-key` to select a
 subset; verified outputs resume without reopening the simulator.
 

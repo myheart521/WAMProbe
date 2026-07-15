@@ -11,6 +11,8 @@
 - [ ] `ruff format --check .`
 - [ ] `ruff check .`
 - [ ] `mypy`
+- [ ] `python scripts/validate_repository.py`
+- [ ] `mkdocs build --strict`
 - [ ] `pytest --cov=wamprobe --cov-report=term-missing`
 
 ## Metric/adapter/benchmark checklist

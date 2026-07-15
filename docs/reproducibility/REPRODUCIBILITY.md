@@ -54,7 +54,8 @@ an action-conditioned future for each proposed candidate.
 
 Run `scripts/build_release_candidate.py` from a clean commit. A valid candidate has two
 byte-reproducible distributions, a `release-manifest.json`, a passing offline clean-wheel
-install, and matching evidence hashes. See [`release/README.md`](../../release/README.md).
+install, and matching evidence hashes. See
+[`release/README.md`](https://github.com/myheart521/WAMProbe/blob/main/release/README.md).
 
 ## Independent reproduction report
 

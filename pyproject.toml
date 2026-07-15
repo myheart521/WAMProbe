@@ -23,6 +23,8 @@ wamprobe = "wamprobe.cli:main"
 
 [project.optional-dependencies]
 dev = [
+  "jsonschema>=4.25,<5",
+  "mkdocs>=1.6,<2",
   "mypy",
   "pytest",
   "pytest-cov",
