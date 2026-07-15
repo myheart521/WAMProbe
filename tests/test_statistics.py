@@ -45,9 +45,9 @@ def test_paired_metric_comparison_resamples_context_differences() -> None:
     assert comparison.right_model == "copy-last-frame"
     assert comparison.contexts == 8
     # Four directional branches have FDE 1.0; the valid no-op branch has FDE 0.0.
-    assert comparison.mean_difference == -0.8
-    assert comparison.confidence_interval.lower == -0.8
-    assert comparison.confidence_interval.upper == -0.8
+    assert comparison.mean_difference == pytest.approx(-0.8)
+    assert comparison.confidence_interval.lower == pytest.approx(-0.8)
+    assert comparison.confidence_interval.upper == pytest.approx(-0.8)
 
 
 def test_statistics_reject_invalid_inputs_and_unpaired_results() -> None:
