@@ -71,4 +71,21 @@ ties are excluded from that denominator.
 
 The suite generator accepts `contexts=1000` without external assets or simulator
 installation. Generated suites are deterministic for a fixed benchmark configuration and
-seed; a versioned on-disk intervention dataset loader remains a separate roadmap item.
+seed and can be exported as checksummed intervention JSONL.
+
+## Closed-loop protocol
+
+`wamprobe closed-loop-study` turns BlockPush and Gripper-Catch into a Tier-2 evaluator.
+At each cycle it scores the unchanged legal candidate set, executes only the selected
+trajectory prefix under exact benchmark dynamics, creates a new context from the resulting
+state, and scores again. The default prefix is one step and the default episode budget is
+the benchmark horizon (six BlockPush steps or five Gripper-Catch steps). Candidate scoring
+uses `min(prediction_horizon, remaining_episode_steps)`; this avoids rewarding or
+penalizing terminal predictions beyond the actual execution budget.
+
+The fixed comparison set contains five future-prediction adapters, deterministic random
+selection, an initial-context fixed action policy, and a greedy simulator-future scorer.
+Success means matching the simulator scorer's final return within `1e-9` for these exact
+analytic tasks. This equality is an evaluator sanity definition and must not be reused as a
+general robot-task success threshold. Full settings, results, and limitations are in the
+[experiment card](../experiments/TOY_CLOSED_LOOP_V0.1.md).

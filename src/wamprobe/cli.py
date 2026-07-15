@@ -36,6 +36,7 @@ from wamprobe.benchmarks.blockpush import BlockPush2D
 from wamprobe.benchmarks.gripper_catch import GripperCatch
 from wamprobe.benchmarks.pointmass import PointMass2D
 from wamprobe.cache import PredictionCache, PredictionCacheRequest
+from wamprobe.closed_loop import run_closed_loop_study, write_closed_loop_study
 from wamprobe.datasets import (
     DatasetValidationError,
     intervention_dataset_sha256,
@@ -154,6 +155,22 @@ def _build_parser() -> argparse.ArgumentParser:
     video_control.add_argument("--contexts", type=int, default=12)
     video_control.add_argument("--seed", type=int, default=7)
     video_control.add_argument("--output", type=Path, required=True)
+
+    closed_loop = subparsers.add_parser(
+        "closed-loop-study",
+        help="run minimal score-execute-observe replanning diagnostics",
+    )
+    closed_loop.add_argument(
+        "--benchmark",
+        choices=("blockpush", "gripper-catch", "all"),
+        default="all",
+    )
+    closed_loop.add_argument("--contexts", type=int, default=12)
+    closed_loop.add_argument("--seed", type=int, default=7)
+    closed_loop.add_argument("--control-steps", type=int, default=None)
+    closed_loop.add_argument("--execute-prefix", type=int, default=1)
+    closed_loop.add_argument("--resamples", type=int, default=1000)
+    closed_loop.add_argument("--output", type=Path, required=True)
     return parser
 
 
@@ -448,6 +465,26 @@ def _run_video_control_study(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_closed_loop_study(args: argparse.Namespace) -> int:
+    names = ("blockpush", "gripper-catch") if args.benchmark == "all" else (args.benchmark,)
+    try:
+        study = run_closed_loop_study(
+            benchmark_names=names,
+            contexts=args.contexts,
+            seed=args.seed,
+            control_steps=args.control_steps,
+            execute_prefix=args.execute_prefix,
+            resamples=args.resamples,
+        )
+        json_path, markdown_path = write_closed_loop_study(args.output, study)
+    except (OSError, ValueError) as error:
+        print(f"WAMProbe closed-loop study error: {error}", file=sys.stderr)
+        return 2
+    print(f"Closed-loop JSON: {json_path}")
+    print(f"Closed-loop Markdown: {markdown_path}")
+    return 0
+
+
 def _run_doctor(args: argparse.Namespace) -> int:
     try:
         manifest = load_manifest(args.manifest)
@@ -499,5 +536,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return _run_experiment_report(args)
     if args.command == "video-control-study":
         return _run_video_control_study(args)
+    if args.command == "closed-loop-study":
+        return _run_closed_loop_study(args)
     parser.error(f"unsupported command: {args.command}")
     return 2

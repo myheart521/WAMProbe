@@ -92,6 +92,36 @@ and regret `0`, despite PSNR below `1 dB` in the committed run. This is a contro
 counterexample, not a claim that visual fidelity is unimportant. See the
 [committed report](../examples/video-control-study/video-control-study.md).
 
+## Run minimal closed-loop replanning
+
+The closed-loop study uses the same candidate set at every decision, scores candidate
+futures, executes only the first true-dynamics step, then rebuilds the context from the
+resulting state and replans:
+
+```bash
+wamprobe closed-loop-study \
+  --benchmark all \
+  --contexts 12 \
+  --seed 7 \
+  --execute-prefix 1 \
+  --resamples 1000 \
+  --output runs/closed-loop-study
+```
+
+`--control-steps` overrides the default episode budget of one benchmark horizon.
+`--execute-prefix` controls how many selected chunk steps are executed before observing
+again. Candidate scores use at most the remaining episode budget, so a perfect fixed-
+horizon predictor is not penalized by a terminal score beyond the steps that can be
+executed.
+
+The report compares five future scorers with a simulator-future scorer, a fixed action-only
+policy, and deterministic random candidate selection. It preserves every context's chosen
+action sequence, final return, success, and gap to the simulator scorer. The committed
+12-context run found CRC/closed-return Pearson values of `0.9855` on BlockPush and `1.0000`
+on Gripper-Catch, but these are descriptive associations across only five future-scorer
+profiles. See the [report](../examples/closed-loop-study/closed-loop-study.md) and
+[experiment card](experiments/TOY_CLOSED_LOOP_V0.1.md).
+
 Uncertainty is computed at the context level. Each bootstrap draw resamples whole shared
 initial states, never individual action branches or adjacent frames. Paired comparisons
 align exact context IDs and report the left-minus-right difference with a 95% interval.
@@ -155,5 +185,6 @@ subset; verified outputs resume without reopening the simulator.
 PointMass-2D validates the evaluator and guards against metric bugs. The current LIBERO
 pilot validates paired data generation across four task families, not policy quality: its
 diagnostic actions do not solve the tasks. Transfer claims still require more initial
-states, WAM future predictions, stochastic generation analysis, and correlation with
-closed-loop return.
+states, action-conditioned real-WAM future predictions, stochastic generation analysis,
+and real-model closed-loop return. The analytic closed-loop study validates evaluator
+behavior; it does not fill those transfer gaps.

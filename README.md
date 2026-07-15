@@ -65,6 +65,10 @@ wamprobe demo --benchmark gripper-catch --horizon 5 --output runs/gripper-catch-
 # Contrast rendered-video fidelity with control-grounded metrics.
 wamprobe video-control-study --contexts 12 --seed 7 \
   --output runs/video-control-study
+
+# Score a candidate set, execute one true-dynamics step, observe, and replan.
+wamprobe closed-loop-study --contexts 12 --seed 7 \
+  --output runs/closed-loop-study
 ```
 
 The command creates:
@@ -83,7 +87,10 @@ See the committed [PointMass](examples/pointmass-demo/report.md),
 profiles. The committed
 [video/control counterexample](examples/video-control-study/video-control-study.md) shows
 that an appearance-corrupted oracle can keep exact state predictions and zero regret while
-receiving very low PSNR and global SSIM.
+receiving very low PSNR and global SSIM. The
+[closed-loop study](examples/closed-loop-study/closed-loop-study.md) then runs a real
+score-execute-observe loop: oracle/noisy future scorers solve BlockPush and reach at least
+91.7% Gripper-Catch success, while action-ignoring scorers receive zero success.
 
 Real-model weights are never committed to Git. Before running the StarWAM integration, follow the
 [model-store layout and download rules](checkpoints/README.md); the first spike requires
@@ -124,13 +131,17 @@ PYTHONPATH=src python -m wamprobe demo --output runs/pointmass-demo
   branches × eight steps in LIBERO-CF-Mini, with exact restore and branch-order validation;
 - dependency-free RGB PSNR/global SSIM diagnostics and a two-benchmark counterexample study
   that keeps traditional video fidelity separate from state accuracy and control value;
+- a minimal receding-horizon evaluator with random, fixed-policy, simulator-oracle, and
+  five future-scorer controls, per-context traces, bootstrap intervals, and offline/closed-loop
+  association analysis;
 - Python 3.11–3.13 CI with linting, strict typing, and coverage.
 
 ## Roadmap
 
 The next milestones are:
 
-1. expand fixed states and add a minimal replanning/closed-loop experiment;
+1. expand LIBERO initial states and evaluate action-conditioned real-WAM futures when an
+   adapter exposes that capability;
 2. add the Occluded-Object memory diagnostic to the broader Toy tier;
 3. prepare a traceable v0.1 release candidate and external reproduction smoke.
 
@@ -141,7 +152,9 @@ The exact toy dynamics and limitations are documented in the
 [toy benchmark card](docs/benchmarks/TOY_BENCHMARKS.md),
 [LIBERO-CF-Mini benchmark card](docs/benchmarks/LIBERO_CF_MINI.md),
 [StarWAM model card](docs/models/STARWAM.md), and
-[core metric cards](docs/metrics/CORE_METRICS.md).
+[core metric cards](docs/metrics/CORE_METRICS.md). The exact closed-loop protocol and
+limitations are recorded in the
+[toy closed-loop experiment card](docs/experiments/TOY_CLOSED_LOOP_V0.1.md).
 
 ## Development
 

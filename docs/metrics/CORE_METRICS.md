@@ -20,6 +20,9 @@ are never treated as independent samples.
 | Top-1 Regret | candidate returns | oracle return minus return of model-selected candidate | lower, ≥0 | depends on candidate-set coverage |
 | RGB PSNR | same-shape rendered RGB frames | `10 log10(255²/MSE)`, averaged over branches and frames | higher, dB; exact matches capped at 100 dB | pixel alignment and appearance can disagree with dynamics/control value |
 | Global SSIM diagnostic | same-camera rendered RGB frames | mean per-channel luminance/contrast/structure over each whole frame | higher, typically [-1,1] | not standard windowed SSIM and can hide local/contact errors |
+| Closed-loop return | repeated candidate scoring + true transition | task return after score-execute-observe replanning | higher; task-specific units | depends on candidate generator, scorer and execution budget |
+| Closed-loop success | shared context and oracle control | fraction matching the simulator-future scorer's return within the fixed tolerance | higher, [0,1] | toy equality threshold is not a general task-success definition |
+| Closed-loop oracle gap | same | simulator-future return minus controller return per context | lower; 0 matches reference | a greedy simulator scorer is not a proof of globally optimal control |
 | Latency | timed model call | synchronized wall time per prediction | lower, seconds | hardware and warm-up dependent |
 | Peak allocated/reserved memory | CUDA runtime | maximum allocator bytes during one prediction | lower, GiB | not total board memory or energy |
 | NFE sensitivity | matched inputs/seeds | paired action RMS and executed endpoint distance across NFE | lower means more stable | stability does not establish correctness |
@@ -44,6 +47,12 @@ regret metric. The built-in global variant is deliberately named `global_ssim`; 
 must not label it as standard windowed SSIM. Exact PSNR matches use a finite 100 dB cap so
 JSON remains portable.
 
+Closed-loop metrics additionally require a legal candidate generator, a fixed task scorer,
+an executable transition, and an explicit replanning contract. WAMProbe records the total
+control steps, executed prefix, candidate tie order and per-context action sequence. The
+scoring window is capped by the remaining execution budget. Controllers without predicted
+candidate futures retain `null` offline CRC/regret rather than receiving invented values.
+
 ## Reference-baseline expectations
 
 - Oracle dynamics should minimize ADE/FDE and regret while maximizing direction and CRC.
@@ -52,6 +61,9 @@ JSON remains portable.
 - Seeded noisy dynamics should degrade ADE/FDE and ranking as noise rises.
 - Appearance-corrupted oracle futures should preserve exact FDE/CRC/regret while degrading
   PSNR/global SSIM, demonstrating that video fidelity cannot replace control grounding.
+- Oracle/noisy future scorers should outperform copy-last, wrong-direction, and
+  action-agnostic scorers in the analytic closed loop; random and action-only controls stay
+  visible rather than being folded into a composite score.
 
 Any new metric must add a failure-mode statement, capability requirement, reference
 ordering test, aggregation unit and range/direction before it enters a public report.

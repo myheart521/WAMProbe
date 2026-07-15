@@ -1117,9 +1117,13 @@ snapshot 执行全部动作块，并在 horizon 8/16/32 记录状态、回报和
 当前进度（2026-07-15）：已在 BlockPush-2D 与 Gripper-Catch 上运行 12-context 的传统
 视频指标/控制价值反例研究。`appearance-corrupted-oracle` 保持 FDE=0、CRC=1、Regret=0，
 但 PSNR 约 0.59 dB；PSNR 与 regret 的跨 profile Pearson 约为 -0.16，且两个 benchmark
-分别出现 3/9 和 5/9 个可比较排序冲突。结果和限制已固化在
-[`examples/video-control-study/`](../examples/video-control-study/video-control-study.md)。
-最小 replanning/closed-loop、release artifact 追溯、技术报告和外部复现仍待完成。
+分别出现 3/9 和 5/9 个可比较排序冲突。最小 score-execute-observe 闭环也已落地：每次
+只执行 1 步并重规划，oracle future scorer 两任务 success 均为 1，noisy future scorer
+分别为 1.0/0.9167，三个 action-ignorance/wrong-direction 对照均为 0；离线 CRC 与闭环
+return 的 5-profile 描述性 Pearson 分别为 0.9855/1.0。全部结果、context-block CI 和限制
+见 [`examples/video-control-study/`](../examples/video-control-study/video-control-study.md)
+与 [`docs/experiments/TOY_CLOSED_LOOP_V0.1.md`](experiments/TOY_CLOSED_LOOP_V0.1.md)。
+release artifact 追溯、技术报告和外部复现仍待完成。
 
 任务：
 
