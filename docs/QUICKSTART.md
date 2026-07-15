@@ -15,11 +15,16 @@ The suite creates multiple actions from each shared initial state. The goal is p
 the final state of one directional action, so the simulator's optimal candidate is known
 exactly.
 
+The output directory contains `summary.json`, `report.md`, and a standalone
+`report.html`. The JSON preserves per-context values, descriptive statistics,
+context-block bootstrap intervals, and paired model differences.
+
 ## Built-in baselines
 
 | Baseline | Behavior | Diagnostic purpose |
 |---|---|---|
 | `oracle-pointmass` | Uses exact dynamics | Expected upper bound |
+| `noisy-linear` | Applies the action plus seeded transition noise | Checks smooth accuracy degradation |
 | `copy-last-frame` | Predicts no movement | Detects action ignorance |
 | `wrong-direction` | Applies the negative action | Separates dependence from correctness |
 | `action-agnostic` | Moves to the goal for every action | Mimics a plausible success prior |
@@ -28,17 +33,26 @@ exactly.
 
 - **Action Dependence** measures endpoint separation across action branches. It does not
   establish that the direction is correct.
+- **Permutation Effect** correlates true and predicted endpoint-distance geometry, then
+  standardizes it against action-label permutations within the same context. Its p-value
+  is reported separately; neither value replaces direction or dynamics metrics.
 - **Counterfactual Direction Accuracy** is mean cosine alignment between predicted and
   true non-noop displacement. `1` is aligned, `0` is uninformative, and `-1` is reversed.
 - **No-op Stability** is the fraction of no-op predictions whose final state remains at
   the shared initial position.
 - **State ADE** is average Euclidean state error over branches and time; lower is better.
+- **State FDE** is final-state Euclidean error averaged over every branch, including the
+  no-op branch; lower is better.
 - **Top-1 Regret** measures how much true return is lost by selecting the candidate that
   looks best under the predicted future; lower is better.
 
 WAMProbe intentionally reports a metric profile, not a composite score. A model may be
 action-dependent but physically wrong, or visually accurate but useless for candidate
 selection.
+
+Uncertainty is computed at the context level. Each bootstrap draw resamples whole shared
+initial states, never individual action branches or adjacent frames. Paired comparisons
+align exact context IDs and report the left-minus-right difference with a 95% interval.
 
 ## Validate real-model artifacts
 

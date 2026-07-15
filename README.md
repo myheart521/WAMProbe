@@ -53,7 +53,8 @@ The command creates:
 ```text
 runs/pointmass-demo/
 ├── summary.json  # versioned machine-readable results
-└── report.md     # human-readable metric comparison
+├── report.md     # human-readable metric comparison
+└── report.html   # standalone interactive-friendly report
 ```
 
 See the committed [example report](examples/pointmass-demo/report.md) for the expected
@@ -81,10 +82,11 @@ PYTHONPATH=src python -m wamprobe demo --output runs/pointmass-demo
 - typed, model-agnostic `WAMAdapter` and `ActionPredictorAdapter` protocols;
 - capability manifest data model and JSON Schema;
 - paired PointMass-2D counterfactual interventions;
-- oracle, copy-last-frame, wrong-direction, and action-agnostic baselines;
-- Action Dependence, Counterfactual Direction Accuracy, No-op Stability, state ADE,
-  and Top-1 Regret;
-- JSON and Markdown reports;
+- oracle, noisy-linear, copy-last-frame, wrong-direction, and action-agnostic baselines;
+- Action Dependence with a within-context permutation null, Counterfactual Direction
+  Accuracy, No-op Stability, state ADE/FDE, and Top-1 Regret;
+- context-block bootstrap intervals and exact-context paired model comparisons;
+- versioned JSON plus Markdown and standalone HTML reports;
 - `wamprobe doctor` model layout, revision, size, Git LFS pointer, and SHA256 checks;
 - typed robot observations, action predictions, deterministic prediction artifacts, and a
   pinned StarWAM/LIBERO smoke runner;
@@ -96,11 +98,11 @@ PYTHONPATH=src python -m wamprobe demo --output runs/pointmass-demo
 
 The next milestones are:
 
-1. context-block bootstrap confidence intervals;
-2. a small image-rendered BlockPush benchmark;
-3. the versioned intervention dataset loader;
-4. expand the LIBERO-CF-Mini pilot from one context to 3–5 task families;
-5. execute cached StarWAM candidate actions, then add LingBot-VA as a published reference.
+1. a small image-rendered BlockPush benchmark;
+2. the versioned intervention dataset loader;
+3. expand the LIBERO-CF-Mini pilot from one context to 3–5 task families;
+4. execute cached StarWAM candidate actions, then add LingBot-VA as a published reference;
+5. add a GPU nightly workflow for the isolated real-model integration.
 
 See the [detailed Chinese project plan](docs/WAMProbe_PLAN.md),
 [quick-start notes](docs/QUICKSTART.md), [failure-case evidence map](docs/research/WAM_VLA_FAILURE_CASES.md),

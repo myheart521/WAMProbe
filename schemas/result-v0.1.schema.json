@@ -32,6 +32,8 @@
           "context_results": {"type": "array"}
         }
       }
-    }
+    },
+    "statistics": {"type": "object"},
+    "paired_comparisons": {"type": "array"}
   }
 }

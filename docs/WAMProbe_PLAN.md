@@ -1036,6 +1036,12 @@ CLI 验收要求：
 
 ### Phase 2：Toy Benchmark 与核心指标（第 5–7 周）
 
+当前进度（2026-07-15）：PointMass-2D 已具有 5 个 reference baselines；ADS 的 context
+内 action-permutation null、CDA、NOS、state ADE/FDE、Top-1 Regret 已实现。每项指标先在
+context 层计算，再做 context-block bootstrap 和严格 context-ID 对齐的 paired comparison；
+示例同时生成 versioned JSON、Markdown 和 standalone HTML。Phase 2 尚缺 #10 的
+BlockPush/Gripper-Catch 与 CRC，不能据此宣称整个 Phase 2 完成。
+
 任务：
 
 - 实现 PointMass、BlockPush、Gripper-Catch；
@@ -1128,6 +1134,10 @@ v0.1 发布门槛：
 | #18 | Add first real WAM adapter | P0 | 7–10 天 | #2、#5 |
 | #19 | Add GPU nightly smoke workflow | P1 | 2 天 | #18 |
 | #20 | Write benchmark card and v0.1 reproducibility guide | P0 | 4 天 | 全部 |
+
+代码落地状态（2026-07-15）：本轮补齐并验证 #8、#11、#13、#15、#16；此前已完成
+#1–#5、#7、#9、#12、#14、#17 的当前 v0.1 切片。#6 和 #18 已有可运行的 StarWAM
+prediction artifact/adapter 切片，但更通用的 cache 与真实 WAM 反事实控制评测仍需继续扩展。
 
 建议 labels：
 
@@ -1244,30 +1254,30 @@ priority:p1
 ### 功能
 
 - [ ] `pip install wamprobe` 可以安装核心包；
-- [ ] `wamprobe doctor` 能检查 capability/benchmark 兼容性；
-- [ ] Toy benchmark 可在 CPU 完整运行；
-- [ ] 至少 4 个 reference baselines；
-- [ ] 至少 1 个真实 WAM adapter；
-- [ ] 至少 6 个核心指标；
+- [x] `wamprobe doctor` 能检查 capability/benchmark 兼容性；
+- [x] Toy benchmark 可在 CPU 完整运行；
+- [x] 至少 4 个 reference baselines；
+- [x] 至少 1 个真实 WAM adapter；
+- [x] 至少 6 个核心指标；
 - [ ] prediction cache 可恢复中断运行；
 - [ ] JSONL/JSON/HTML 输出齐全；
-- [ ] paired comparison 和 bootstrap CI 可用。
+- [x] paired comparison 和 bootstrap CI 可用。
 
 ### 研究有效性
 
-- [ ] oracle 与错误 baseline 能被稳定区分；
+- [x] oracle 与错误 baseline 能被稳定区分；
 - [ ] action shuffle/mask 产生预期指标下降；
-- [ ] 噪声增加时准确性指标总体退化；
+- [x] 噪声增加时准确性指标总体退化；
 - [ ] 至少一个 causal/ranking 指标与 simulator return 相关；
 - [ ] 报告传统视频指标与控制指标的差异；
 - [ ] 公开所有主要失败率和 skipped metrics。
 
 ### 工程质量
 
-- [ ] 核心 coverage ≥ 85%；
-- [ ] schema 有版本和兼容策略；
+- [x] 核心 coverage ≥ 85%；
+- [x] schema 有版本和兼容策略；
 - [ ] 所有 release artifact 可追溯；
-- [ ] README 15 分钟 quickstart 可执行；
+- [x] README 15 分钟 quickstart 可执行；
 - [ ] benchmark/model/metric cards 完整；
 - [ ] 至少一个外部用户复现 smoke test。
 

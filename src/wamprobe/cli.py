@@ -11,6 +11,7 @@ from pathlib import Path
 from wamprobe.adapters.baselines import (
     ActionAgnosticAdapter,
     CopyLastFrameAdapter,
+    NoisyLinearAdapter,
     OraclePointMassAdapter,
     WrongDirectionAdapter,
 )
@@ -35,7 +36,7 @@ def _build_parser() -> argparse.ArgumentParser:
         "--output",
         type=Path,
         default=Path("runs/pointmass-demo"),
-        help="directory for summary.json and report.md",
+        help="directory for summary.json, report.md, and report.html",
     )
     doctor = subparsers.add_parser("doctor", help="validate pinned local model artifacts")
     doctor.add_argument(
@@ -64,19 +65,22 @@ def _run_demo(args: argparse.Namespace) -> int:
     suite = benchmark.make_suite(contexts=args.contexts, seed=args.seed)
     adapters: list[WAMAdapter] = [
         OraclePointMassAdapter(benchmark),
+        NoisyLinearAdapter(),
         CopyLastFrameAdapter(),
         WrongDirectionAdapter(benchmark),
         ActionAgnosticAdapter(),
     ]
     results = [evaluate(adapter, benchmark, suite, seed=args.seed) for adapter in adapters]
-    summary_path, report_path = write_reports(
+    summary_path, report_path, html_path = write_reports(
         args.output,
         benchmark=benchmark.benchmark_id,
         results=results,
+        seed=args.seed,
     )
     print("WAMProbe demo complete")
     print(f"JSON: {summary_path}")
     print(f"Markdown: {report_path}")
+    print(f"HTML: {html_path}")
     return 0
 
 
