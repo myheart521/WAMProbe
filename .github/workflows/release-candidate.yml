@@ -12,13 +12,13 @@ jobs:
   build-audit-smoke:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@v8
         with:
           version: "0.11.6"
           enable-cache: true
@@ -27,13 +27,13 @@ jobs:
       - name: Build twice, audit evidence, and smoke clean wheel
         run: .venv/bin/python scripts/build_release_candidate.py
       - name: Attest wheel and source distribution provenance
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: |
             dist/release-candidate/*.whl
             dist/release-candidate/*.tar.gz
       - name: Upload candidate bundle
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: wamprobe-release-candidate-${{ github.sha }}
           if-no-files-found: error

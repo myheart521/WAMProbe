@@ -38,3 +38,8 @@ as a final GitHub Release.
   offline-ranking/return association analysis.
 - Release artifact audit, candidate workflow, clean-wheel smoke test, evidence manifest,
   and technical-report draft.
+
+### Changed
+
+- GitHub workflows now use the current Node 24-compatible major releases of official
+  checkout, Python setup, artifact, Pages, provenance, and uv setup actions.
