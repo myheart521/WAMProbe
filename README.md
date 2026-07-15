@@ -60,7 +60,7 @@ runs/pointmass-demo/
 See the committed [example report](examples/pointmass-demo/report.md) for the expected
 baseline ordering.
 
-Real-model weights are never committed to Git. Before the StarWAM integration, follow the
+Real-model weights are never committed to Git. Before running the StarWAM integration, follow the
 [model-store layout and download rules](checkpoints/README.md); the first spike requires
 approximately 46.3 GB of pinned StarWAM and Wan2.2 artifacts.
 
@@ -79,7 +79,7 @@ PYTHONPATH=src python -m wamprobe demo --output runs/pointmass-demo
 
 ## Current runnable scope
 
-- typed, model-agnostic `WAMAdapter` protocol;
+- typed, model-agnostic `WAMAdapter` and `ActionPredictorAdapter` protocols;
 - capability manifest data model and JSON Schema;
 - paired PointMass-2D counterfactual interventions;
 - oracle, copy-last-frame, wrong-direction, and action-agnostic baselines;
@@ -87,6 +87,8 @@ PYTHONPATH=src python -m wamprobe demo --output runs/pointmass-demo
   and Top-1 Regret;
 - JSON and Markdown reports;
 - `wamprobe doctor` model layout, revision, size, Git LFS pointer, and SHA256 checks;
+- typed robot observations, action predictions, deterministic prediction artifacts, and a
+  pinned StarWAM/LIBERO smoke runner;
 - Python 3.11–3.13 CI with linting, strict typing, and coverage.
 
 ## Roadmap
@@ -97,7 +99,7 @@ The next milestones are:
 2. a small image-rendered BlockPush benchmark;
 3. the versioned intervention dataset loader;
 4. LIBERO-CF-Mini paired simulator branches;
-5. a pinned StarWAM inference adapter, followed by LingBot-VA as a published reference.
+5. paired LIBERO simulator branches, then LingBot-VA as a published reference adapter.
 
 See the [detailed Chinese project plan](docs/WAMProbe_PLAN.md),
 [quick-start notes](docs/QUICKSTART.md), [failure-case evidence map](docs/research/WAM_VLA_FAILURE_CASES.md),

@@ -40,8 +40,10 @@ environments/starwam/.venv/bin/python -m pip install flash-attn --no-build-isola
 ```
 
 The tracked patch changes only model-inference checkpoint reads that were verified to be
-pure tensor mappings. It keeps LIBERO's separate legacy init-state compatibility path
-unchanged. Do not generalize `weights_only=True` changes to arbitrary data or optimizer
+pure tensor mappings. It also constructs UMT5 on the meta device before assigning its
+memory-mapped weights, avoiding a duplicate random model on the GPU. The WAMProbe smoke
+runner loads the pinned LIBERO NumPy init state with `weights_only=True` and a minimal
+NumPy allowlist. Do not generalize these changes to arbitrary data or optimizer
 checkpoints without inspecting their payloads first.
 
 ## Verified preflight
@@ -58,10 +60,40 @@ The pinned artifacts and environment passed the following checks on 2026-07-15:
   unexpected keys;
 - GPU 2 load-only smoke check: deterministic seed 42, `model.eval()`, 12.16 GB peak
   allocated and 12.38 GB peak reserved, followed by successful memory release.
+- fixed LIBERO observation: `libero_spatial` task 0, init state 0, 30 wait steps, two
+  256x256 RGB frames, eight ordered proprio values, and observation content SHA256
+  `051ac984bcbfad0ecd0184f86e0c3b1d148502a849337132b438fbf62f22a29b`;
+- real one-step action smoke: a denormalized `[32, 7]` chunk on an RTX 4090, 2.95 seconds
+  model-call latency, 11.386 GiB peak allocated, and 11.529 GiB peak reserved. The VAE
+  ran in FP32 on CPU while the released StarWAM action/DiT model ran in BF16 on GPU.
+- released eight-step setting: the same typed `[32, 7]` path completed in 2.81 seconds
+  with the same measured GPU peak and cache key
+  `c6c46faab2a33940fe40d20aba3fab311f8e17885ed753f963c8b51161d939e1`.
 
-This is a loadability check, not a successful LIBERO rollout or evidence that generated
-actions are correct. The next gate is one typed observation-to-action artifact with its
-resolved preprocessing and normalization metadata.
+These runs prove the typed observation-to-action integration path, not policy quality or
+rollout success. No predicted action was executed in the simulator, so neither artifact
+may be reported as a LIBERO benchmark result.
+
+## Reproduce the fixed smoke run
+
+Choose one physical GPU with sufficient free memory. Run T5 caching in a separate process
+so its memory is fully released before the action model is loaded:
+
+```bash
+environments/starwam/.venv/bin/python environments/starwam/run_libero_smoke.py \
+  --mode observe --gpu-index 0
+
+environments/starwam/.venv/bin/python environments/starwam/run_libero_smoke.py \
+  --mode text-cache --gpu-index 0 --minimum-free-gib 13
+
+environments/starwam/.venv/bin/python environments/starwam/run_libero_smoke.py \
+  --mode infer --gpu-index 0 --minimum-free-gib 15 \
+  --num-inference-steps 8 --vae-device cpu
+```
+
+Add `--verify-large-hashes` to rehash the checkpoint, VAE, and T5 before a run. Generated
+PNGs, text caches, observation metadata, and prediction JSON remain below
+`runs/starwam-libero-smoke/` and are ignored by Git.
 
 ## Local paths
 

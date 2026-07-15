@@ -54,6 +54,27 @@ Exit code `0` means every required model passed. Exit code `1` means an artifact
 missing, incomplete, the wrong size/hash, or from a conflicting recorded revision. Exit
 code `2` means the manifest itself could not be read safely. Use `--json` for automation.
 
+## Run the opt-in StarWAM smoke probe
+
+After reproducing the isolated environment in
+[`environments/starwam/README.md`](../environments/starwam/README.md), select a physical
+GPU with enough free memory and run the text encoder and action model in separate
+processes:
+
+```bash
+environments/starwam/.venv/bin/python environments/starwam/run_libero_smoke.py \
+  --mode text-cache --gpu-index 0 --minimum-free-gib 13
+
+environments/starwam/.venv/bin/python environments/starwam/run_libero_smoke.py \
+  --mode infer --gpu-index 0 --minimum-free-gib 15 \
+  --num-inference-steps 1 --vae-device cpu
+```
+
+The runner fixes LIBERO suite/task/init state/wait steps and seed, verifies upstream
+revisions and input hashes, records both camera transformations and proprio ordering, and
+writes a cache-keyed prediction JSON below `runs/starwam-libero-smoke/`. Use the one-step
+setting only as an integration smoke test; the published StarWAM recipe uses eight steps.
+
 ## What this demo does not prove
 
 PointMass-2D validates the evaluator and guards against metric bugs. It is not evidence

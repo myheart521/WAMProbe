@@ -6,10 +6,14 @@ from wamprobe.adapters.baselines import (
     OraclePointMassAdapter,
     WrongDirectionAdapter,
 )
+from wamprobe.adapters.starwam import StarWAMAdapter, StarWAMBackendResult, StarWAMRelease
 
 __all__ = [
     "ActionAgnosticAdapter",
     "CopyLastFrameAdapter",
     "OraclePointMassAdapter",
+    "StarWAMAdapter",
+    "StarWAMBackendResult",
+    "StarWAMRelease",
     "WrongDirectionAdapter",
 ]

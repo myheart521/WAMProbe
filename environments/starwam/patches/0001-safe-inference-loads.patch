@@ -21,19 +21,34 @@ index ad0574f..22ea9a2 100644
      _load_model_state(model, state)
      return _checkpoint_meta(payload, checkpoint)
 diff --git a/starwam/backbone/wan22.py b/starwam/backbone/wan22.py
-index 9a14d12..056b570 100644
+index 9a14d12..5b79254 100644
 --- a/starwam/backbone/wan22.py
 +++ b/starwam/backbone/wan22.py
-@@ -602,7 +602,7 @@ class T5EncoderModel:
+@@ -600,14 +600,21 @@ class T5EncoderModel:
+             encoder_only=True,
+             return_tokenizer=False,
              dtype=dtype,
-             device=device).eval().requires_grad_(False)
+-            device=device).eval().requires_grad_(False)
++            device="meta").eval().requires_grad_(False)
          logging.info(f'loading {checkpoint_path}')
 -        model.load_state_dict(torch.load(checkpoint_path, map_location='cpu', weights_only=False))
-+        model.load_state_dict(torch.load(checkpoint_path, map_location='cpu', weights_only=True))
++        state = torch.load(
++            checkpoint_path,
++            map_location='cpu',
++            weights_only=True,
++            mmap=True,
++        )
++        model.load_state_dict(state, assign=True)
          self.model = model
          if shard_fn is not None:
              self.model = shard_fn(self.model, sync_module_states=False)
-@@ -1490,7 +1490,7 @@ def _video_vae(pretrained_path=None, z_dim=16, dim=160, device="cpu", **kwargs):
+         else:
+             self.model.to(self.device)
++        del state
+         # init tokenizer
+         self.tokenizer = HuggingfaceTokenizer(
+             name=tokenizer_path, seq_len=text_len, clean='whitespace')
+@@ -1490,7 +1497,7 @@ def _video_vae(pretrained_path=None, z_dim=16, dim=160, device="cpu", **kwargs):
      # load checkpoint
      logging.info(f"loading {pretrained_path}")
      model.load_state_dict(

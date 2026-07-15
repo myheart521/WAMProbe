@@ -86,21 +86,29 @@ zero missing or unexpected entries. A load-only test on one RTX 4090 peaked at 1
 allocated and 12.38 GB reserved, used deterministic seed 42 and evaluation mode, and
 released the allocation afterward.
 
-These results clear artifact, environment, architecture, and loadability gates only. No
-LIBERO observation was executed, so action correctness, preprocessing correctness, runtime
-latency, and rollout success remain unverified.
+The first typed inference slice was subsequently completed on the same date. A fixed
+`libero_spatial` task-0 observation was generated from init state 0 after 30 dummy wait
+steps, with two raw RGB frames and the exact eight-dimensional proprio ordering. The
+pinned released model produced finite, denormalized `[32, 7]` action chunks with both the
+one-step smoke setting and the released eight-step setting. With the FP32 VAE offloaded to
+CPU and the BF16 action/DiT model on an RTX 4090, the eight-step model call took 3.38
+seconds on the first run and 2.81 seconds in the final recorded artifact, peaking at
+11.386 GiB allocated / 11.529 GiB reserved GPU memory.
+
+This clears the observation-to-action integration gate only. No action was executed in
+the simulator, and no rollout success or policy-quality claim is made.
 
 ## First adapter implementation slice
 
 The next coding slice is deliberately narrow:
 
-1. add a `starwam` optional dependency group or isolated environment specification;
-2. implement metadata-only discovery and `wamprobe doctor` compatibility checks first;
-3. download one checkpoint family and record immutable hashes outside Git;
-4. run one LIBERO observation through upstream inference and save a typed, cached artifact;
-5. expose only capabilities verified from that artifact;
-6. add a mocked CPU contract test and an opt-in GPU smoke test;
-7. defer counterfactual scoring until simulator snapshot/restore produces paired branches.
+1. isolated StarWAM environment and pinned local upstream snapshots: **complete**;
+2. metadata-only discovery and `wamprobe doctor` checks: **complete**;
+3. immutable model pins and required hashes: **complete**;
+4. typed, cached observation-to-action artifact: **complete**;
+5. capability declaration and mocked CPU contract tests: **complete**;
+6. opt-in fixed LIBERO GPU smoke runner: **complete**;
+7. paired simulator snapshot/restore and counterfactual scoring: **next**.
 
 ## Sources checked
 
