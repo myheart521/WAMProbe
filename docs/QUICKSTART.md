@@ -75,9 +75,27 @@ revisions and input hashes, records both camera transformations and proprio orde
 writes a cache-keyed prediction JSON below `runs/starwam-libero-smoke/`. Use the one-step
 setting only as an integration smoke test; the published StarWAM recipe uses eight steps.
 
+## Generate the paired LIBERO counterfactual pilot
+
+This step uses the same isolated simulator environment but loads no model weights:
+
+```bash
+environments/starwam/.venv/bin/python environments/libero/generate_cf_pilot.py \
+  --gpu-index 0 --horizon 8
+```
+
+The runner restores one fixed snapshot before `no-op`, positive/negative end-effector X,
+and gripper-close branches. It stores two camera views and state descriptors for all eight
+future steps, repeats no-op, and executes all branches in reverse order. A successful run
+requires byte-identical MuJoCo integration states, force-refreshed initial observations,
+repeated rollouts, and order-independent branch results. See
+[`environments/libero/README.md`](../environments/libero/README.md) for the output layout
+and the required Python-side gripper-state restoration.
+
 ## What this demo does not prove
 
-PointMass-2D validates the evaluator and guards against metric bugs. It is not evidence
-that the metrics transfer to manipulation videos. That requires paired simulator branches,
-perception-based state extraction, stochastic generation analysis, and correlation with
-closed-loop return; these are explicit later milestones.
+PointMass-2D validates the evaluator and guards against metric bugs. The current LIBERO
+pilot validates paired data generation for one context, not policy quality: its diagnostic
+actions do not solve the task. Transfer claims still require multiple manipulation tasks,
+WAM future predictions, stochastic generation analysis, and correlation with closed-loop
+return.

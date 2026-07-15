@@ -18,10 +18,9 @@ the same initial state
 └── expert act  → predicted future / true future
 ```
 
-The project is in an early alpha. Its first runnable slice is deliberately small and
-CPU-only: an analytic PointMass-2D benchmark verifies the public API and metrics against
-an oracle and several intentionally broken baselines before expensive robot models are
-integrated.
+The project is in an early alpha. Its dependency-free core includes an analytic
+PointMass-2D benchmark, while opt-in isolated runners now cover one released StarWAM
+observation-to-action path and one real paired LIBERO simulator pilot.
 
 ## Why another evaluation project?
 
@@ -89,6 +88,8 @@ PYTHONPATH=src python -m wamprobe demo --output runs/pointmass-demo
 - `wamprobe doctor` model layout, revision, size, Git LFS pointer, and SHA256 checks;
 - typed robot observations, action predictions, deterministic prediction artifacts, and a
   pinned StarWAM/LIBERO smoke runner;
+- dependency-free robot action-branch/future contracts plus a four-branch, eight-step
+  LIBERO snapshot/restore pilot with exact branch-order validation;
 - Python 3.11–3.13 CI with linting, strict typing, and coverage.
 
 ## Roadmap
@@ -98,8 +99,8 @@ The next milestones are:
 1. context-block bootstrap confidence intervals;
 2. a small image-rendered BlockPush benchmark;
 3. the versioned intervention dataset loader;
-4. LIBERO-CF-Mini paired simulator branches;
-5. paired LIBERO simulator branches, then LingBot-VA as a published reference adapter.
+4. expand the LIBERO-CF-Mini pilot from one context to 3–5 task families;
+5. execute cached StarWAM candidate actions, then add LingBot-VA as a published reference.
 
 See the [detailed Chinese project plan](docs/WAMProbe_PLAN.md),
 [quick-start notes](docs/QUICKSTART.md), [failure-case evidence map](docs/research/WAM_VLA_FAILURE_CASES.md),

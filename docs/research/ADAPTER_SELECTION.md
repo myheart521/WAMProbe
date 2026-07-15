@@ -98,6 +98,19 @@ seconds on the first run and 2.81 seconds in the final recorded artifact, peakin
 This clears the observation-to-action integration gate only. No action was executed in
 the simulator, and no rollout success or policy-quality claim is made.
 
+The paired simulator slice was then completed on the same pinned LIBERO context. Four
+eight-step action branches (`no-op`, positive/negative end-effector X, and gripper close)
+were generated from one content-addressed MuJoCo `mjSTATE_INTEGRATION` snapshot. The
+runner also restores robosuite clocks/controllers/observables, Python and NumPy RNG state,
+and Panda gripper `current_action`. Without that last Python-side value, two branches were
+experimentally shown to depend on execution order despite restoring MuJoCo state.
+
+The final pilot passed two independent snapshot restores, an exact repeated no-op rollout,
+and forward-versus-reverse branch execution with zero maximum state error. It produced
+four real futures and branch-separation metrics, but all returns and success values were
+zero because these are diagnostic interventions rather than a task-solving policy. This
+is not a LIBERO benchmark score.
+
 ## First adapter implementation slice
 
 The next coding slice is deliberately narrow:
@@ -108,7 +121,8 @@ The next coding slice is deliberately narrow:
 4. typed, cached observation-to-action artifact: **complete**;
 5. capability declaration and mocked CPU contract tests: **complete**;
 6. opt-in fixed LIBERO GPU smoke runner: **complete**;
-7. paired simulator snapshot/restore and counterfactual scoring: **next**.
+7. paired simulator snapshot/restore and counterfactual scoring: **complete**;
+8. execute cached StarWAM candidate branches and expand LIBERO-CF-Mini tasks: **next**.
 
 ## Sources checked
 

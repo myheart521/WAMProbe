@@ -507,6 +507,13 @@ oracle > noisy action-aware > action-agnostic > wrong-direction/copy-last
 - 记录渲染 FPS、控制 FPS 和 action repeat；
 - 对每个任务写 benchmark card，说明哪些物理属性可以可靠评测。
 
+2026-07-15 pilot 进展：已在固定 `libero_spatial` task 0/context 上生成 4 个分支、
+每分支 8 步和 2 个相机视角。恢复契约采用 MuJoCo `mjSTATE_INTEGRATION`，并额外恢复
+robosuite 时钟、controller、observable、Python/NumPy RNG 与 Panda gripper 的
+`current_action`。两次 restore、重复 no-op、正序/逆序执行均达到逐状态完全一致，
+最大状态误差为 0。该 pilot 的诊断动作 return/success 均为 0，因此只证明配对数据
+生成和分支分离，不是 LIBERO 策略成功率结果。
+
 ### 8.3 Tier 2：Closed-Loop Utility
 
 目标：验证离线指标是否与控制收益相关。
