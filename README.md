@@ -60,6 +60,10 @@ runs/pointmass-demo/
 See the committed [example report](examples/pointmass-demo/report.md) for the expected
 baseline ordering.
 
+Real-model weights are never committed to Git. Before the StarWAM integration, follow the
+[model-store layout and download rules](checkpoints/README.md); the first spike requires
+approximately 46.3 GB of pinned StarWAM and Wan2.2 artifacts.
+
 You can also run the module directly:
 
 ```bash

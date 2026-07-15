@@ -11,7 +11,8 @@ dist/
 
 # Local data, model weights, generated predictions, and reports
 data/
-checkpoints/
+checkpoints/*
+!checkpoints/README.md
 runs/
 *.ckpt
 *.pt

@@ -14,3 +14,5 @@ All notable changes to WAMProbe will be documented here.
 - JSON/Markdown reports, schemas, CLI, CI, and contributor documentation.
 - Phase 0 evidence map covering 15 reported WAM/VLA failure modes.
 - Version-pinned audit selecting StarWAM as the first real adapter target.
+- Provider-scoped local model store with pinned revisions, expected paths, sizes, and
+  checksums for the first StarWAM integration.
