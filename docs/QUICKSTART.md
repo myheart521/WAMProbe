@@ -72,6 +72,26 @@ WAMProbe intentionally reports a metric profile, not a composite score. A model 
 action-dependent but physically wrong, or visually accurate but useless for candidate
 selection.
 
+## Compare video fidelity with control value
+
+Run the deterministic counterexample study on both rendered manipulation benchmarks:
+
+```bash
+wamprobe video-control-study \
+  --benchmark all \
+  --contexts 12 \
+  --seed 7 \
+  --output runs/video-control-study
+```
+
+The command writes `video-control-study.json` and `video-control-study.md`. It reports
+PSNR and an explicitly labeled whole-frame global SSIM next to state FDE, Candidate
+Ranking Correlation, and Top-1 Regret. The `appearance-corrupted-oracle` deliberately
+inverts rendered RGB while preserving exact dynamics: it therefore has FDE `0`, CRC `1`,
+and regret `0`, despite PSNR below `1 dB` in the committed run. This is a controlled metric
+counterexample, not a claim that visual fidelity is unimportant. See the
+[committed report](../examples/video-control-study/video-control-study.md).
+
 Uncertainty is computed at the context level. Each bootstrap draw resamples whole shared
 initial states, never individual action branches or adjacent frames. Paired comparisons
 align exact context IDs and report the left-minus-right difference with a 95% interval.

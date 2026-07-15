@@ -48,6 +48,7 @@ from wamprobe.experiments import analyze_action_experiment, write_action_experim
 from wamprobe.manipulation_evaluation import evaluate_manipulation
 from wamprobe.reporting import write_reports
 from wamprobe.stats import paired_metric_comparison
+from wamprobe.video_control_study import run_video_control_study, write_video_control_study
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -140,6 +141,19 @@ def _build_parser() -> argparse.ArgumentParser:
     experiment_report.add_argument("matrix", type=Path, help="matrix-index.json path")
     experiment_report.add_argument("execution", type=Path, help="execution-index.json path")
     experiment_report.add_argument("--output", type=Path, required=True)
+
+    video_control = subparsers.add_parser(
+        "video-control-study",
+        help="compare traditional rendered-video fidelity with control metrics",
+    )
+    video_control.add_argument(
+        "--benchmark",
+        choices=("blockpush", "gripper-catch", "all"),
+        default="all",
+    )
+    video_control.add_argument("--contexts", type=int, default=12)
+    video_control.add_argument("--seed", type=int, default=7)
+    video_control.add_argument("--output", type=Path, required=True)
     return parser
 
 
@@ -417,6 +431,23 @@ def _run_experiment_report(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_video_control_study(args: argparse.Namespace) -> int:
+    names = ("blockpush", "gripper-catch") if args.benchmark == "all" else (args.benchmark,)
+    try:
+        study = run_video_control_study(
+            benchmark_names=names,
+            contexts=args.contexts,
+            seed=args.seed,
+        )
+        json_path, markdown_path = write_video_control_study(args.output, study)
+    except (OSError, ValueError) as error:
+        print(f"WAMProbe video-control study error: {error}", file=sys.stderr)
+        return 2
+    print(f"Video-control JSON: {json_path}")
+    print(f"Video-control Markdown: {markdown_path}")
+    return 0
+
+
 def _run_doctor(args: argparse.Namespace) -> int:
     try:
         manifest = load_manifest(args.manifest)
@@ -466,5 +497,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return _run_dataset_validate(args)
     if args.command == "experiment-report":
         return _run_experiment_report(args)
+    if args.command == "video-control-study":
+        return _run_video_control_study(args)
     parser.error(f"unsupported command: {args.command}")
     return 2

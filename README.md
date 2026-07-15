@@ -61,6 +61,10 @@ wamprobe report runs/pointmass-demo --output runs/rebuilt-report
 # Contact and attachment diagnostics use the same report pipeline.
 wamprobe demo --benchmark blockpush --horizon 6 --output runs/blockpush-demo
 wamprobe demo --benchmark gripper-catch --horizon 5 --output runs/gripper-catch-demo
+
+# Contrast rendered-video fidelity with control-grounded metrics.
+wamprobe video-control-study --contexts 12 --seed 7 \
+  --output runs/video-control-study
 ```
 
 The command creates:
@@ -76,7 +80,10 @@ runs/pointmass-demo/
 See the committed [PointMass](examples/pointmass-demo/report.md),
 [BlockPush](examples/blockpush-demo/report.md), and
 [Gripper-Catch](examples/gripper-catch-demo/report.md) reports for the expected baseline
-profiles.
+profiles. The committed
+[video/control counterexample](examples/video-control-study/video-control-study.md) shows
+that an appearance-corrupted oracle can keep exact state predictions and zero regret while
+receiving very low PSNR and global SSIM.
 
 Real-model weights are never committed to Git. Before running the StarWAM integration, follow the
 [model-store layout and download rules](checkpoints/README.md); the first spike requires
@@ -115,16 +122,17 @@ PYTHONPATH=src python -m wamprobe demo --output runs/pointmass-demo
   pinned StarWAM/LIBERO runner with multi-seed/NFE action execution reports;
 - dependency-free robot action-branch/future contracts plus four task families × four
   branches × eight steps in LIBERO-CF-Mini, with exact restore and branch-order validation;
+- dependency-free RGB PSNR/global SSIM diagnostics and a two-benchmark counterexample study
+  that keeps traditional video fidelity separate from state accuracy and control value;
 - Python 3.11–3.13 CI with linting, strict typing, and coverage.
 
 ## Roadmap
 
 The next milestones are:
 
-1. add a traditional video-quality versus control-value baseline study;
-2. expand fixed states and add a minimal replanning/closed-loop experiment;
-3. add the Occluded-Object memory diagnostic to the broader Toy tier;
-4. prepare a signed v0.1 release candidate and external reproduction smoke.
+1. expand fixed states and add a minimal replanning/closed-loop experiment;
+2. add the Occluded-Object memory diagnostic to the broader Toy tier;
+3. prepare a traceable v0.1 release candidate and external reproduction smoke.
 
 See the [detailed Chinese project plan](docs/WAMProbe_PLAN.md),
 [quick-start notes](docs/QUICKSTART.md), [failure-case evidence map](docs/research/WAM_VLA_FAILURE_CASES.md),

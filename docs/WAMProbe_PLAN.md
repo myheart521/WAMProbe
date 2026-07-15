@@ -1114,6 +1114,13 @@ snapshot 执行全部动作块，并在 horizon 8/16/32 记录状态、回报和
 
 ### Phase 5：控制价值与 v0.1 发布（第 14–16 周）
 
+当前进度（2026-07-15）：已在 BlockPush-2D 与 Gripper-Catch 上运行 12-context 的传统
+视频指标/控制价值反例研究。`appearance-corrupted-oracle` 保持 FDE=0、CRC=1、Regret=0，
+但 PSNR 约 0.59 dB；PSNR 与 regret 的跨 profile Pearson 约为 -0.16，且两个 benchmark
+分别出现 3/9 和 5/9 个可比较排序冲突。结果和限制已固化在
+[`examples/video-control-study/`](../examples/video-control-study/video-control-study.md)。
+最小 replanning/closed-loop、release artifact 追溯、技术报告和外部复现仍待完成。
+
 任务：
 
 - candidate ranking 和最小 closed-loop utility；
@@ -1293,7 +1300,7 @@ priority:p1
 - [x] action shuffle/permutation 产生预期指标下降；
 - [x] 噪声增加时准确性指标总体退化；
 - [x] 至少一个 causal/ranking 指标与 simulator return 相关；
-- [ ] 报告传统视频指标与控制指标的差异；
+- [x] 报告传统视频指标与控制指标的差异；
 - [x] 公开所有主要失败率和 skipped metrics。
 
 ### 工程质量

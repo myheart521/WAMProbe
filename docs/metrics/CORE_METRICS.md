@@ -18,6 +18,8 @@ are never treated as independent samples.
 | CRC NDCG | candidate returns | discounted gain after shifting relevance non-negative | higher, [0,1] | shift convention must stay fixed |
 | CRC pairwise accuracy | candidate returns | correct preference fraction; model ties receive 0.5 | higher, [0,1] | true-return ties are excluded |
 | Top-1 Regret | candidate returns | oracle return minus return of model-selected candidate | lower, ≥0 | depends on candidate-set coverage |
+| RGB PSNR | same-shape rendered RGB frames | `10 log10(255²/MSE)`, averaged over branches and frames | higher, dB; exact matches capped at 100 dB | pixel alignment and appearance can disagree with dynamics/control value |
+| Global SSIM diagnostic | same-camera rendered RGB frames | mean per-channel luminance/contrast/structure over each whole frame | higher, typically [-1,1] | not standard windowed SSIM and can hide local/contact errors |
 | Latency | timed model call | synchronized wall time per prediction | lower, seconds | hardware and warm-up dependent |
 | Peak allocated/reserved memory | CUDA runtime | maximum allocator bytes during one prediction | lower, GiB | not total board memory or energy |
 | NFE sensitivity | matched inputs/seeds | paired action RMS and executed endpoint distance across NFE | lower means more stable | stability does not establish correctness |
@@ -36,12 +38,20 @@ An undefined correlation caused by a constant outcome is serialized as JSON `nul
 explained in the report. A zero sparse success rate remains a reported negative result;
 it is not dropped from aggregation.
 
+PSNR and global SSIM are secondary diagnostics only. They require pixel futures in the
+same camera geometry and are never substituted for a missing state, causal, ranking, or
+regret metric. The built-in global variant is deliberately named `global_ssim`; reports
+must not label it as standard windowed SSIM. Exact PSNR matches use a finite 100 dB cap so
+JSON remains portable.
+
 ## Reference-baseline expectations
 
 - Oracle dynamics should minimize ADE/FDE and regret while maximizing direction and CRC.
 - Copy-last and action-agnostic baselines should have weak action dependence and ranking.
 - Wrong-direction should separate futures but have negative direction correctness.
 - Seeded noisy dynamics should degrade ADE/FDE and ranking as noise rises.
+- Appearance-corrupted oracle futures should preserve exact FDE/CRC/regret while degrading
+  PSNR/global SSIM, demonstrating that video fidelity cannot replace control grounding.
 
 Any new metric must add a failure-mode statement, capability requirement, reference
 ordering test, aggregation unit and range/direction before it enters a public report.
