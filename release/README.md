@@ -33,10 +33,17 @@ provenance attestations. It is manual-dispatch only.
 
 ## Public release boundary
 
+The audited `v0.1.0rc1` artifacts are available from the
+[GitHub pre-release](https://github.com/myheart521/WAMProbe/releases/tag/v0.1.0rc1), and
+the wheel and sdist have GitHub build-provenance attestations. The independent clean-smoke
+request is tracked in [Issue #2](https://github.com/myheart521/WAMProbe/issues/2). PyPI
+publication is pending the one-time Trusted Publisher registration for this new project.
+
 Before publishing, a maintainer must review the candidate manifest, confirm the version
 and changelog, obtain one independent clean-environment smoke report, configure the PyPI
 Trusted Publisher for the repository/environment, and approve both the Git tag and GitHub
-Release text. Public `v0.1.0` publication is intentionally not automated from this Draft PR.
+Release text. Final `v0.1.0` publication remains a separate maintainer decision after the
+release-candidate review.
 
 The guarded `Publish to PyPI` workflow is manual-dispatch only, runs only when the selected
 ref is a tag, requires the typed confirmation to equal that tag, verifies that
