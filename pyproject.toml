@@ -32,6 +32,16 @@ dev = [
 [tool.hatch.build.targets.wheel]
 packages = ["src/wamprobe"]
 
+[tool.hatch.build.targets.sdist]
+include = [
+  "/CHANGELOG.md",
+  "/CITATION.cff",
+  "/LICENSE",
+  "/README.md",
+  "/pyproject.toml",
+  "/src/wamprobe",
+]
+
 [tool.hatch.build]
 exclude = [
   "/.coverage",

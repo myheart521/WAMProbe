@@ -18,6 +18,10 @@ metadata, checks every committed evidence hash, installs the wheel without netwo
 dependencies in a fresh virtual environment, and runs the CLI/demo smoke. Outputs remain
 below ignored `dist/release-candidate/`:
 
+The sdist uses an explicit source/package-metadata allowlist instead of Hatch's default VCS
+file discovery, so a normal clone, shallow Actions checkout, and Git worktree select the
+same content.
+
 ```text
 wamprobe-<version>-py3-none-any.whl
 wamprobe-<version>.tar.gz
