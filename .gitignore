@@ -14,6 +14,7 @@ data/
 checkpoints/*
 !checkpoints/README.md
 runs/
+vendor/
 *.ckpt
 *.pt
 *.pth

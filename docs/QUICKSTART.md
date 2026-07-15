@@ -40,6 +40,20 @@ WAMProbe intentionally reports a metric profile, not a composite score. A model 
 action-dependent but physically wrong, or visually accurate but useless for candidate
 selection.
 
+## Validate real-model artifacts
+
+The first real adapter uses pinned StarWAM and Wan2.2 files stored outside Git. Follow
+[`checkpoints/README.md`](../checkpoints/README.md), then run:
+
+```bash
+wamprobe doctor
+wamprobe doctor --verify-hashes
+```
+
+Exit code `0` means every required model passed. Exit code `1` means an artifact is
+missing, incomplete, the wrong size/hash, or from a conflicting recorded revision. Exit
+code `2` means the manifest itself could not be read safely. Use `--json` for automation.
+
 ## What this demo does not prove
 
 PointMass-2D validates the evaluator and guards against metric bugs. It is not evidence

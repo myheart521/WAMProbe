@@ -64,6 +64,13 @@ Real-model weights are never committed to Git. Before the StarWAM integration, f
 [model-store layout and download rules](checkpoints/README.md); the first spike requires
 approximately 46.3 GB of pinned StarWAM and Wan2.2 artifacts.
 
+Validate local artifacts without importing PyTorch or upstream model code:
+
+```bash
+wamprobe doctor
+wamprobe doctor --verify-hashes  # streams the 12 GB StarWAM SHA256 check
+```
+
 You can also run the module directly:
 
 ```bash
@@ -79,6 +86,7 @@ PYTHONPATH=src python -m wamprobe demo --output runs/pointmass-demo
 - Action Dependence, Counterfactual Direction Accuracy, No-op Stability, state ADE,
   and Top-1 Regret;
 - JSON and Markdown reports;
+- `wamprobe doctor` model layout, revision, size, Git LFS pointer, and SHA256 checks;
 - Python 3.11–3.13 CI with linting, strict typing, and coverage.
 
 ## Roadmap

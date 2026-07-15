@@ -43,6 +43,7 @@ exclude = [
   "/data",
   "/dist",
   "/runs",
+  "/vendor",
 ]
 
 [tool.pytest.ini_options]

@@ -125,5 +125,13 @@ sha256sum \
   checkpoints/upstream/modelscope/panshaohua/starwam/starwam-libero/action_stats.json
 ```
 
-WAMProbe will add `wamprobe doctor` as the next implementation slice to validate this
-layout, revisions, required files, and checkpoint metadata without loading the GPU model.
+Validate the completed store without importing the GPU model:
+
+```bash
+uv run wamprobe doctor
+uv run wamprobe doctor --verify-hashes
+```
+
+The fast check validates required paths, exact selected-file sizes, Git/Hugging Face
+revision metadata, and unresolved Git LFS pointers. `--verify-hashes` additionally streams
+SHA256 checks for selected files and is expected to take longer for the 12 GB checkpoint.
