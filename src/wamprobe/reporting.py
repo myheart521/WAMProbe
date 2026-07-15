@@ -277,6 +277,7 @@ def write_reports(
     summary_path = output_dir / "summary.json"
     report_path = output_dir / "report.md"
     html_path = output_dir / "report.html"
+    jsonl_path = output_dir / "results.jsonl"
     payload = {
         "schema_version": "0.1",
         "benchmark": benchmark,
@@ -287,13 +288,37 @@ def write_reports(
         },
         "paired_comparisons": [asdict(comparison) for comparison in comparisons],
     }
-    summary_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    summary_path.write_text(
+        json.dumps(payload, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
     report_path.write_text(
         render_markdown(results, statistics=statistics, comparisons=comparisons),
         encoding="utf-8",
     )
     html_path.write_text(
         render_html(results, statistics=statistics, comparisons=comparisons),
+        encoding="utf-8",
+    )
+    jsonl_records = (
+        {
+            "schema_version": "0.1",
+            "benchmark": result.benchmark,
+            "model_id": result.model_id,
+            "context_id": context.context_id,
+            "selected_action": context.selected_action,
+            "optimal_action": context.optimal_action,
+            "top1_regret": context.top1_regret,
+            "metrics": context.metrics,
+        }
+        for result in results
+        for context in result.context_results
+    )
+    jsonl_path.write_text(
+        "".join(
+            json.dumps(record, sort_keys=True, separators=(",", ":")) + "\n"
+            for record in jsonl_records
+        ),
         encoding="utf-8",
     )
     return summary_path, report_path, html_path

@@ -47,6 +47,17 @@ python -m pip install -e .
 
 wamprobe demo --contexts 12 --seed 7 --output runs/pointmass-demo
 
+# Resume identical evaluations from verified content-addressed results.
+wamprobe demo --contexts 12 --seed 7 --cache-dir runs/cache --output runs/resumed
+
+# Export, verify, compare, and rebuild reports without rerunning a model.
+wamprobe dataset-export --benchmark pointmass --contexts 12 --output data/pointmass.jsonl
+wamprobe dataset-validate data/pointmass.jsonl
+wamprobe compare runs/pointmass-demo runs/resumed \
+  --left-model oracle-pointmass --right-model copy-last-frame \
+  --metric state_fde --output runs/comparison.json
+wamprobe report runs/pointmass-demo --output runs/rebuilt-report
+
 # Contact and attachment diagnostics use the same report pipeline.
 wamprobe demo --benchmark blockpush --horizon 6 --output runs/blockpush-demo
 wamprobe demo --benchmark gripper-catch --horizon 5 --output runs/gripper-catch-demo
@@ -57,6 +68,7 @@ The command creates:
 ```text
 runs/pointmass-demo/
 ├── summary.json  # versioned machine-readable results
+├── results.jsonl # one stable record per model and shared context
 ├── report.md     # human-readable metric comparison
 └── report.html   # standalone interactive-friendly report
 ```
@@ -94,7 +106,10 @@ PYTHONPATH=src python -m wamprobe demo --output runs/pointmass-demo
   Accuracy, No-op Stability, state ADE/FDE, four-view Candidate Ranking Correlation,
   and Top-1 Regret;
 - context-block bootstrap intervals and exact-context paired model comparisons;
-- versioned JSON plus Markdown and standalone HTML reports;
+- deterministic checksummed intervention JSONL with strict typed round trips;
+- corruption-detecting, content-addressed prediction cache for resumable runs;
+- versioned JSON/JSONL plus Markdown and standalone HTML reports, with standalone
+  `report` and exact-context `compare` commands;
 - `wamprobe doctor` model layout, revision, size, Git LFS pointer, and SHA256 checks;
 - typed robot observations, action predictions, deterministic prediction artifacts, and a
   pinned StarWAM/LIBERO smoke runner;
@@ -106,11 +121,10 @@ PYTHONPATH=src python -m wamprobe demo --output runs/pointmass-demo
 
 The next milestones are:
 
-1. the versioned intervention dataset loader;
-2. expand the LIBERO-CF-Mini pilot from one context to 3–5 task families;
-3. execute cached StarWAM candidate actions, then add LingBot-VA as a published reference;
-4. add a GPU nightly workflow for the isolated real-model integration;
-5. add the Occluded-Object memory diagnostic to the broader Toy tier.
+1. expand the LIBERO-CF-Mini pilot from one context to 3–5 task families;
+2. execute cached StarWAM candidate actions, then add LingBot-VA as a published reference;
+3. add a GPU nightly workflow for the isolated real-model integration;
+4. add the Occluded-Object memory diagnostic to the broader Toy tier.
 
 See the [detailed Chinese project plan](docs/WAMProbe_PLAN.md),
 [quick-start notes](docs/QUICKSTART.md), [failure-case evidence map](docs/research/WAM_VLA_FAILURE_CASES.md),

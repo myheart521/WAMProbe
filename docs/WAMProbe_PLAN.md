@@ -1014,6 +1014,12 @@ CLI 验收要求：
 
 ### Phase 1：核心 API 与数据格式（第 3–4 周）
 
+完成状态（2026-07-15）：typed API、capability/result/intervention schema、doctor、dummy
+adapters 以及通用 intervention JSONL loader 已落地。Prediction cache 以完整输入和配置生成
+内容地址，使用原子写入与 payload SHA256 校验；相同 demo 可从 5/5 缓存结果恢复，损坏条目
+会明确失败而不会静默重算。`dataset-export`、`dataset-validate`、`report` 和 `compare` CLI
+均已通过端到端测试。
+
 任务：
 
 - 完成 typed data classes 和 `WAMAdapter`；
@@ -1136,9 +1142,9 @@ v0.1 发布门槛：
 | #19 | Add GPU nightly smoke workflow | P1 | 2 天 | #18 |
 | #20 | Write benchmark card and v0.1 reproducibility guide | P0 | 4 天 | 全部 |
 
-代码落地状态（2026-07-15）：已补齐并验证 #8、#10、#11、#13、#15、#16 以及 CRC；
-此前已完成 #1–#5、#7、#9、#12、#14、#17 的当前 v0.1 切片。#6 和 #18 已有可运行的 StarWAM
-prediction artifact/adapter 切片，但更通用的 cache 与真实 WAM 反事实控制评测仍需继续扩展。
+代码落地状态（2026-07-15）：已补齐并验证 #6、#8、#10、#11、#13、#15、#16 以及 CRC；
+此前已完成 #1–#5、#7、#9、#12、#14、#17 的当前 v0.1 切片。#18 已有可运行的 StarWAM
+prediction artifact/adapter 切片，但真实 WAM 反事实控制评测仍需继续扩展。
 
 建议 labels：
 
@@ -1260,8 +1266,8 @@ priority:p1
 - [x] 至少 4 个 reference baselines；
 - [x] 至少 1 个真实 WAM adapter；
 - [x] 至少 6 个核心指标；
-- [ ] prediction cache 可恢复中断运行；
-- [ ] JSONL/JSON/HTML 输出齐全；
+- [x] prediction cache 可恢复中断运行；
+- [x] JSONL/JSON/HTML 输出齐全；
 - [x] paired comparison 和 bootstrap CI 可用。
 
 ### 研究有效性
