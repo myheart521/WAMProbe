@@ -12,3 +12,5 @@ All notable changes to WAMProbe will be documented here.
 - Action Dependence, Counterfactual Direction Accuracy, No-op Stability, state ADE,
   and Top-1 Regret metrics.
 - JSON/Markdown reports, schemas, CLI, CI, and contributor documentation.
+- Phase 0 evidence map covering 15 reported WAM/VLA failure modes.
+- Version-pinned audit selecting StarWAM as the first real adapter target.

@@ -728,6 +728,11 @@ v0.1 必须先实现无需外部大模型的 baseline，用于验证指标：
 2. **FastWAM adapter**：用于 action-only/联合变体和效率评测，但要根据公开 checkpoint 实际能力启用指标；
 3. **其他 WAM**：待 v0.1 协议稳定后通过独立 extras/plugin 添加。
 
+截至 2026-07-15 的代码、checkpoint、许可证与环境审计已完成。第一实现目标保留为
+StarWAM，LingBot-VA 调整为第二个论文对照，Fast-WAM 在权重许可证元数据明确前只作为
+action-only/效率设计参考。版本 pin、风险和第一实现切片见
+[`docs/research/ADAPTER_SELECTION.md`](research/ADAPTER_SELECTION.md)。
+
 ### 11.3 依赖隔离
 
 v0.1：
@@ -974,6 +979,11 @@ CLI 验收要求：
 ## 17. 16 周实施计划
 
 ### Phase 0：问题收敛（第 1–2 周）
+
+当前进度（2026-07-15）：15 个文献失败模式和首个 Adapter 审计已经完成，见
+[`docs/research/WAM_VLA_FAILURE_CASES.md`](research/WAM_VLA_FAILURE_CASES.md) 与
+[`docs/research/ADAPTER_SELECTION.md`](research/ADAPTER_SELECTION.md)。外部研究者 README
+理解度检查仍需人工完成。
 
 任务：
 

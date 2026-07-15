@@ -85,10 +85,11 @@ The next milestones are:
 2. a small image-rendered BlockPush benchmark;
 3. the versioned intervention dataset loader;
 4. LIBERO-CF-Mini paired simulator branches;
-5. the first real WAM adapter, selected after checkpoint and license verification.
+5. a pinned StarWAM inference adapter, followed by LingBot-VA as a published reference.
 
 See the [detailed Chinese project plan](docs/WAMProbe_PLAN.md),
-[quick-start notes](docs/QUICKSTART.md), and [design RFCs](docs/rfcs/).
+[quick-start notes](docs/QUICKSTART.md), [failure-case evidence map](docs/research/WAM_VLA_FAILURE_CASES.md),
+[adapter selection record](docs/research/ADAPTER_SELECTION.md), and [design RFCs](docs/rfcs/).
 
 ## Development
 
