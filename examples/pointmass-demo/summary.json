@@ -1,0 +1,354 @@
+{
+  "schema_version": "0.1",
+  "benchmark": "pointmass-2d-v0.1",
+  "results": [
+    {
+      "schema_version": "0.1",
+      "model_id": "oracle-pointmass",
+      "benchmark": "pointmass-2d-v0.1",
+      "contexts": 12,
+      "metrics": {
+        "action_dependence": 1.0,
+        "counterfactual_direction_accuracy": 1.0,
+        "noop_stability": 1.0,
+        "state_ade": 0.0,
+        "top1_regret": 0.0
+      },
+      "context_results": [
+        {
+          "context_id": "context-0000",
+          "selected_action": "right",
+          "optimal_action": "right",
+          "top1_regret": 0.0
+        },
+        {
+          "context_id": "context-0001",
+          "selected_action": "left",
+          "optimal_action": "left",
+          "top1_regret": 0.0
+        },
+        {
+          "context_id": "context-0002",
+          "selected_action": "up",
+          "optimal_action": "up",
+          "top1_regret": 0.0
+        },
+        {
+          "context_id": "context-0003",
+          "selected_action": "down",
+          "optimal_action": "down",
+          "top1_regret": 0.0
+        },
+        {
+          "context_id": "context-0004",
+          "selected_action": "right",
+          "optimal_action": "right",
+          "top1_regret": 0.0
+        },
+        {
+          "context_id": "context-0005",
+          "selected_action": "left",
+          "optimal_action": "left",
+          "top1_regret": 0.0
+        },
+        {
+          "context_id": "context-0006",
+          "selected_action": "up",
+          "optimal_action": "up",
+          "top1_regret": 0.0
+        },
+        {
+          "context_id": "context-0007",
+          "selected_action": "down",
+          "optimal_action": "down",
+          "top1_regret": 0.0
+        },
+        {
+          "context_id": "context-0008",
+          "selected_action": "right",
+          "optimal_action": "right",
+          "top1_regret": 0.0
+        },
+        {
+          "context_id": "context-0009",
+          "selected_action": "left",
+          "optimal_action": "left",
+          "top1_regret": 0.0
+        },
+        {
+          "context_id": "context-0010",
+          "selected_action": "up",
+          "optimal_action": "up",
+          "top1_regret": 0.0
+        },
+        {
+          "context_id": "context-0011",
+          "selected_action": "down",
+          "optimal_action": "down",
+          "top1_regret": 0.0
+        }
+      ]
+    },
+    {
+      "schema_version": "0.1",
+      "model_id": "copy-last-frame",
+      "benchmark": "pointmass-2d-v0.1",
+      "contexts": 12,
+      "metrics": {
+        "action_dependence": 0.0,
+        "counterfactual_direction_accuracy": 0.0,
+        "noop_stability": 1.0,
+        "state_ade": 0.5,
+        "top1_regret": 1.0
+      },
+      "context_results": [
+        {
+          "context_id": "context-0000",
+          "selected_action": "noop",
+          "optimal_action": "right",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0001",
+          "selected_action": "noop",
+          "optimal_action": "left",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0002",
+          "selected_action": "noop",
+          "optimal_action": "up",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0003",
+          "selected_action": "noop",
+          "optimal_action": "down",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0004",
+          "selected_action": "noop",
+          "optimal_action": "right",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0005",
+          "selected_action": "noop",
+          "optimal_action": "left",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0006",
+          "selected_action": "noop",
+          "optimal_action": "up",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0007",
+          "selected_action": "noop",
+          "optimal_action": "down",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0008",
+          "selected_action": "noop",
+          "optimal_action": "right",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0009",
+          "selected_action": "noop",
+          "optimal_action": "left",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0010",
+          "selected_action": "noop",
+          "optimal_action": "up",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0011",
+          "selected_action": "noop",
+          "optimal_action": "down",
+          "top1_regret": 1.0
+        }
+      ]
+    },
+    {
+      "schema_version": "0.1",
+      "model_id": "wrong-direction",
+      "benchmark": "pointmass-2d-v0.1",
+      "contexts": 12,
+      "metrics": {
+        "action_dependence": 1.0,
+        "counterfactual_direction_accuracy": -1.0,
+        "noop_stability": 1.0,
+        "state_ade": 1.0,
+        "top1_regret": 2.0
+      },
+      "context_results": [
+        {
+          "context_id": "context-0000",
+          "selected_action": "left",
+          "optimal_action": "right",
+          "top1_regret": 2.0
+        },
+        {
+          "context_id": "context-0001",
+          "selected_action": "right",
+          "optimal_action": "left",
+          "top1_regret": 2.0
+        },
+        {
+          "context_id": "context-0002",
+          "selected_action": "down",
+          "optimal_action": "up",
+          "top1_regret": 2.0
+        },
+        {
+          "context_id": "context-0003",
+          "selected_action": "up",
+          "optimal_action": "down",
+          "top1_regret": 2.0
+        },
+        {
+          "context_id": "context-0004",
+          "selected_action": "left",
+          "optimal_action": "right",
+          "top1_regret": 2.0
+        },
+        {
+          "context_id": "context-0005",
+          "selected_action": "right",
+          "optimal_action": "left",
+          "top1_regret": 2.0
+        },
+        {
+          "context_id": "context-0006",
+          "selected_action": "down",
+          "optimal_action": "up",
+          "top1_regret": 2.0
+        },
+        {
+          "context_id": "context-0007",
+          "selected_action": "up",
+          "optimal_action": "down",
+          "top1_regret": 2.0
+        },
+        {
+          "context_id": "context-0008",
+          "selected_action": "left",
+          "optimal_action": "right",
+          "top1_regret": 2.0
+        },
+        {
+          "context_id": "context-0009",
+          "selected_action": "right",
+          "optimal_action": "left",
+          "top1_regret": 2.0
+        },
+        {
+          "context_id": "context-0010",
+          "selected_action": "down",
+          "optimal_action": "up",
+          "top1_regret": 2.0
+        },
+        {
+          "context_id": "context-0011",
+          "selected_action": "up",
+          "optimal_action": "down",
+          "top1_regret": 2.0
+        }
+      ]
+    },
+    {
+      "schema_version": "0.1",
+      "model_id": "action-agnostic",
+      "benchmark": "pointmass-2d-v0.1",
+      "contexts": 12,
+      "metrics": {
+        "action_dependence": 0.0,
+        "counterfactual_direction_accuracy": 0.0,
+        "noop_stability": 0.0,
+        "state_ade": 0.7285533905932737,
+        "top1_regret": 1.0
+      },
+      "context_results": [
+        {
+          "context_id": "context-0000",
+          "selected_action": "noop",
+          "optimal_action": "right",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0001",
+          "selected_action": "noop",
+          "optimal_action": "left",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0002",
+          "selected_action": "noop",
+          "optimal_action": "up",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0003",
+          "selected_action": "noop",
+          "optimal_action": "down",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0004",
+          "selected_action": "noop",
+          "optimal_action": "right",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0005",
+          "selected_action": "noop",
+          "optimal_action": "left",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0006",
+          "selected_action": "noop",
+          "optimal_action": "up",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0007",
+          "selected_action": "noop",
+          "optimal_action": "down",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0008",
+          "selected_action": "noop",
+          "optimal_action": "right",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0009",
+          "selected_action": "noop",
+          "optimal_action": "left",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0010",
+          "selected_action": "noop",
+          "optimal_action": "up",
+          "top1_regret": 1.0
+        },
+        {
+          "context_id": "context-0011",
+          "selected_action": "noop",
+          "optimal_action": "down",
+          "top1_regret": 1.0
+        }
+      ]
+    }
+  ]
+}

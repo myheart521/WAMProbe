@@ -1,3 +1,3 @@
-"""WAMProbe: evaluation tools for World Action Models."""
+"""WAMProbe: counterfactual evaluation for World Action Models."""
 
-__version__ = "0.0.0"
+__version__ = "0.1.0a0"

@@ -4,11 +4,22 @@ build-backend = "hatchling.build"
 
 [project]
 name = "wamprobe"
-version = "0.0.0"
+version = "0.1.0a0"
 description = "Causal consistency and control-utility evaluation for World Action Models"
 readme = "README.md"
 requires-python = ">=3.11"
+license = "Apache-2.0"
+authors = [{name = "WAMProbe contributors"}]
+keywords = ["robotics", "world-model", "world-action-model", "evaluation", "benchmark"]
 dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/myheart521/WAMProbe"
+Repository = "https://github.com/myheart521/WAMProbe"
+Issues = "https://github.com/myheart521/WAMProbe/issues"
+
+[project.scripts]
+wamprobe = "wamprobe.cli:main"
 
 [project.optional-dependencies]
 dev = [
@@ -21,14 +32,30 @@ dev = [
 [tool.hatch.build.targets.wheel]
 packages = ["src/wamprobe"]
 
+[tool.hatch.build]
+exclude = [
+  "/.coverage",
+  "/.mypy_cache",
+  "/.pytest_cache",
+  "/.ruff_cache",
+  "/.venv",
+  "/dist",
+]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+addopts = [
+  "--strict-markers",
+]
 
 [tool.ruff]
 line-length = 100
 target-version = "py311"
 
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
 [tool.mypy]
 python_version = "3.11"
 strict = true
-packages = ["wamprobe"]
+files = ["src/wamprobe", "tests"]

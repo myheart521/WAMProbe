@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/myheart521/WAMProbe/schemas/capability-v0.1.schema.json",
+  "title": "WAMProbe model capability manifest v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["model_id", "future_representation"],
+  "properties": {
+    "model_id": {"type": "string", "minLength": 1},
+    "future_representation": {
+      "enum": ["none", "pixels", "states", "latents"]
+    },
+    "predicts_actions": {"type": "boolean", "default": false},
+    "scores_actions": {"type": "boolean", "default": false},
+    "exposes_world_features": {"type": "boolean", "default": false},
+    "stochastic": {"type": "boolean", "default": false},
+    "deterministic_seed": {"type": "boolean", "default": true},
+    "supports_batching": {"type": "boolean", "default": false}
+  }
+}
