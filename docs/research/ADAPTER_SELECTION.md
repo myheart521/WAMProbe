@@ -122,7 +122,11 @@ The next coding slice is deliberately narrow:
 5. capability declaration and mocked CPU contract tests: **complete**;
 6. opt-in fixed LIBERO GPU smoke runner: **complete**;
 7. paired simulator snapshot/restore and counterfactual scoring: **complete**;
-8. execute cached StarWAM candidate branches and expand LIBERO-CF-Mini tasks: **next**.
+8. execute cached StarWAM action chunks and expand LIBERO-CF-Mini to four task families:
+   **complete**;
+9. evaluate action-conditioned real-WAM candidate futures: **capability-blocked for the
+   released StarWAM adapter**, which accepts observations and emits actions but does not
+   accept candidate actions or return one future per candidate.
 
 ## Sources checked
 

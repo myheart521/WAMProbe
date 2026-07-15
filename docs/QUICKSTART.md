@@ -122,6 +122,22 @@ on Gripper-Catch, but these are descriptive associations across only five future
 profiles. See the [report](../examples/closed-loop-study/closed-loop-study.md) and
 [experiment card](experiments/TOY_CLOSED_LOOP_V0.1.md).
 
+## Audit a release candidate
+
+From a clean commit, the candidate command builds twice with the commit timestamp as
+`SOURCE_DATE_EPOCH`, verifies identical wheel/sdist hashes and evidence identities, then
+installs the wheel offline in a fresh environment and runs a two-context demo:
+
+```bash
+uv sync --extra dev --locked
+.venv/bin/python scripts/build_release_candidate.py
+```
+
+The command writes ignored artifacts and `release-manifest.json` below
+`dist/release-candidate/`. It does not publish or tag anything. See the
+[release procedure](../release/README.md) and
+[reproducibility guide](reproducibility/REPRODUCIBILITY.md).
+
 Uncertainty is computed at the context level. Each bootstrap draw resamples whole shared
 initial states, never individual action branches or adjacent frames. Paired comparisons
 align exact context IDs and report the left-minus-right difference with a 95% interval.

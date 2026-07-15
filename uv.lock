@@ -446,7 +446,7 @@ wheels = [
 
 [[package]]
 name = "wamprobe"
-version = "0.1.0a0"
+version = "0.1.0rc1"
 source = { editable = "." }
 
 [package.optional-dependencies]

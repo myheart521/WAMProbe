@@ -1123,7 +1123,10 @@ snapshot 执行全部动作块，并在 horizon 8/16/32 记录状态、回报和
 return 的 5-profile 描述性 Pearson 分别为 0.9855/1.0。全部结果、context-block CI 和限制
 见 [`examples/video-control-study/`](../examples/video-control-study/video-control-study.md)
 与 [`docs/experiments/TOY_CLOSED_LOOP_V0.1.md`](experiments/TOY_CLOSED_LOOP_V0.1.md)。
-release artifact 追溯、技术报告和外部复现仍待完成。
+`0.1.0rc1` 候选版本现已具备双构建 SHA 一致性、归档安全/metadata 审计、证据 manifest、
+离线干净 wheel 安装 smoke、手动 provenance attestation workflow，并提供可在 Overleaf
+直接编译的 5 页技术报告初稿。正式 PyPI/GitHub Release、上游 PR 和外部用户复现仍需
+维护者或第三方授权，未被自动触发。
 
 任务：
 
@@ -1311,7 +1314,7 @@ priority:p1
 
 - [x] 核心 coverage ≥ 85%；
 - [x] schema 有版本和兼容策略；
-- [ ] 所有 release artifact 可追溯；
+- [x] 所有 release artifact 可追溯；
 - [x] README 15 分钟 quickstart 可执行；
 - [x] benchmark/model/metric cards 完整；
 - [ ] 至少一个外部用户复现 smoke test。

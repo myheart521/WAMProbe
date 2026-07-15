@@ -18,7 +18,7 @@ the same initial state
 └── expert act  → predicted future / true future
 ```
 
-The project is in an early alpha. Its dependency-free core includes an analytic
+The project is preparing a `0.1.0rc1` source candidate. Its dependency-free core includes an analytic
 PointMass-2D benchmark, while opt-in isolated runners now cover one released StarWAM
 observation-to-action path and a four-family paired LIBERO-CF-Mini simulator pilot.
 
@@ -134,6 +134,9 @@ PYTHONPATH=src python -m wamprobe demo --output runs/pointmass-demo
 - a minimal receding-horizon evaluator with random, fixed-policy, simulator-oracle, and
   five future-scorer controls, per-context traces, bootstrap intervals, and offline/closed-loop
   association analysis;
+- a versioned evidence manifest, byte-reproducible wheel/sdist builder, archive audit,
+  offline clean-wheel demo smoke, manual provenance-attestation workflow, and LaTeX
+  technical-report draft;
 - Python 3.11–3.13 CI with linting, strict typing, and coverage.
 
 ## Roadmap
@@ -143,7 +146,8 @@ The next milestones are:
 1. expand LIBERO initial states and evaluate action-conditioned real-WAM futures when an
    adapter exposes that capability;
 2. add the Occluded-Object memory diagnostic to the broader Toy tier;
-3. prepare a traceable v0.1 release candidate and external reproduction smoke.
+3. obtain an independent reproduction smoke, then review the candidate for explicit
+   maintainer-approved PyPI/GitHub publication.
 
 See the [detailed Chinese project plan](docs/WAMProbe_PLAN.md),
 [quick-start notes](docs/QUICKSTART.md), [failure-case evidence map](docs/research/WAM_VLA_FAILURE_CASES.md),
@@ -155,6 +159,10 @@ The exact toy dynamics and limitations are documented in the
 [core metric cards](docs/metrics/CORE_METRICS.md). The exact closed-loop protocol and
 limitations are recorded in the
 [toy closed-loop experiment card](docs/experiments/TOY_CLOSED_LOOP_V0.1.md).
+Release reviewers can start with the
+[reproducibility guide](docs/reproducibility/REPRODUCIBILITY.md),
+[candidate procedure](release/README.md), and
+[technical report source](paper/main.tex).
 
 ## Development
 

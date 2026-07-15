@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "wamprobe"
-version = "0.1.0a0"
+version = "0.1.0rc1"
 description = "Causal consistency and control-utility evaluation for World Action Models"
 readme = "README.md"
 requires-python = ">=3.11"

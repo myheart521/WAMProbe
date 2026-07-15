@@ -16,8 +16,13 @@ Before opening a pull request, run:
 ruff format --check .
 ruff check .
 mypy
-pytest --cov=wamprobe --cov-report=term-missing
+pytest --cov=wamprobe --cov-report=term-missing --cov-fail-under=85
 ```
+
+Changes to public schemas, committed evidence, package metadata, or release tooling must
+also run `.venv/bin/python scripts/build_release_candidate.py` from a clean commit. Do not
+use `--allow-dirty` as release evidence; that switch exists only for local development of
+the audit itself.
 
 ## Contribution requirements
 

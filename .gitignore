@@ -20,6 +20,14 @@ vendor/
 *.pth
 *.safetensors
 
+# Local technical-report builds
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.pdf
+
 # Editors and operating systems
 .DS_Store
 .idea/

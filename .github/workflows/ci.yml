@@ -32,3 +32,22 @@ jobs:
         run: mypy
       - name: Test with coverage
         run: pytest --cov=wamprobe --cov-report=term-missing --cov-fail-under=85
+
+  package-candidate:
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.11.6"
+          enable-cache: true
+      - name: Install locked development environment
+        run: uv sync --extra dev --locked
+      - name: Build, reproduce, audit, and smoke candidate
+        run: .venv/bin/python scripts/build_release_candidate.py --dist-dir dist/ci-candidate

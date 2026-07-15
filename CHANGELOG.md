@@ -2,7 +2,10 @@
 
 All notable changes to WAMProbe will be documented here.
 
-## [Unreleased]
+## [0.1.0rc1] - 2026-07-15
+
+This candidate is prepared for reproducibility review and is not yet published to PyPI or
+as a final GitHub Release.
 
 ### Added
 
@@ -20,3 +23,16 @@ All notable changes to WAMProbe will be documented here.
   output for local model artifacts.
 - Reproducible StarWAM environment preflight and a narrow patch that restricts verified
   inference checkpoint loads to PyTorch's weights-only deserializer.
+- Checksummed intervention JSONL, corruption-detecting content-addressed prediction cache,
+  exact-context comparison, and report-only regeneration commands.
+- Contact-aware BlockPush-2D and attachment-aware Gripper-Catch analytic benchmarks.
+- Four-family LIBERO-CF-Mini generation with exact snapshot restore, repeat, branch-order,
+  provenance, and cache validation.
+- A pinned StarWAM 36-prediction matrix and 36 action-chunk simulator executions with
+  explicit unsupported-metric skips and retained zero-success results.
+- Dependency-free PSNR/global-SSIM diagnostics and a traditional-video/control-value
+  counterexample study.
+- Minimal score-execute-observe closed-loop replanning with context-block intervals and
+  offline-ranking/return association analysis.
+- Release artifact audit, candidate workflow, clean-wheel smoke test, evidence manifest,
+  and technical-report draft.

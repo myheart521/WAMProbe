@@ -47,6 +47,7 @@ from wamprobe.doctor import ModelManifestError, check_model_store, load_manifest
 from wamprobe.evaluation import EvaluationResult, evaluate
 from wamprobe.experiments import analyze_action_experiment, write_action_experiment_report
 from wamprobe.manipulation_evaluation import evaluate_manipulation
+from wamprobe.release_audit import audit_release
 from wamprobe.reporting import write_reports
 from wamprobe.stats import paired_metric_comparison
 from wamprobe.video_control_study import run_video_control_study, write_video_control_study
@@ -171,6 +172,17 @@ def _build_parser() -> argparse.ArgumentParser:
     closed_loop.add_argument("--execute-prefix", type=int, default=1)
     closed_loop.add_argument("--resamples", type=int, default=1000)
     closed_loop.add_argument("--output", type=Path, required=True)
+
+    release_audit = subparsers.add_parser(
+        "release-audit",
+        help="verify built distributions and reproducibility evidence",
+    )
+    release_audit.add_argument("--dist", type=Path, required=True)
+    release_audit.add_argument("--evidence-manifest", type=Path, required=True)
+    release_audit.add_argument("--repository-root", type=Path, default=Path("."))
+    release_audit.add_argument("--source-commit", required=True)
+    release_audit.add_argument("--source-date-epoch", type=int, required=True)
+    release_audit.add_argument("--output", type=Path, required=True)
     return parser
 
 
@@ -485,6 +497,24 @@ def _run_closed_loop_study(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_release_audit(args: argparse.Namespace) -> int:
+    try:
+        report = audit_release(
+            dist_dir=args.dist,
+            evidence_manifest=args.evidence_manifest,
+            repository_root=args.repository_root,
+            source_commit=args.source_commit,
+            source_date_epoch=args.source_date_epoch,
+            output_path=args.output,
+        )
+    except (OSError, ValueError) as error:
+        print(f"WAMProbe release audit error: {error}", file=sys.stderr)
+        return 2
+    print(f"Release audit: {args.output}")
+    print(f"Artifacts: {len(report.artifacts)}; evidence: {len(report.committed_evidence)}")
+    return 0
+
+
 def _run_doctor(args: argparse.Namespace) -> int:
     try:
         manifest = load_manifest(args.manifest)
@@ -538,5 +568,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return _run_video_control_study(args)
     if args.command == "closed-loop-study":
         return _run_closed_loop_study(args)
+    if args.command == "release-audit":
+        return _run_release_audit(args)
     parser.error(f"unsupported command: {args.command}")
     return 2
