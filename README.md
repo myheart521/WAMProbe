@@ -112,7 +112,7 @@ PYTHONPATH=src python -m wamprobe demo --output runs/pointmass-demo
   `report` and exact-context `compare` commands;
 - `wamprobe doctor` model layout, revision, size, Git LFS pointer, and SHA256 checks;
 - typed robot observations, action predictions, deterministic prediction artifacts, and a
-  pinned StarWAM/LIBERO smoke runner;
+  pinned StarWAM/LIBERO runner with multi-seed/NFE action execution reports;
 - dependency-free robot action-branch/future contracts plus four task families × four
   branches × eight steps in LIBERO-CF-Mini, with exact restore and branch-order validation;
 - Python 3.11–3.13 CI with linting, strict typing, and coverage.
@@ -121,16 +121,19 @@ PYTHONPATH=src python -m wamprobe demo --output runs/pointmass-demo
 
 The next milestones are:
 
-1. execute cached StarWAM candidate actions across LIBERO-CF-Mini;
-2. run action-mask/shuffle, seed, horizon, and NFE ablations;
-3. add a GPU nightly workflow for the isolated real-model integration;
-4. add the Occluded-Object memory diagnostic to the broader Toy tier.
+1. add a traditional video-quality versus control-value baseline study;
+2. expand fixed states and add a minimal replanning/closed-loop experiment;
+3. add the Occluded-Object memory diagnostic to the broader Toy tier;
+4. prepare a signed v0.1 release candidate and external reproduction smoke.
 
 See the [detailed Chinese project plan](docs/WAMProbe_PLAN.md),
 [quick-start notes](docs/QUICKSTART.md), [failure-case evidence map](docs/research/WAM_VLA_FAILURE_CASES.md),
 [adapter selection record](docs/research/ADAPTER_SELECTION.md), and [design RFCs](docs/rfcs/).
 The exact toy dynamics and limitations are documented in the
-[toy benchmark card](docs/benchmarks/TOY_BENCHMARKS.md).
+[toy benchmark card](docs/benchmarks/TOY_BENCHMARKS.md),
+[LIBERO-CF-Mini benchmark card](docs/benchmarks/LIBERO_CF_MINI.md),
+[StarWAM model card](docs/models/STARWAM.md), and
+[core metric cards](docs/metrics/CORE_METRICS.md).
 
 ## Development
 

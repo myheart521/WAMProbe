@@ -101,6 +101,7 @@ def test_action_artifact_writes_atomic_json_without_raw_rgb(tmp_path: Path) -> N
     assert payload["provenance"]["vae_sha256"] == "2" * 64
     assert payload["inference"]["num_inference_steps"] == 1
     assert payload["prediction"]["actions"][1] == [0.1] * 7
+    assert len(payload["prediction_sha256"]) == 64
 
 
 def test_action_artifact_rejects_mismatched_context() -> None:

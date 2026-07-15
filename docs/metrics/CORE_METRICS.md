@@ -1,0 +1,47 @@
+# Core metric cards
+
+WAMProbe reports a profile rather than one composite score. All aggregate confidence
+intervals resample complete shared contexts; action branches and frames from one context
+are never treated as independent samples.
+
+| Metric | Requires | Definition | Direction / range | Principal limitation |
+|---|---|---|---|---|
+| Action Dependence | paired candidate futures | mean predicted pair separation normalized by true separation | higher; analytic implementation clipped to [0,1] | separation can be confidently wrong |
+| ADS permutation effect | paired action/future alignment | observed action-future association minus within-context permutation null | higher is stronger alignment | small branch sets give coarse p-values |
+| ADS permutation p-value | same | add-one Monte Carlo randomization probability | lower is stronger evidence | not an effect size and not independent across frames |
+| Counterfactual Direction | vector states | cosine of predicted and true displacement | -1 opposite, 0 absent/orthogonal, 1 aligned | ignores calibrated magnitude |
+| No-op Stability/Fidelity | explicit no-op truth | point-mass drift score or exact manipulation no-op fidelity | higher is better | a static model can pass no-op alone |
+| State ADE | typed state trajectory | mean Euclidean error over steps and branches | lower, ≥0 | state dimensions and units must be semantically aligned |
+| State FDE | typed state trajectory | mean final-state Euclidean error | lower, ≥0 | can hide transient physical violations |
+| CRC Spearman | candidate returns | rank correlation with average tie ranks | higher, [-1,1] | unstable for very small/tied candidate sets |
+| CRC Kendall tau-b | candidate returns | concordant-minus-discordant pairs with tie correction | higher, [-1,1] | ignores return magnitude |
+| CRC NDCG | candidate returns | discounted gain after shifting relevance non-negative | higher, [0,1] | shift convention must stay fixed |
+| CRC pairwise accuracy | candidate returns | correct preference fraction; model ties receive 0.5 | higher, [0,1] | true-return ties are excluded |
+| Top-1 Regret | candidate returns | oracle return minus return of model-selected candidate | lower, ≥0 | depends on candidate-set coverage |
+| Latency | timed model call | synchronized wall time per prediction | lower, seconds | hardware and warm-up dependent |
+| Peak allocated/reserved memory | CUDA runtime | maximum allocator bytes during one prediction | lower, GiB | not total board memory or energy |
+| NFE sensitivity | matched inputs/seeds | paired action RMS and executed endpoint distance across NFE | lower means more stable | stability does not establish correctness |
+| Seed sensitivity | matched inputs/NFE | paired action RMS and executed endpoint distance across seeds | lower means more stable | deterministic collapse can also score low |
+| Branch EEF/object separation | paired simulator futures | mean pairwise final-state distance | diagnostic, ≥0 | raw object vectors are comparable only within a task |
+| No-op EEF drift | explicit simulator no-op | distance from initial to final EEF | lower, ≥0 | controller settling can produce small nonzero drift |
+
+## Applicability rules
+
+Metrics are gated by the adapter capability manifest. Missing inputs produce an explicit
+skip, never a surrogate value. In particular, the released StarWAM adapter emits actions
+but no action-conditioned future artifact. WAMProbe therefore skips candidate-action
+mask/shuffle, predicted-video PSNR/SSIM/FVD and future-state ADE/FDE for that adapter.
+
+An undefined correlation caused by a constant outcome is serialized as JSON `null` and
+explained in the report. A zero sparse success rate remains a reported negative result;
+it is not dropped from aggregation.
+
+## Reference-baseline expectations
+
+- Oracle dynamics should minimize ADE/FDE and regret while maximizing direction and CRC.
+- Copy-last and action-agnostic baselines should have weak action dependence and ranking.
+- Wrong-direction should separate futures but have negative direction correctness.
+- Seeded noisy dynamics should degrade ADE/FDE and ranking as noise rises.
+
+Any new metric must add a failure-mode statement, capability requirement, reference
+ordering test, aggregation unit and range/direction before it enters a public report.

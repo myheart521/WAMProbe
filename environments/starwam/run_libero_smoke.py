@@ -20,6 +20,7 @@ import random
 import subprocess
 import sys
 import time
+import uuid
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -94,6 +95,9 @@ from wamprobe.artifacts import (  # noqa: E402
     ResolvedInference,
     ResolvedPreprocessing,
 )
+from wamprobe.libero_cf import LiberoTaskSpec, load_libero_cf_manifest  # noqa: E402
+
+LIBERO_CF_MANIFEST = REPOSITORY_ROOT / "configs" / "benchmarks" / "libero_cf_mini_v0.1.json"
 
 
 @dataclass(frozen=True, slots=True)
@@ -257,26 +261,39 @@ def _load_init_states(path: Path) -> Any:
     return states
 
 
-def _capture_observation() -> CapturedObservation:
+def _capture_observation(spec: LiberoTaskSpec | None = None) -> CapturedObservation:
     import numpy as np
     from libero.libero import benchmark, get_libero_path
     from libero.libero.envs import OffScreenRenderEnv
 
-    suite = benchmark.get_benchmark_dict()[TASK_SUITE]()
-    task = suite.get_task(TASK_ID)
-    if task.language != TASK:
-        raise RuntimeError(f"pinned LIBERO task changed: expected {TASK!r}, got {task.language!r}")
+    task_suite = spec.task_suite if spec is not None else TASK_SUITE
+    task_id = spec.task_id if spec is not None else TASK_ID
+    task_text = spec.task if spec is not None else TASK
+    init_state_index = spec.init_state_index if spec is not None else INIT_STATE_INDEX
+    wait_steps = spec.wait_steps if spec is not None else WAIT_STEPS
+    seed = spec.seed if spec is not None else SEED
+    context_id = spec.context_id if spec is not None else CONTEXT_ID
+    bddl_sha256 = spec.bddl_sha256 if spec is not None else BDDL_SHA256
+    init_states_sha256 = spec.init_states_sha256 if spec is not None else INIT_STATES_SHA256
+    expected_shape = spec.init_states_shape if spec is not None else (50, 92)
+
+    suite = benchmark.get_benchmark_dict()[task_suite]()
+    task = suite.get_task(task_id)
+    if task.language != task_text:
+        raise RuntimeError(
+            f"pinned LIBERO task changed: expected {task_text!r}, got {task.language!r}"
+        )
 
     bddl_path = Path(suite.get_task_bddl_file_path(TASK_ID))
     init_states_path = (
         Path(get_libero_path("init_states")) / task.problem_folder / task.init_states_file
     )
-    if _sha256(bddl_path) != BDDL_SHA256:
+    if _sha256(bddl_path) != bddl_sha256:
         raise RuntimeError("LIBERO BDDL hash mismatch")
-    if _sha256(init_states_path) != INIT_STATES_SHA256:
+    if _sha256(init_states_path) != init_states_sha256:
         raise RuntimeError("LIBERO init-state hash mismatch")
     init_states = _load_init_states(init_states_path)
-    if init_states.shape != (50, 92):
+    if init_states.shape != expected_shape:
         raise RuntimeError(f"unexpected LIBERO init-state shape: {init_states.shape}")
 
     environment = OffScreenRenderEnv(
@@ -284,12 +301,12 @@ def _capture_observation() -> CapturedObservation:
         camera_heights=256,
         camera_widths=256,
     )
-    environment.seed(SEED)
+    environment.seed(seed)
     done = False
     try:
         environment.reset()
-        observation = environment.set_init_state(init_states[INIT_STATE_INDEX])
-        for _ in range(WAIT_STEPS):
+        observation = environment.set_init_state(init_states[init_state_index])
+        for _ in range(wait_steps):
             observation, _, done, _ = environment.step(LIBERO_DUMMY_ACTION)
     finally:
         environment.close()
@@ -307,8 +324,8 @@ def _capture_observation() -> CapturedObservation:
         raise RuntimeError(f"unexpected LIBERO proprio shape: {proprio.shape}")
 
     typed_observation = RobotObservation(
-        context_id=CONTEXT_ID,
-        task=TASK,
+        context_id=context_id,
+        task=task_text,
         frames=(
             RGBFrame("agentview", 256, 256, agentview.tobytes()),
             RGBFrame("wrist", 256, 256, wrist.tobytes()),
@@ -339,26 +356,26 @@ def _resolved_config(run_dir: Path) -> Any:
     return config
 
 
-def _text_cache_path(config: Any) -> Path:
+def _text_cache_path(config: Any, task: str = TASK) -> Path:
     from starwam.data.lerobot import text_cache_path
 
     return text_cache_path(
         config.data.text_embedding_cache_dir,
-        TASK,
+        task,
         int(config.data.text_len),
         TEXT_PROMPT_TEMPLATE,
         str(config.data.text_cache_encoder_id),
     )
 
 
-def _load_text_cache(path: Path, config: Any) -> tuple[Any, Any]:
+def _load_text_cache(path: Path, config: Any, task: str = TASK) -> tuple[Any, Any]:
     import torch
 
     payload = torch.load(path, map_location="cpu", weights_only=True)
     if not isinstance(payload, dict):
         raise TypeError("text cache must contain a mapping")
-    if payload.get("task") != TASK or payload.get("prompt") != TEXT_PROMPT_TEMPLATE.format(
-        task=TASK
+    if payload.get("task") != task or payload.get("prompt") != TEXT_PROMPT_TEMPLATE.format(
+        task=task
     ):
         raise RuntimeError("text cache task or prompt mismatch")
     context = payload.get("context")
@@ -373,12 +390,12 @@ def _load_text_cache(path: Path, config: Any) -> tuple[Any, Any]:
     return context, mask
 
 
-def _text_condition_sha256(context: Any, mask: Any) -> str:
+def _text_condition_sha256(context: Any, mask: Any, task: str = TASK) -> str:
     import torch
 
     metadata = {
-        "task": TASK,
-        "prompt": TEXT_PROMPT_TEMPLATE.format(task=TASK),
+        "task": task,
+        "prompt": TEXT_PROMPT_TEMPLATE.format(task=task),
         "context_shape": list(context.shape),
         "context_dtype": str(context.dtype),
         "mask_shape": list(mask.shape),
@@ -392,16 +409,25 @@ def _text_condition_sha256(context: Any, mask: Any) -> str:
     return digest.hexdigest()
 
 
-def _prepare_text_cache(config: Any, minimum_free_gib: float) -> Path:
+def _prepare_text_caches(
+    config: Any,
+    minimum_free_gib: float,
+    tasks: tuple[str, ...],
+) -> tuple[Path, ...]:
     import torch
     from starwam.backbone.wan22 import Wan22TextEncoder
     from starwam.data.lerobot import save_text_cache
 
-    cache_path = _text_cache_path(config)
-    if cache_path.is_file():
-        _load_text_cache(cache_path, config)
-        print(f"text cache already valid: {cache_path}")
-        return cache_path
+    cache_paths = tuple(_text_cache_path(config, task) for task in tasks)
+    missing = [
+        (task, path) for task, path in zip(tasks, cache_paths, strict=True) if not path.is_file()
+    ]
+    for task, path in zip(tasks, cache_paths, strict=True):
+        if path.is_file():
+            _load_text_cache(path, config, task)
+            print(f"text cache already valid: {path}")
+    if not missing:
+        return cache_paths
 
     device = _require_cuda_memory(minimum_free_gib)
     _set_seed(SEED)
@@ -412,21 +438,34 @@ def _prepare_text_cache(config: Any, minimum_free_gib: float) -> Path:
         device=str(device),
         dtype=torch.bfloat16,
     )
-    prompt = TEXT_PROMPT_TEMPLATE.format(task=TASK)
     try:
-        with torch.inference_mode():
-            context, mask = encoder.encode([prompt])
-        save_text_cache(cache_path, context[0], mask[0], prompt, TASK)
-        _load_text_cache(cache_path, config)
+        for task, cache_path in missing:
+            prompt = TEXT_PROMPT_TEMPLATE.format(task=task)
+            with torch.inference_mode():
+                contexts, masks = encoder.encode([prompt])
+            save_text_cache(
+                cache_path,
+                contexts[0],
+                masks[0],
+                prompt,
+                task,
+            )
+            _load_text_cache(cache_path, config, task)
+            print(f"wrote text cache: {cache_path}")
     finally:
         del encoder
         gc.collect()
         torch.cuda.empty_cache()
-    print(f"wrote text cache: {cache_path}")
-    return cache_path
+    return cache_paths
 
 
-def _preprocessing(text_cache_sha256: str) -> ResolvedPreprocessing:
+def _prepare_text_cache(config: Any, minimum_free_gib: float) -> Path:
+    """Backward-compatible single-task text-cache helper."""
+
+    return _prepare_text_caches(config, minimum_free_gib, (TASK,))[0]
+
+
+def _preprocessing(text_cache_sha256: str, task: str = TASK) -> ResolvedPreprocessing:
     return ResolvedPreprocessing(
         camera_order=CAMERA_ORDER,
         camera_transforms=("rotate_180", "rotate_180"),
@@ -438,7 +477,7 @@ def _preprocessing(text_cache_sha256: str) -> ResolvedPreprocessing:
         tensor_layout="BCHW",
         camera_concatenation="horizontal",
         input_value_range=(-1.0, 1.0),
-        text_prompt=TEXT_PROMPT_TEMPLATE.format(task=TASK),
+        text_prompt=TEXT_PROMPT_TEMPLATE.format(task=task),
         text_cache_sha256=text_cache_sha256,
         proprio_fields=PROPRIO_FIELDS,
         action_normalization="minmax_then_libero_gripper_binary_inversion",
@@ -479,10 +518,18 @@ def _write_observation(
     captured: CapturedObservation,
     preprocessing: ResolvedPreprocessing,
     run_dir: Path,
+    spec: LiberoTaskSpec | None = None,
 ) -> Path:
     import numpy as np
     from PIL import Image
 
+    task_suite = spec.task_suite if spec is not None else TASK_SUITE
+    task_id = spec.task_id if spec is not None else TASK_ID
+    init_state_index = spec.init_state_index if spec is not None else INIT_STATE_INDEX
+    wait_steps = spec.wait_steps if spec is not None else WAIT_STEPS
+    seed = spec.seed if spec is not None else SEED
+    bddl_sha256 = spec.bddl_sha256 if spec is not None else BDDL_SHA256
+    init_states_sha256 = spec.init_states_sha256 if spec is not None else INIT_STATES_SHA256
     output_dir = run_dir / "observations" / captured.observation.context_id
     output_dir.mkdir(parents=True, exist_ok=True)
     for frame in captured.observation.frames:
@@ -496,16 +543,16 @@ def _write_observation(
         "preprocessing": preprocessing.to_dict(),
         "libero": {
             "revision": LIBERO_REVISION,
-            "task_suite": TASK_SUITE,
-            "task_id": TASK_ID,
-            "init_state_index": INIT_STATE_INDEX,
-            "wait_steps": WAIT_STEPS,
-            "seed": SEED,
+            "task_suite": task_suite,
+            "task_id": task_id,
+            "init_state_index": init_state_index,
+            "wait_steps": wait_steps,
+            "seed": seed,
             "done_during_wait": captured.done_during_wait,
             "bddl_path": str(captured.bddl_path),
-            "bddl_sha256": BDDL_SHA256,
+            "bddl_sha256": bddl_sha256,
             "init_states_path": str(captured.init_states_path),
-            "init_states_sha256": INIT_STATES_SHA256,
+            "init_states_sha256": init_states_sha256,
             "init_states_shape": list(captured.init_states_shape),
             "init_states_dtype": captured.init_states_dtype,
         },
@@ -774,15 +821,443 @@ def _run_inference(
         adapter.close()
 
 
+def _provenance() -> ModelProvenance:
+    return ModelProvenance(
+        adapter_version="0.1.0a0",
+        upstream_code_revision=STARWAM_REVISION,
+        model_revision=MODEL_REVISION,
+        backbone_revision=BACKBONE_REVISION,
+        checkpoint_sha256=CHECKPOINT_SHA256,
+        vae_sha256=VAE_SHA256,
+        text_encoder_sha256=TEXT_ENCODER_SHA256,
+    )
+
+
+def _inference_configuration(
+    config: Any,
+    *,
+    num_inference_steps: int,
+    vae_device: str,
+) -> ResolvedInference:
+    return ResolvedInference(
+        engine="starwam_mot_infer_action",
+        num_inference_steps=num_inference_steps,
+        scheduler="continuous_flow_match_euler",
+        scheduler_shift=float(config.framework.action_scheduler.infer_shift),
+        video_conditioning=str(config.framework.action_video_conditioning),
+        vae_device=vae_device,
+        sampled_video_frames=9,
+    )
+
+
+def _matrix_cache_key(
+    observation: RobotObservation,
+    preprocessing: ResolvedPreprocessing,
+    inference: ResolvedInference,
+    *,
+    seed: int,
+) -> str:
+    payload = {
+        "schema_version": "0.1",
+        "observation": observation.descriptor(),
+        "model_id": StarWAMRelease().model_id,
+        "seed": seed,
+        "provenance": _provenance().to_dict(),
+        "preprocessing": preprocessing.to_dict(),
+        "inference": inference.to_dict(),
+    }
+    return hashlib.sha256(
+        json.dumps(
+            payload,
+            allow_nan=False,
+            ensure_ascii=False,
+            separators=(",", ":"),
+            sort_keys=True,
+        ).encode("utf-8")
+    ).hexdigest()
+
+
+def _cached_prediction(path: Path, cache_key: str) -> dict[str, object] | None:
+    if not path.is_file():
+        return None
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(payload, dict) or payload.get("cache_key") != cache_key:
+            return None
+        prediction = payload["prediction"]
+        if not isinstance(prediction, dict):
+            return None
+        prediction_sha256 = payload.get("prediction_sha256")
+        if (
+            prediction_sha256
+            != hashlib.sha256(
+                json.dumps(
+                    prediction,
+                    allow_nan=False,
+                    ensure_ascii=False,
+                    separators=(",", ":"),
+                    sort_keys=True,
+                ).encode("utf-8")
+            ).hexdigest()
+        ):
+            return None
+        actions = prediction["actions"]
+        runtime = prediction["runtime"]
+        if not isinstance(actions, list) or len(actions) != 32:
+            return None
+        if not all(
+            isinstance(action, list)
+            and len(action) == 7
+            and all(
+                isinstance(value, (int, float))
+                and not isinstance(value, bool)
+                and math.isfinite(float(value))
+                for value in action
+            )
+            for action in actions
+        ):
+            return None
+        if not isinstance(runtime, dict):
+            return None
+        return payload
+    except (KeyError, OSError, TypeError, ValueError, json.JSONDecodeError):
+        return None
+
+
+def _matrix_record(
+    *,
+    spec: LiberoTaskSpec,
+    seed: int,
+    num_inference_steps: int,
+    cache_key: str,
+    path: Path,
+    payload: dict[str, object],
+    status: str,
+) -> dict[str, object]:
+    prediction = payload["prediction"]
+    if not isinstance(prediction, dict):
+        raise TypeError("prediction payload must be an object")
+    runtime = prediction["runtime"]
+    actions = prediction["actions"]
+    if not isinstance(runtime, dict) or not isinstance(actions, list):
+        raise TypeError("prediction runtime and actions have invalid types")
+    return {
+        "task_key": spec.key,
+        "task_family": spec.task_family,
+        "context_id": spec.context_id,
+        "seed": seed,
+        "num_inference_steps": num_inference_steps,
+        "cache_key": cache_key,
+        "prediction_artifact": str(path),
+        "status": status,
+        "action_horizon": len(actions),
+        "action_dim": len(actions[0]) if actions else 0,
+        "latency_seconds": runtime.get("latency_seconds"),
+        "peak_allocated_bytes": runtime.get("peak_allocated_bytes"),
+        "peak_reserved_bytes": runtime.get("peak_reserved_bytes"),
+    }
+
+
+def _write_matrix_index(
+    run_dir: Path,
+    *,
+    manifest_path: Path,
+    task_keys: list[str],
+    seeds: tuple[int, ...],
+    inference_steps: tuple[int, ...],
+    records: list[dict[str, object]],
+) -> None:
+    path = run_dir / "matrix-index.json"
+    payload = {
+        "schema_version": "0.1",
+        "benchmark_id": "libero-cf-mini-v0.1",
+        "model_id": StarWAMRelease().model_id,
+        "manifest_uri": str(manifest_path),
+        "manifest_sha256": _sha256(manifest_path),
+        "task_keys": task_keys,
+        "seeds": list(seeds),
+        "num_inference_steps": list(inference_steps),
+        "expected_predictions": len(task_keys) * len(seeds) * len(inference_steps),
+        "completed_predictions": sum(
+            record.get("status") in {"generated", "cache-hit"} for record in records
+        ),
+        "failed_predictions": sum(record.get("status") == "failed" for record in records),
+        "records": records,
+        "capability_skips": [
+            {
+                "ablation": "candidate-action-mask",
+                "status": "skipped",
+                "reason": (
+                    "released StarWAM adapter predicts actions from observation/task and "
+                    "does not accept a candidate action as model input"
+                ),
+            },
+            {
+                "ablation": "candidate-action-shuffle",
+                "status": "skipped",
+                "reason": ("released StarWAM adapter has no action-conditioned future endpoint"),
+            },
+        ],
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.{uuid.uuid4().hex}.tmp")
+    try:
+        temporary.write_text(
+            json.dumps(payload, allow_nan=False, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        temporary.replace(path)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
+def _run_inference_matrix(
+    config: Any,
+    run_dir: Path,
+    *,
+    manifest_path: Path,
+    task_keys: list[str],
+    seeds: tuple[int, ...],
+    inference_steps: tuple[int, ...],
+    minimum_free_gib: float,
+    vae_device: str,
+    physical_gpu_index: int,
+) -> Path:
+    import torch
+
+    manifest = load_libero_cf_manifest(manifest_path)
+    if manifest.libero_revision != LIBERO_REVISION:
+        raise RuntimeError("LIBERO-CF manifest and StarWAM runner revisions differ")
+    specs = manifest.select(task_keys)
+    _prepare_text_caches(
+        config,
+        minimum_free_gib,
+        tuple(spec.task for spec in specs),
+    )
+
+    prepared: dict[
+        str,
+        tuple[CapturedObservation, ResolvedPreprocessing, Any, Any],
+    ] = {}
+    for spec in specs:
+        text_path = _text_cache_path(config, spec.task)
+        context, context_mask = _load_text_cache(text_path, config, spec.task)
+        preprocessing = _preprocessing(
+            _text_condition_sha256(context, context_mask, spec.task),
+            spec.task,
+        )
+        captured = _capture_observation(spec)
+        _write_observation(captured, preprocessing, run_dir, spec)
+        prepared[spec.key] = (captured, preprocessing, context, context_mask)
+
+    records: list[dict[str, object]] = []
+    jobs: list[
+        tuple[
+            LiberoTaskSpec,
+            CapturedObservation,
+            ResolvedPreprocessing,
+            Any,
+            Any,
+            int,
+            int,
+            str,
+            Path,
+        ]
+    ] = []
+    for spec in specs:
+        captured, preprocessing, context, context_mask = prepared[spec.key]
+        for num_inference_steps in inference_steps:
+            inference = _inference_configuration(
+                config,
+                num_inference_steps=num_inference_steps,
+                vae_device=vae_device,
+            )
+            for seed in seeds:
+                cache_key = _matrix_cache_key(
+                    captured.observation,
+                    preprocessing,
+                    inference,
+                    seed=seed,
+                )
+                path = run_dir / "predictions" / f"{cache_key}.json"
+                cached = _cached_prediction(path, cache_key)
+                if cached is not None:
+                    records.append(
+                        _matrix_record(
+                            spec=spec,
+                            seed=seed,
+                            num_inference_steps=num_inference_steps,
+                            cache_key=cache_key,
+                            path=path,
+                            payload=cached,
+                            status="cache-hit",
+                        )
+                    )
+                else:
+                    jobs.append(
+                        (
+                            spec,
+                            captured,
+                            preprocessing,
+                            context,
+                            context_mask,
+                            num_inference_steps,
+                            seed,
+                            cache_key,
+                            path,
+                        )
+                    )
+    _write_matrix_index(
+        run_dir,
+        manifest_path=manifest_path,
+        task_keys=[spec.key for spec in specs],
+        seeds=seeds,
+        inference_steps=inference_steps,
+        records=records,
+    )
+    if not jobs:
+        return run_dir / "matrix-index.json"
+
+    device = _require_cuda_memory(minimum_free_gib)
+    _set_seed(seeds[0])
+    model = _build_model(config, device, vae_device)
+    first = jobs[0]
+    backend = LocalStarWAMBackend(
+        model=model,
+        config=config,
+        context=first[3].unsqueeze(0).to(device=device, dtype=torch.bfloat16),
+        context_mask=first[4].unsqueeze(0).to(device=device, dtype=torch.bool),
+        stats=_load_stats(),
+        preprocessing=first[2],
+        device=device,
+        runtime_device=(
+            f"cuda:0 (physical GPU {physical_gpu_index}, {torch.cuda.get_device_name(device)})"
+        ),
+        num_inference_steps=first[5],
+    )
+    adapter = StarWAMAdapter(backend, release=StarWAMRelease())
+    try:
+        active_task_key: str | None = None
+        for (
+            spec,
+            captured,
+            preprocessing,
+            context,
+            context_mask,
+            num_inference_steps,
+            seed,
+            cache_key,
+            path,
+        ) in jobs:
+            try:
+                if active_task_key != spec.key:
+                    backend.context = context.unsqueeze(0).to(
+                        device=device,
+                        dtype=torch.bfloat16,
+                    )
+                    backend.context_mask = context_mask.unsqueeze(0).to(
+                        device=device,
+                        dtype=torch.bool,
+                    )
+                    active_task_key = spec.key
+                backend.preprocessing = preprocessing
+                backend.num_inference_steps = num_inference_steps
+                prediction = adapter.predict_action(captured.observation, seed=seed)
+                artifact = ActionPredictionArtifact(
+                    observation=captured.observation,
+                    prediction=prediction,
+                    provenance=_provenance(),
+                    preprocessing=preprocessing,
+                    inference=_inference_configuration(
+                        config,
+                        num_inference_steps=num_inference_steps,
+                        vae_device=vae_device,
+                    ),
+                )
+                if artifact.cache_key != cache_key:
+                    raise RuntimeError("precomputed and generated cache keys differ")
+                artifact.write_json(path)
+                payload = artifact.to_dict()
+                records.append(
+                    _matrix_record(
+                        spec=spec,
+                        seed=seed,
+                        num_inference_steps=num_inference_steps,
+                        cache_key=cache_key,
+                        path=path,
+                        payload=payload,
+                        status="generated",
+                    )
+                )
+            except Exception as error:
+                records.append(
+                    {
+                        "task_key": spec.key,
+                        "task_family": spec.task_family,
+                        "context_id": spec.context_id,
+                        "seed": seed,
+                        "num_inference_steps": num_inference_steps,
+                        "cache_key": cache_key,
+                        "status": "failed",
+                        "error_type": type(error).__name__,
+                        "error": str(error),
+                    }
+                )
+            _write_matrix_index(
+                run_dir,
+                manifest_path=manifest_path,
+                task_keys=[task.key for task in specs],
+                seeds=seeds,
+                inference_steps=inference_steps,
+                records=records,
+            )
+    finally:
+        adapter.close()
+    failures = sum(record.get("status") == "failed" for record in records)
+    if failures:
+        raise RuntimeError(f"{failures}/{len(records)} StarWAM matrix predictions failed")
+    return run_dir / "matrix-index.json"
+
+
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--mode", choices=("observe", "text-cache", "infer"), default="infer")
+    parser.add_argument(
+        "--mode",
+        choices=("observe", "text-cache", "infer", "matrix"),
+        default="infer",
+    )
     parser.add_argument("--gpu-index", type=int, default=0, help="physical CUDA/EGL GPU")
     parser.add_argument(
         "--run-dir", type=Path, default=REPOSITORY_ROOT / "runs" / "starwam-libero-smoke"
     )
     parser.add_argument("--minimum-free-gib", type=float, default=18.0)
     parser.add_argument("--num-inference-steps", type=int, default=1)
+    parser.add_argument(
+        "--manifest",
+        type=Path,
+        default=LIBERO_CF_MANIFEST,
+        help="pinned task manifest used by matrix mode",
+    )
+    parser.add_argument(
+        "--task-key",
+        action="append",
+        default=[],
+        help="matrix task key; repeat to select several (default: all)",
+    )
+    parser.add_argument(
+        "--matrix-seed",
+        action="append",
+        type=int,
+        default=[],
+        help="matrix diffusion seed; repeat to select several (default: 0,1,2)",
+    )
+    parser.add_argument(
+        "--matrix-inference-steps",
+        action="append",
+        type=int,
+        default=[],
+        help="matrix NFE; repeat to select several (default: 1,4,8)",
+    )
     parser.add_argument("--vae-device", choices=("cpu", "cuda"), default="cpu")
     parser.add_argument(
         "--verify-large-hashes",
@@ -800,10 +1275,35 @@ def main() -> None:
         raise ValueError("minimum-free-gib must be positive")
     if args.num_inference_steps <= 0:
         raise ValueError("num-inference-steps must be positive")
+    matrix_seeds = tuple(args.matrix_seed or (0, 1, 2))
+    matrix_inference_steps = tuple(args.matrix_inference_steps or (1, 4, 8))
+    if any(seed < 0 for seed in matrix_seeds):
+        raise ValueError("matrix seeds must be non-negative")
+    if any(steps <= 0 for steps in matrix_inference_steps):
+        raise ValueError("matrix inference steps must be positive")
+    if len(matrix_seeds) != len(set(matrix_seeds)):
+        raise ValueError("matrix seeds must be unique")
+    if len(matrix_inference_steps) != len(set(matrix_inference_steps)):
+        raise ValueError("matrix inference steps must be unique")
     run_dir = args.run_dir.expanduser().resolve()
     _configure_process(args.gpu_index, run_dir)
     _verify_inputs(verify_large_hashes=args.verify_large_hashes)
     config = _resolved_config(run_dir)
+
+    if args.mode == "matrix":
+        index = _run_inference_matrix(
+            config,
+            run_dir,
+            manifest_path=args.manifest.expanduser().resolve(),
+            task_keys=args.task_key,
+            seeds=matrix_seeds,
+            inference_steps=matrix_inference_steps,
+            minimum_free_gib=args.minimum_free_gib,
+            vae_device="cuda:0" if args.vae_device == "cuda" else "cpu",
+            physical_gpu_index=args.gpu_index,
+        )
+        print(f"wrote matrix index: {index}")
+        return
 
     if args.mode == "text-cache":
         _prepare_text_cache(config, args.minimum_free_gib)

@@ -44,6 +44,7 @@ from wamprobe.datasets import (
 )
 from wamprobe.doctor import ModelManifestError, check_model_store, load_manifest
 from wamprobe.evaluation import EvaluationResult, evaluate
+from wamprobe.experiments import analyze_action_experiment, write_action_experiment_report
 from wamprobe.manipulation_evaluation import evaluate_manipulation
 from wamprobe.reporting import write_reports
 from wamprobe.stats import paired_metric_comparison
@@ -131,6 +132,14 @@ def _build_parser() -> argparse.ArgumentParser:
         help="validate checksums and schema for an intervention JSONL file",
     )
     dataset_validate.add_argument("dataset", type=Path)
+
+    experiment_report = subparsers.add_parser(
+        "experiment-report",
+        help="analyze a cached real-model prediction/execution matrix",
+    )
+    experiment_report.add_argument("matrix", type=Path, help="matrix-index.json path")
+    experiment_report.add_argument("execution", type=Path, help="execution-index.json path")
+    experiment_report.add_argument("--output", type=Path, required=True)
     return parser
 
 
@@ -396,6 +405,18 @@ def _run_dataset_validate(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_experiment_report(args: argparse.Namespace) -> int:
+    try:
+        analysis = analyze_action_experiment(args.matrix, args.execution)
+        json_path, markdown_path = write_action_experiment_report(args.output, analysis)
+    except (OSError, ValueError) as error:
+        print(f"WAMProbe experiment report error: {error}", file=sys.stderr)
+        return 2
+    print(f"Experiment JSON: {json_path}")
+    print(f"Experiment Markdown: {markdown_path}")
+    return 0
+
+
 def _run_doctor(args: argparse.Namespace) -> int:
     try:
         manifest = load_manifest(args.manifest)
@@ -443,5 +464,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return _run_dataset_export(args)
     if args.command == "dataset-validate":
         return _run_dataset_validate(args)
+    if args.command == "experiment-report":
+        return _run_experiment_report(args)
     parser.error(f"unsupported command: {args.command}")
     return 2

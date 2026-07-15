@@ -19,6 +19,17 @@ def _validate_hex_digest(value: str, length: int, field_name: str) -> None:
         raise ValueError(f"{field_name} must be a lowercase {length}-character hex digest")
 
 
+def _stable_sha256(value: object) -> str:
+    encoded = json.dumps(
+        value,
+        allow_nan=False,
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
 @dataclass(frozen=True, slots=True)
 class ModelProvenance:
     """Immutable code and checkpoint identity for a prediction."""
@@ -229,6 +240,7 @@ class ActionPredictionArtifact:
     def to_dict(self) -> dict[str, object]:
         """Return the complete JSON-compatible cache artifact."""
 
+        prediction = self.prediction.to_dict()
         return {
             "schema_version": self.schema_version,
             "cache_key": self.cache_key,
@@ -236,7 +248,8 @@ class ActionPredictionArtifact:
             "observation": self.observation.descriptor(),
             "preprocessing": self.preprocessing.to_dict(),
             "inference": self.inference.to_dict(),
-            "prediction": self.prediction.to_dict(),
+            "prediction": prediction,
+            "prediction_sha256": _stable_sha256(prediction),
         }
 
     def write_json(self, path: Path) -> None:

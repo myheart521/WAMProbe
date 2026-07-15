@@ -70,9 +70,9 @@ The pinned artifacts and environment passed the following checks on 2026-07-15:
   with the same measured GPU peak and cache key
   `c6c46faab2a33940fe40d20aba3fab311f8e17885ed753f963c8b51161d939e1`.
 
-These runs prove the typed observation-to-action integration path, not policy quality or
-rollout success. No predicted action was executed in the simulator, so neither artifact
-may be reported as a LIBERO benchmark result.
+These fixed smoke runs prove the typed observation-to-action integration path, not policy
+quality or rollout success. The later matrix below executes predicted actions but remains
+a fixed-context diagnostic rather than a LIBERO benchmark score.
 
 ## Reproduce the fixed smoke run
 
@@ -95,6 +95,31 @@ Add `--verify-large-hashes` to rehash the checkpoint, VAE, and T5 before a run. 
 PNGs, text caches, observation metadata, and prediction JSON remain below
 `runs/starwam-libero-smoke/` and are ignored by Git.
 
+## Run the LIBERO-CF-Mini matrix
+
+Matrix mode prepares all four text caches before loading the action model once. It runs
+three seeds × NFE 1/4/8 for every fixed task and resumes from output-SHA-verified
+prediction artifacts:
+
+```bash
+environments/starwam/.venv/bin/python environments/starwam/run_libero_smoke.py \
+  --mode matrix --gpu-index 0 --minimum-free-gib 18 --vae-device cpu \
+  --run-dir runs/starwam-libero-cf-mini-v0.1
+
+environments/starwam/.venv/bin/python \
+  environments/starwam/execute_prediction_matrix.py \
+  --gpu-index 0 --matrix-dir runs/starwam-libero-cf-mini-v0.1
+
+wamprobe experiment-report \
+  runs/starwam-libero-cf-mini-v0.1/matrix-index.json \
+  runs/starwam-libero-cf-mini-v0.1/execution-index.json \
+  --output runs/starwam-libero-cf-mini-v0.1/report
+```
+
+The verified run completed 36 predictions and executions with no runtime failure. See the
+[experiment report](../../docs/experiments/STARWAM_LIBERO_CF_MINI_V0.1.md) for NFE/seed
+sensitivity, 8/16/32-step outcomes, negative results and capability-gated skips.
+
 ## Local paths
 
 ```text
@@ -104,5 +129,6 @@ checkpoints/upstream/modelscope/panshaohua/starwam/
 environments/starwam/.venv/
 ```
 
-Only this environment documentation is tracked. The virtual environment, upstream source,
-weights, caches, LIBERO assets, and predictions stay local.
+Only code, documentation and aggregate evidence are tracked. The virtual environment,
+upstream source, weights, caches, LIBERO assets, simulator states and predictions stay
+local until a user-approved artifact release.
