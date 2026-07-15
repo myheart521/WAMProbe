@@ -1,0 +1,88 @@
+{
+  "schema_version": "0.1",
+  "store_root": "checkpoints/upstream",
+  "required_now": [
+    {
+      "name": "Wan2.2-TI2V-5B",
+      "provider": "huggingface",
+      "repository": "Wan-AI/Wan2.2-TI2V-5B",
+      "revision": "921dbaf3f1674a56f47e83fb80a34bac8a8f203e",
+      "license": "Apache-2.0",
+      "target": "huggingface/Wan-AI/Wan2.2-TI2V-5B",
+      "download_mode": "full_snapshot",
+      "expected_bytes": 34203123497,
+      "required_paths": [
+        "config.json",
+        "Wan2.2_VAE.pth",
+        "diffusion_pytorch_model-00001-of-00003.safetensors",
+        "diffusion_pytorch_model-00002-of-00003.safetensors",
+        "diffusion_pytorch_model-00003-of-00003.safetensors",
+        "diffusion_pytorch_model.safetensors.index.json",
+        "models_t5_umt5-xxl-enc-bf16.pth",
+        "google/umt5-xxl/tokenizer.json"
+      ]
+    },
+    {
+      "name": "StarWAM LIBERO MoT",
+      "provider": "modelscope",
+      "repository": "panshaohua/starwam",
+      "revision": "7d4bfe3ec76172ca17169fa959d21da099d386fe",
+      "license": "Apache-2.0",
+      "target": "modelscope/panshaohua/starwam",
+      "download_mode": "selected_files",
+      "expected_bytes": 12042006874,
+      "required_files": [
+        {
+          "path": "starwam-libero/mot/starwam_wan225b_mot.pt",
+          "bytes": 12042005132,
+          "sha256": "d24edea01579880327cfd9dc84d24adab82e420dca9652e614ad697bc8cc5378"
+        },
+        {
+          "path": "starwam-libero/action_stats.json",
+          "bytes": 1742,
+          "sha256": "9f65fb518ca446e0d5ca9e8127e960fe3d11e6466e4f48ba9bb1135b1e0fb4f0"
+        }
+      ]
+    }
+  ],
+  "optional_later": [
+    {
+      "name": "StarWAM LIBERO Shared-DiT",
+      "provider": "modelscope",
+      "repository": "panshaohua/starwam",
+      "revision": "7d4bfe3ec76172ca17169fa959d21da099d386fe",
+      "license": "Apache-2.0",
+      "target": "modelscope/panshaohua/starwam",
+      "path": "starwam-libero/sharedit/starwam_wan225b_shareddit.pt",
+      "bytes": 20076857590,
+      "sha256": "76effa606b4954ba79ae53755e1a3baf412b6d88ed64db50ba9d896bd0ac5c40",
+      "status": "optional"
+    },
+    {
+      "name": "LingBot-VA LIBERO-Long",
+      "provider": "huggingface",
+      "repository": "robbyant/lingbot-va-posttrain-libero-long",
+      "revision": "0e89d1e753019988aba484e8da2dc0810e264d9f",
+      "license": "Apache-2.0",
+      "target": "huggingface/robbyant/lingbot-va-posttrain-libero-long",
+      "download_mode": "full_snapshot",
+      "expected_bytes": 24382314409,
+      "status": "optional"
+    },
+    {
+      "name": "Fast-WAM LIBERO",
+      "provider": "huggingface",
+      "repository": "yuanty/fastwam",
+      "revision": "139eebb6d90cdd9bdbbe465f72c6edc9ad5a518a",
+      "license": "UNVERIFIED",
+      "target": "huggingface/yuanty/fastwam",
+      "download_mode": "selected_files",
+      "expected_bytes": 12041776079,
+      "required_paths": [
+        "libero_uncond_2cam224.pt",
+        "libero_uncond_2cam224_dataset_stats.json"
+      ],
+      "status": "blocked"
+    }
+  ]
+}

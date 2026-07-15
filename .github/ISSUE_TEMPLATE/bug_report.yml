@@ -1,0 +1,35 @@
+name: Bug report
+description: Report reproducible incorrect behavior in WAMProbe
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: "Do not include credentials, private datasets, or model access tokens."
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the observed and expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal reproduction
+      description: Include the command, resolved config, and smallest non-sensitive fixture.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: WAMProbe version or commit
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Python, OS, hardware, and relevant adapter/upstream revisions.
+    validations:
+      required: true

@@ -1,0 +1,42 @@
+name: Adapter proposal
+description: Propose integration of an open World Action Model
+title: "[Adapter]: "
+labels: ["area:adapter"]
+body:
+  - type: input
+    id: repository
+    attributes:
+      label: Upstream repository
+      placeholder: https://github.com/owner/repository
+    validations:
+      required: true
+  - type: input
+    id: checkpoint
+    attributes:
+      label: Public checkpoint
+    validations:
+      required: true
+  - type: input
+    id: license
+    attributes:
+      label: Code and checkpoint licenses
+    validations:
+      required: true
+  - type: checkboxes
+    id: capabilities
+    attributes:
+      label: Exposed capabilities
+      options:
+        - label: Pixel future prediction
+        - label: State future prediction
+        - label: Latent future representation
+        - label: Action prediction
+        - label: Candidate action scoring
+        - label: World feature access
+  - type: textarea
+    id: smoke
+    attributes:
+      label: Smallest reproducible smoke path
+      description: Describe hardware, benchmark, and expected runtime.
+    validations:
+      required: true

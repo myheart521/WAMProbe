@@ -8,15 +8,26 @@ __pycache__/
 .venv/
 build/
 dist/
+site/
 
 # Local data, model weights, generated predictions, and reports
 data/
-checkpoints/
+checkpoints/*
+!checkpoints/README.md
 runs/
+vendor/
 *.ckpt
 *.pt
 *.pth
 *.safetensors
+
+# Local technical-report builds
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.pdf
 
 # Editors and operating systems
 .DS_Store

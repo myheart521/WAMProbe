@@ -1,0 +1,80 @@
+name: GPU nightly
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+    inputs:
+      full_matrix:
+        description: Run all four tasks, seeds, and NFE settings
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wamprobe-gpu-nightly
+  cancel-in-progress: false
+
+jobs:
+  starwam-libero-smoke:
+    if: ${{ vars.WAMPROBE_GPU_NIGHTLY_ENABLED == 'true' }}
+    runs-on: [self-hosted, linux, x64, gpu]
+    timeout-minutes: 90
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          clean: false
+      - name: Validate provisioned runner
+        run: |
+          test -x environments/starwam/.venv/bin/python
+          test -d vendor/upstream/starwam
+          test -d vendor/upstream/libero
+          nvidia-smi
+          environments/starwam/.venv/bin/python -m wamprobe doctor --json
+      - name: Run cached StarWAM matrix
+        env:
+          FULL_MATRIX: ${{ inputs.full_matrix || 'false' }}
+        run: |
+          args=(
+            --mode matrix
+            --gpu-index 0
+            --minimum-free-gib 18
+            --vae-device cpu
+            --run-dir runs/gpu-nightly
+          )
+          if [[ "$FULL_MATRIX" != "true" ]]; then
+            args+=(
+              --task-key spatial-task0
+              --matrix-seed 0
+              --matrix-inference-steps 1
+            )
+          fi
+          environments/starwam/.venv/bin/python \
+            environments/starwam/run_libero_smoke.py "${args[@]}"
+      - name: Execute action prefixes
+        run: |
+          environments/starwam/.venv/bin/python \
+            environments/starwam/execute_prediction_matrix.py \
+            --gpu-index 0 \
+            --matrix-dir runs/gpu-nightly
+      - name: Build experiment report
+        run: |
+          environments/starwam/.venv/bin/python -m wamprobe experiment-report \
+            runs/gpu-nightly/matrix-index.json \
+            runs/gpu-nightly/execution-index.json \
+            --output runs/gpu-nightly/report
+      - name: Upload structured evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: wamprobe-gpu-nightly-${{ github.run_id }}
+          if-no-files-found: warn
+          retention-days: 14
+          path: |
+            runs/gpu-nightly/matrix-index.json
+            runs/gpu-nightly/execution-index.json
+            runs/gpu-nightly/report/

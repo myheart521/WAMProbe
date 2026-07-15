@@ -1,0 +1,4099 @@
+{
+  "benchmarks": [
+    {
+      "benchmark_id": "blockpush-2d-v0.1",
+      "comparable_future_scorer_pairs": 6,
+      "control_steps": 6,
+      "correlations": {
+        "offline_crc_vs_closed_loop_return_pearson": 0.9855274566525744,
+        "offline_regret_vs_closed_loop_return_pearson": -1.0
+      },
+      "execute_prefix": 1,
+      "offline_return_order_disagreements": 0,
+      "profiles": [
+        {
+          "controller_id": "oracle-simulator",
+          "controller_kind": "future-scorer",
+          "episodes": [
+            {
+              "context_id": "blockpush-context-0000",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0001",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0002",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0003",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0004",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0005",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0006",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0007",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0008",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0009",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0010",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0011",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            }
+          ],
+          "offline_crc_spearman": 1.0,
+          "offline_top1_regret": 0.0,
+          "oracle_gap_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.0,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.0
+            },
+            "contexts": 12,
+            "mean": 0.0,
+            "median": 0.0,
+            "quantiles": {
+              "p05": 0.0,
+              "p25": 0.0,
+              "p75": 0.0,
+              "p95": 0.0
+            },
+            "standard_deviation": 0.0
+          },
+          "return_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.0,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.0
+            },
+            "contexts": 12,
+            "mean": 0.0,
+            "median": -0.0,
+            "quantiles": {
+              "p05": -0.0,
+              "p25": -0.0,
+              "p75": -0.0,
+              "p95": -0.0
+            },
+            "standard_deviation": 0.0
+          },
+          "success_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 1.0,
+              "lower": 1.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 1.0
+            },
+            "contexts": 12,
+            "mean": 1.0,
+            "median": 1.0,
+            "quantiles": {
+              "p05": 1.0,
+              "p25": 1.0,
+              "p75": 1.0,
+              "p95": 1.0
+            },
+            "standard_deviation": 0.0
+          }
+        },
+        {
+          "controller_id": "noisy-dynamics",
+          "controller_kind": "future-scorer",
+          "episodes": [
+            {
+              "context_id": "blockpush-context-0000",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0001",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0002",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0003",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0004",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0005",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0006",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0007",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0008",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0009",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0010",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0011",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            }
+          ],
+          "offline_crc_spearman": 1.0,
+          "offline_top1_regret": 0.0,
+          "oracle_gap_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.0,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.0
+            },
+            "contexts": 12,
+            "mean": 0.0,
+            "median": 0.0,
+            "quantiles": {
+              "p05": 0.0,
+              "p25": 0.0,
+              "p75": 0.0,
+              "p95": 0.0
+            },
+            "standard_deviation": 0.0
+          },
+          "return_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.0,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.0
+            },
+            "contexts": 12,
+            "mean": 0.0,
+            "median": -0.0,
+            "quantiles": {
+              "p05": -0.0,
+              "p25": -0.0,
+              "p75": -0.0,
+              "p95": -0.0
+            },
+            "standard_deviation": 0.0
+          },
+          "success_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 1.0,
+              "lower": 1.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 1.0
+            },
+            "contexts": 12,
+            "mean": 1.0,
+            "median": 1.0,
+            "quantiles": {
+              "p05": 1.0,
+              "p25": 1.0,
+              "p75": 1.0,
+              "p95": 1.0
+            },
+            "standard_deviation": 0.0
+          }
+        },
+        {
+          "controller_id": "copy-last-frame",
+          "controller_kind": "future-scorer",
+          "episodes": [
+            {
+              "context_id": "blockpush-context-0000",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0001",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0002",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0003",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0004",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0005",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0006",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0007",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0008",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0009",
+              "executed_steps": 6,
+              "final_return": -0.30000000000000004,
+              "oracle_gap": 0.30000000000000004,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0010",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0011",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            }
+          ],
+          "offline_crc_spearman": 0.0,
+          "offline_top1_regret": 0.3,
+          "oracle_gap_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.3,
+              "lower": 0.3,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.3
+            },
+            "contexts": 12,
+            "mean": 0.3,
+            "median": 0.3,
+            "quantiles": {
+              "p05": 0.3,
+              "p25": 0.3,
+              "p75": 0.3,
+              "p95": 0.30000000000000004
+            },
+            "standard_deviation": 1.6024689053196365e-17
+          },
+          "return_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": -0.3,
+              "lower": -0.3,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": -0.3
+            },
+            "contexts": 12,
+            "mean": -0.3,
+            "median": -0.3,
+            "quantiles": {
+              "p05": -0.30000000000000004,
+              "p25": -0.3,
+              "p75": -0.3,
+              "p95": -0.3
+            },
+            "standard_deviation": 1.6024689053196365e-17
+          },
+          "success_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.0,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.0
+            },
+            "contexts": 12,
+            "mean": 0.0,
+            "median": 0.0,
+            "quantiles": {
+              "p05": 0.0,
+              "p25": 0.0,
+              "p75": 0.0,
+              "p95": 0.0
+            },
+            "standard_deviation": 0.0
+          }
+        },
+        {
+          "controller_id": "wrong-direction",
+          "controller_kind": "future-scorer",
+          "episodes": [
+            {
+              "context_id": "blockpush-context-0000",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "push-left",
+                "push-left",
+                "push-left",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0001",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "push-right",
+                "push-right",
+                "push-right",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0002",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "push-down",
+                "push-down",
+                "push-down",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0003",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "push-up",
+                "push-up",
+                "push-up",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0004",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "push-left",
+                "push-left",
+                "push-left",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0005",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "push-right",
+                "push-right",
+                "push-right",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0006",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "push-down",
+                "push-down",
+                "push-down",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0007",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "push-up",
+                "push-up",
+                "push-up",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0008",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "push-left",
+                "push-left",
+                "push-left",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0009",
+              "executed_steps": 6,
+              "final_return": -0.30000000000000004,
+              "oracle_gap": 0.30000000000000004,
+              "selected_actions": [
+                "push-right",
+                "push-right",
+                "push-right",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0010",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "push-down",
+                "push-down",
+                "push-down",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0011",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "push-up",
+                "push-up",
+                "push-up",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            }
+          ],
+          "offline_crc_spearman": -0.25,
+          "offline_top1_regret": 0.3,
+          "oracle_gap_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.3,
+              "lower": 0.3,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.3
+            },
+            "contexts": 12,
+            "mean": 0.3,
+            "median": 0.3,
+            "quantiles": {
+              "p05": 0.3,
+              "p25": 0.3,
+              "p75": 0.3,
+              "p95": 0.30000000000000004
+            },
+            "standard_deviation": 1.6024689053196365e-17
+          },
+          "return_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": -0.3,
+              "lower": -0.3,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": -0.3
+            },
+            "contexts": 12,
+            "mean": -0.3,
+            "median": -0.3,
+            "quantiles": {
+              "p05": -0.30000000000000004,
+              "p25": -0.3,
+              "p75": -0.3,
+              "p95": -0.3
+            },
+            "standard_deviation": 1.6024689053196365e-17
+          },
+          "success_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.0,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.0
+            },
+            "contexts": 12,
+            "mean": 0.0,
+            "median": 0.0,
+            "quantiles": {
+              "p05": 0.0,
+              "p25": 0.0,
+              "p75": 0.0,
+              "p95": 0.0
+            },
+            "standard_deviation": 0.0
+          }
+        },
+        {
+          "controller_id": "action-agnostic",
+          "controller_kind": "future-scorer",
+          "episodes": [
+            {
+              "context_id": "blockpush-context-0000",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0001",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0002",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0003",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0004",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0005",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0006",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0007",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0008",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0009",
+              "executed_steps": 6,
+              "final_return": -0.30000000000000004,
+              "oracle_gap": 0.30000000000000004,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0010",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0011",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            }
+          ],
+          "offline_crc_spearman": 0.0,
+          "offline_top1_regret": 0.3,
+          "oracle_gap_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.3,
+              "lower": 0.3,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.3
+            },
+            "contexts": 12,
+            "mean": 0.3,
+            "median": 0.3,
+            "quantiles": {
+              "p05": 0.3,
+              "p25": 0.3,
+              "p75": 0.3,
+              "p95": 0.30000000000000004
+            },
+            "standard_deviation": 1.6024689053196365e-17
+          },
+          "return_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": -0.3,
+              "lower": -0.3,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": -0.3
+            },
+            "contexts": 12,
+            "mean": -0.3,
+            "median": -0.3,
+            "quantiles": {
+              "p05": -0.30000000000000004,
+              "p25": -0.3,
+              "p75": -0.3,
+              "p95": -0.3
+            },
+            "standard_deviation": 1.6024689053196365e-17
+          },
+          "success_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.0,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.0
+            },
+            "contexts": 12,
+            "mean": 0.0,
+            "median": 0.0,
+            "quantiles": {
+              "p05": 0.0,
+              "p25": 0.0,
+              "p75": 0.0,
+              "p95": 0.0
+            },
+            "standard_deviation": 0.0
+          }
+        },
+        {
+          "controller_id": "simulator-oracle-scorer",
+          "controller_kind": "simulator-control",
+          "episodes": [
+            {
+              "context_id": "blockpush-context-0000",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0001",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0002",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0003",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0004",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0005",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0006",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0007",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0008",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0009",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0010",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0011",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            }
+          ],
+          "offline_crc_spearman": null,
+          "offline_top1_regret": null,
+          "oracle_gap_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.0,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.0
+            },
+            "contexts": 12,
+            "mean": 0.0,
+            "median": 0.0,
+            "quantiles": {
+              "p05": 0.0,
+              "p25": 0.0,
+              "p75": 0.0,
+              "p95": 0.0
+            },
+            "standard_deviation": 0.0
+          },
+          "return_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.0,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.0
+            },
+            "contexts": 12,
+            "mean": 0.0,
+            "median": -0.0,
+            "quantiles": {
+              "p05": -0.0,
+              "p25": -0.0,
+              "p75": -0.0,
+              "p95": -0.0
+            },
+            "standard_deviation": 0.0
+          },
+          "success_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 1.0,
+              "lower": 1.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 1.0
+            },
+            "contexts": 12,
+            "mean": 1.0,
+            "median": 1.0,
+            "quantiles": {
+              "p05": 1.0,
+              "p25": 1.0,
+              "p75": 1.0,
+              "p95": 1.0
+            },
+            "standard_deviation": 0.0
+          }
+        },
+        {
+          "controller_id": "fixed-action-policy",
+          "controller_kind": "action-only-control",
+          "episodes": [
+            {
+              "context_id": "blockpush-context-0000",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0001",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0002",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0003",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0004",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0005",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0006",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0007",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0008",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right",
+                "push-right"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0009",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left",
+                "push-left"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0010",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up",
+                "push-up"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            },
+            {
+              "context_id": "blockpush-context-0011",
+              "executed_steps": 6,
+              "final_return": -0.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-down"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": true
+            }
+          ],
+          "offline_crc_spearman": null,
+          "offline_top1_regret": null,
+          "oracle_gap_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.0,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.0
+            },
+            "contexts": 12,
+            "mean": 0.0,
+            "median": 0.0,
+            "quantiles": {
+              "p05": 0.0,
+              "p25": 0.0,
+              "p75": 0.0,
+              "p95": 0.0
+            },
+            "standard_deviation": 0.0
+          },
+          "return_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.0,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.0
+            },
+            "contexts": 12,
+            "mean": 0.0,
+            "median": -0.0,
+            "quantiles": {
+              "p05": -0.0,
+              "p25": -0.0,
+              "p75": -0.0,
+              "p95": -0.0
+            },
+            "standard_deviation": 0.0
+          },
+          "success_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 1.0,
+              "lower": 1.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 1.0
+            },
+            "contexts": 12,
+            "mean": 1.0,
+            "median": 1.0,
+            "quantiles": {
+              "p05": 1.0,
+              "p25": 1.0,
+              "p75": 1.0,
+              "p95": 1.0
+            },
+            "standard_deviation": 0.0
+          }
+        },
+        {
+          "controller_id": "random-candidate",
+          "controller_kind": "random-control",
+          "episodes": [
+            {
+              "context_id": "blockpush-context-0000",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "push-left",
+                "push-left",
+                "push-up",
+                "noop",
+                "push-left",
+                "push-up"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0001",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "push-left",
+                "push-down",
+                "push-right",
+                "push-right",
+                "push-down",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0002",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "push-down",
+                "push-up",
+                "push-left",
+                "push-left",
+                "push-down",
+                "push-left"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0003",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "push-left",
+                "push-right",
+                "push-down",
+                "push-left",
+                "push-up",
+                "push-left"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0004",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "push-up",
+                "push-up",
+                "push-down",
+                "noop",
+                "push-up",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0005",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "push-down",
+                "push-down",
+                "push-down",
+                "push-up",
+                "noop",
+                "push-left"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0006",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "push-up",
+                "noop",
+                "push-left",
+                "push-right",
+                "noop",
+                "push-right"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0007",
+              "executed_steps": 6,
+              "final_return": -0.18,
+              "oracle_gap": 0.18,
+              "selected_actions": [
+                "push-right",
+                "push-down",
+                "push-down",
+                "noop",
+                "push-down",
+                "push-down"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0008",
+              "executed_steps": 6,
+              "final_return": -0.24,
+              "oracle_gap": 0.24,
+              "selected_actions": [
+                "push-right",
+                "push-up",
+                "push-down",
+                "push-right",
+                "push-left",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0009",
+              "executed_steps": 6,
+              "final_return": -0.30000000000000004,
+              "oracle_gap": 0.30000000000000004,
+              "selected_actions": [
+                "push-right",
+                "push-down",
+                "push-right",
+                "push-left",
+                "push-right",
+                "push-right"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0010",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "push-down",
+                "push-left",
+                "push-down",
+                "push-down",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            },
+            {
+              "context_id": "blockpush-context-0011",
+              "executed_steps": 6,
+              "final_return": -0.3,
+              "oracle_gap": 0.3,
+              "selected_actions": [
+                "noop",
+                "push-right",
+                "noop",
+                "push-left",
+                "push-right",
+                "noop"
+              ],
+              "simulator_oracle_return": -0.0,
+              "success": false
+            }
+          ],
+          "offline_crc_spearman": null,
+          "offline_top1_regret": null,
+          "oracle_gap_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.285,
+              "lower": 0.26,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.3
+            },
+            "contexts": 12,
+            "mean": 0.285,
+            "median": 0.3,
+            "quantiles": {
+              "p05": 0.213,
+              "p25": 0.3,
+              "p75": 0.3,
+              "p95": 0.30000000000000004
+            },
+            "standard_deviation": 0.035707142142714254
+          },
+          "return_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": -0.285,
+              "lower": -0.3,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": -0.26499999999999996
+            },
+            "contexts": 12,
+            "mean": -0.285,
+            "median": -0.3,
+            "quantiles": {
+              "p05": -0.30000000000000004,
+              "p25": -0.3,
+              "p75": -0.3,
+              "p95": -0.21300000000000002
+            },
+            "standard_deviation": 0.035707142142714254
+          },
+          "success_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.0,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.0
+            },
+            "contexts": 12,
+            "mean": 0.0,
+            "median": 0.0,
+            "quantiles": {
+              "p05": 0.0,
+              "p25": 0.0,
+              "p75": 0.0,
+              "p95": 0.0
+            },
+            "standard_deviation": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "benchmark_id": "gripper-catch-v0.1",
+      "comparable_future_scorer_pairs": 6,
+      "control_steps": 5,
+      "correlations": {
+        "offline_crc_vs_closed_loop_return_pearson": 0.9999976774578939,
+        "offline_regret_vs_closed_loop_return_pearson": -0.9999976774578939
+      },
+      "execute_prefix": 1,
+      "offline_return_order_disagreements": 0,
+      "profiles": [
+        {
+          "controller_id": "oracle-simulator",
+          "controller_kind": "future-scorer",
+          "episodes": [
+            {
+              "context_id": "gripper-catch-context-0000",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0001",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0002",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0003",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0004",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0005",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0006",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0007",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0008",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0009",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0010",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0011",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            }
+          ],
+          "offline_crc_spearman": 1.0,
+          "offline_top1_regret": 0.0,
+          "oracle_gap_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.0,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.0
+            },
+            "contexts": 12,
+            "mean": 0.0,
+            "median": 0.0,
+            "quantiles": {
+              "p05": 0.0,
+              "p25": 0.0,
+              "p75": 0.0,
+              "p95": 0.0
+            },
+            "standard_deviation": 0.0
+          },
+          "return_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 1.0,
+              "lower": 1.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 1.0
+            },
+            "contexts": 12,
+            "mean": 1.0,
+            "median": 1.0,
+            "quantiles": {
+              "p05": 1.0,
+              "p25": 1.0,
+              "p75": 1.0,
+              "p95": 1.0
+            },
+            "standard_deviation": 0.0
+          },
+          "success_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 1.0,
+              "lower": 1.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 1.0
+            },
+            "contexts": 12,
+            "mean": 1.0,
+            "median": 1.0,
+            "quantiles": {
+              "p05": 1.0,
+              "p25": 1.0,
+              "p75": 1.0,
+              "p95": 1.0
+            },
+            "standard_deviation": 0.0
+          }
+        },
+        {
+          "controller_id": "noisy-dynamics",
+          "controller_kind": "future-scorer",
+          "episodes": [
+            {
+              "context_id": "gripper-catch-context-0000",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0001",
+              "executed_steps": 5,
+              "final_return": 0.96,
+              "oracle_gap": 0.040000000000000036,
+              "selected_actions": [
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-left"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0002",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0003",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0004",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0005",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0006",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0007",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0008",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0009",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0010",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0011",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            }
+          ],
+          "offline_crc_spearman": 1.0,
+          "offline_top1_regret": 0.0,
+          "oracle_gap_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.003333333333333336,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.010000000000000009
+            },
+            "contexts": 12,
+            "mean": 0.003333333333333336,
+            "median": 0.0,
+            "quantiles": {
+              "p05": 0.0,
+              "p25": 0.0,
+              "p75": 0.0,
+              "p95": 0.017999999999999988
+            },
+            "standard_deviation": 0.011055415967851341
+          },
+          "return_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.9966666666666667,
+              "lower": 0.9899999999999999,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 1.0
+            },
+            "contexts": 12,
+            "mean": 0.9966666666666667,
+            "median": 1.0,
+            "quantiles": {
+              "p05": 0.982,
+              "p25": 1.0,
+              "p75": 1.0,
+              "p95": 1.0
+            },
+            "standard_deviation": 0.011055415967851341
+          },
+          "success_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.9166666666666666,
+              "lower": 0.75,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 1.0
+            },
+            "contexts": 12,
+            "mean": 0.9166666666666666,
+            "median": 1.0,
+            "quantiles": {
+              "p05": 0.55,
+              "p25": 1.0,
+              "p75": 1.0,
+              "p95": 1.0
+            },
+            "standard_deviation": 0.2763853991962833
+          }
+        },
+        {
+          "controller_id": "copy-last-frame",
+          "controller_kind": "future-scorer",
+          "episodes": [
+            {
+              "context_id": "gripper-catch-context-0000",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0001",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0002",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0003",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0004",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0005",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0006",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0007",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0008",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0009",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0010",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0011",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            }
+          ],
+          "offline_crc_spearman": 0.0,
+          "offline_top1_regret": 1.0,
+          "oracle_gap_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 1.0,
+              "lower": 1.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 1.0
+            },
+            "contexts": 12,
+            "mean": 1.0,
+            "median": 1.0,
+            "quantiles": {
+              "p05": 1.0,
+              "p25": 1.0,
+              "p75": 1.0,
+              "p95": 1.0
+            },
+            "standard_deviation": 0.0
+          },
+          "return_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.0,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.0
+            },
+            "contexts": 12,
+            "mean": 0.0,
+            "median": 0.0,
+            "quantiles": {
+              "p05": 0.0,
+              "p25": 0.0,
+              "p75": 0.0,
+              "p95": 0.0
+            },
+            "standard_deviation": 0.0
+          },
+          "success_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.0,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.0
+            },
+            "contexts": 12,
+            "mean": 0.0,
+            "median": 0.0,
+            "quantiles": {
+              "p05": 0.0,
+              "p25": 0.0,
+              "p75": 0.0,
+              "p95": 0.0
+            },
+            "standard_deviation": 0.0
+          }
+        },
+        {
+          "controller_id": "wrong-direction",
+          "controller_kind": "future-scorer",
+          "episodes": [
+            {
+              "context_id": "gripper-catch-context-0000",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0001",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0002",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0003",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0004",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0005",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0006",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0007",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0008",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0009",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0010",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0011",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            }
+          ],
+          "offline_crc_spearman": 0.0,
+          "offline_top1_regret": 1.0,
+          "oracle_gap_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 1.0,
+              "lower": 1.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 1.0
+            },
+            "contexts": 12,
+            "mean": 1.0,
+            "median": 1.0,
+            "quantiles": {
+              "p05": 1.0,
+              "p25": 1.0,
+              "p75": 1.0,
+              "p95": 1.0
+            },
+            "standard_deviation": 0.0
+          },
+          "return_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.0,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.0
+            },
+            "contexts": 12,
+            "mean": 0.0,
+            "median": 0.0,
+            "quantiles": {
+              "p05": 0.0,
+              "p25": 0.0,
+              "p75": 0.0,
+              "p95": 0.0
+            },
+            "standard_deviation": 0.0
+          },
+          "success_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.0,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.0
+            },
+            "contexts": 12,
+            "mean": 0.0,
+            "median": 0.0,
+            "quantiles": {
+              "p05": 0.0,
+              "p25": 0.0,
+              "p75": 0.0,
+              "p95": 0.0
+            },
+            "standard_deviation": 0.0
+          }
+        },
+        {
+          "controller_id": "action-agnostic",
+          "controller_kind": "future-scorer",
+          "episodes": [
+            {
+              "context_id": "gripper-catch-context-0000",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0001",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0002",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0003",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0004",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0005",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0006",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0007",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0008",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0009",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0010",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0011",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            }
+          ],
+          "offline_crc_spearman": 0.0,
+          "offline_top1_regret": 1.0,
+          "oracle_gap_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 1.0,
+              "lower": 1.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 1.0
+            },
+            "contexts": 12,
+            "mean": 1.0,
+            "median": 1.0,
+            "quantiles": {
+              "p05": 1.0,
+              "p25": 1.0,
+              "p75": 1.0,
+              "p95": 1.0
+            },
+            "standard_deviation": 0.0
+          },
+          "return_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.0,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.0
+            },
+            "contexts": 12,
+            "mean": 0.0,
+            "median": 0.0,
+            "quantiles": {
+              "p05": 0.0,
+              "p25": 0.0,
+              "p75": 0.0,
+              "p95": 0.0
+            },
+            "standard_deviation": 0.0
+          },
+          "success_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.0,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.0
+            },
+            "contexts": 12,
+            "mean": 0.0,
+            "median": 0.0,
+            "quantiles": {
+              "p05": 0.0,
+              "p25": 0.0,
+              "p75": 0.0,
+              "p95": 0.0
+            },
+            "standard_deviation": 0.0
+          }
+        },
+        {
+          "controller_id": "simulator-oracle-scorer",
+          "controller_kind": "simulator-control",
+          "episodes": [
+            {
+              "context_id": "gripper-catch-context-0000",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0001",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0002",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0003",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0004",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0005",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0006",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0007",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0008",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0009",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0010",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0011",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            }
+          ],
+          "offline_crc_spearman": null,
+          "offline_top1_regret": null,
+          "oracle_gap_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.0,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.0
+            },
+            "contexts": 12,
+            "mean": 0.0,
+            "median": 0.0,
+            "quantiles": {
+              "p05": 0.0,
+              "p25": 0.0,
+              "p75": 0.0,
+              "p95": 0.0
+            },
+            "standard_deviation": 0.0
+          },
+          "return_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 1.0,
+              "lower": 1.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 1.0
+            },
+            "contexts": 12,
+            "mean": 1.0,
+            "median": 1.0,
+            "quantiles": {
+              "p05": 1.0,
+              "p25": 1.0,
+              "p75": 1.0,
+              "p95": 1.0
+            },
+            "standard_deviation": 0.0
+          },
+          "success_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 1.0,
+              "lower": 1.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 1.0
+            },
+            "contexts": 12,
+            "mean": 1.0,
+            "median": 1.0,
+            "quantiles": {
+              "p05": 1.0,
+              "p25": 1.0,
+              "p75": 1.0,
+              "p95": 1.0
+            },
+            "standard_deviation": 0.0
+          }
+        },
+        {
+          "controller_id": "fixed-action-policy",
+          "controller_kind": "action-only-control",
+          "episodes": [
+            {
+              "context_id": "gripper-catch-context-0000",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0001",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0002",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0003",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0004",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0005",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0006",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0007",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0008",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0009",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left",
+                "catch-left"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0010",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay",
+                "catch-stay"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0011",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right",
+                "catch-right"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            }
+          ],
+          "offline_crc_spearman": null,
+          "offline_top1_regret": null,
+          "oracle_gap_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.0,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.0
+            },
+            "contexts": 12,
+            "mean": 0.0,
+            "median": 0.0,
+            "quantiles": {
+              "p05": 0.0,
+              "p25": 0.0,
+              "p75": 0.0,
+              "p95": 0.0
+            },
+            "standard_deviation": 0.0
+          },
+          "return_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 1.0,
+              "lower": 1.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 1.0
+            },
+            "contexts": 12,
+            "mean": 1.0,
+            "median": 1.0,
+            "quantiles": {
+              "p05": 1.0,
+              "p25": 1.0,
+              "p75": 1.0,
+              "p95": 1.0
+            },
+            "standard_deviation": 0.0
+          },
+          "success_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 1.0,
+              "lower": 1.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 1.0
+            },
+            "contexts": 12,
+            "mean": 1.0,
+            "median": 1.0,
+            "quantiles": {
+              "p05": 1.0,
+              "p25": 1.0,
+              "p75": 1.0,
+              "p95": 1.0
+            },
+            "standard_deviation": 0.0
+          }
+        },
+        {
+          "controller_id": "random-candidate",
+          "controller_kind": "random-control",
+          "episodes": [
+            {
+              "context_id": "gripper-catch-context-0000",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "catch-stay",
+                "catch-right",
+                "catch-stay",
+                "catch-right",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0001",
+              "executed_steps": 5,
+              "final_return": 1.0,
+              "oracle_gap": 0.0,
+              "selected_actions": [
+                "catch-right",
+                "catch-left",
+                "catch-right",
+                "catch-stay",
+                "catch-left"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": true
+            },
+            {
+              "context_id": "gripper-catch-context-0002",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "catch-left",
+                "noop",
+                "noop",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0003",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "catch-left",
+                "noop",
+                "catch-left",
+                "noop",
+                "catch-left"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0004",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "catch-stay",
+                "noop",
+                "catch-stay",
+                "catch-stay",
+                "noop"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0005",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "catch-left",
+                "catch-left",
+                "catch-stay",
+                "catch-right",
+                "catch-right"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0006",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "catch-right",
+                "catch-left",
+                "catch-stay",
+                "catch-right",
+                "catch-stay"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0007",
+              "executed_steps": 5,
+              "final_return": 0.92,
+              "oracle_gap": 0.07999999999999996,
+              "selected_actions": [
+                "catch-stay",
+                "catch-left",
+                "catch-right",
+                "catch-left",
+                "catch-left"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0008",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "noop",
+                "noop",
+                "catch-right",
+                "catch-stay",
+                "catch-right"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0009",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "catch-left",
+                "catch-right",
+                "catch-stay",
+                "catch-left",
+                "catch-stay"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0010",
+              "executed_steps": 5,
+              "final_return": 0.9199999999999999,
+              "oracle_gap": 0.08000000000000007,
+              "selected_actions": [
+                "catch-left",
+                "catch-left",
+                "catch-stay",
+                "catch-right",
+                "catch-left"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            },
+            {
+              "context_id": "gripper-catch-context-0011",
+              "executed_steps": 5,
+              "final_return": 0.0,
+              "oracle_gap": 1.0,
+              "selected_actions": [
+                "catch-stay",
+                "noop",
+                "noop",
+                "noop",
+                "catch-right"
+              ],
+              "simulator_oracle_return": 1.0,
+              "success": false
+            }
+          ],
+          "offline_crc_spearman": null,
+          "offline_top1_regret": null,
+          "oracle_gap_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.7633333333333333,
+              "lower": 0.5133333333333333,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 1.0
+            },
+            "contexts": 12,
+            "mean": 0.7633333333333333,
+            "median": 1.0,
+            "quantiles": {
+              "p05": 0.043999999999999984,
+              "p25": 0.77,
+              "p75": 1.0,
+              "p95": 1.0
+            },
+            "standard_deviation": 0.4103521522898215
+          },
+          "return_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.23666666666666666,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.47333333333333333
+            },
+            "contexts": 12,
+            "mean": 0.23666666666666666,
+            "median": 0.0,
+            "quantiles": {
+              "p05": 0.0,
+              "p25": 0.0,
+              "p75": 0.22999999999999998,
+              "p95": 0.956
+            },
+            "standard_deviation": 0.4103521522898215
+          },
+          "success_summary": {
+            "confidence_interval": {
+              "confidence_level": 0.95,
+              "estimate": 0.08333333333333333,
+              "lower": 0.0,
+              "resamples": 1000,
+              "unit": "context",
+              "upper": 0.25
+            },
+            "contexts": 12,
+            "mean": 0.08333333333333333,
+            "median": 0.0,
+            "quantiles": {
+              "p05": 0.0,
+              "p25": 0.0,
+              "p75": 0.0,
+              "p95": 0.4499999999999993
+            },
+            "standard_deviation": 0.2763853991962833
+          }
+        }
+      ]
+    }
+  ],
+  "contexts_per_benchmark": 12,
+  "interpretation": "Each cycle scores the same legal action set, executes only the selected trajectory prefix in true dynamics, then replans from the resulting state; the scoring window is capped by the remaining episode budget. Cross-profile Pearson values are descriptive because there are only five future scorers; context-block intervals remain the primary uncertainty view.",
+  "resamples": 1000,
+  "schema_version": "0.1",
+  "seed": 7
+}

@@ -507,6 +507,13 @@ oracle > noisy action-aware > action-agnostic > wrong-direction/copy-last
 - 记录渲染 FPS、控制 FPS 和 action repeat；
 - 对每个任务写 benchmark card，说明哪些物理属性可以可靠评测。
 
+2026-07-15 pilot 进展：已在固定 `libero_spatial` task 0/context 上生成 4 个分支、
+每分支 8 步和 2 个相机视角。恢复契约采用 MuJoCo `mjSTATE_INTEGRATION`，并额外恢复
+robosuite 时钟、controller、observable、Python/NumPy RNG 与 Panda gripper 的
+`current_action`。两次 restore、重复 no-op、正序/逆序执行均达到逐状态完全一致，
+最大状态误差为 0。该 pilot 的诊断动作 return/success 均为 0，因此只证明配对数据
+生成和分支分离，不是 LIBERO 策略成功率结果。
+
 ### 8.3 Tier 2：Closed-Loop Utility
 
 目标：验证离线指标是否与控制收益相关。
@@ -727,6 +734,11 @@ v0.1 必须先实现无需外部大模型的 baseline，用于验证指标：
 1. **StarWAM adapter**：代码以模块化 WAM 家族为目标，适合验证 capability protocol；
 2. **FastWAM adapter**：用于 action-only/联合变体和效率评测，但要根据公开 checkpoint 实际能力启用指标；
 3. **其他 WAM**：待 v0.1 协议稳定后通过独立 extras/plugin 添加。
+
+截至 2026-07-15 的代码、checkpoint、许可证与环境审计已完成。第一实现目标保留为
+StarWAM，LingBot-VA 调整为第二个论文对照，Fast-WAM 在权重许可证元数据明确前只作为
+action-only/效率设计参考。版本 pin、风险和第一实现切片见
+[`docs/research/ADAPTER_SELECTION.md`](research/ADAPTER_SELECTION.md)。
 
 ### 11.3 依赖隔离
 
@@ -975,6 +987,12 @@ CLI 验收要求：
 
 ### Phase 0：问题收敛（第 1–2 周）
 
+当前进度（2026-07-15）：15 个文献失败模式和首个 Adapter 审计已经完成，见
+[`docs/research/WAM_VLA_FAILURE_CASES.md`](research/WAM_VLA_FAILURE_CASES.md) 与
+[`docs/research/ADAPTER_SELECTION.md`](research/ADAPTER_SELECTION.md)。MkDocs 文档站、
+严格站点构建、仓库内 Markdown 链接检查和公开 JSON Schema/规范实例验证也已进入 CI；
+外部研究者 README 理解度检查仍需人工完成。
+
 任务：
 
 - 阅读并整理 10–15 个 WAM/VLA 评测失败案例；
@@ -996,6 +1014,12 @@ CLI 验收要求：
 - 首个 adapter 的模型能力和许可证已经核实。
 
 ### Phase 1：核心 API 与数据格式（第 3–4 周）
+
+完成状态（2026-07-15）：typed API、capability/result/intervention schema、doctor、dummy
+adapters 以及通用 intervention JSONL loader 已落地。Prediction cache 以完整输入和配置生成
+内容地址，使用原子写入与 payload SHA256 校验；相同 demo 可从 5/5 缓存结果恢复，损坏条目
+会明确失败而不会静默重算。`dataset-export`、`dataset-validate`、`report` 和 `compare` CLI
+均已通过端到端测试。
 
 任务：
 
@@ -1019,6 +1043,13 @@ CLI 验收要求：
 
 ### Phase 2：Toy Benchmark 与核心指标（第 5–7 周）
 
+完成状态（2026-07-15）：Phase 2 约定范围已经落地。PointMass-2D、带显式接触阶段的
+BlockPush-2D、带闭合/附着语义的 Gripper-Catch 均可在 CPU 运行；后两者提供确定性/带噪声
+状态 rollout 与 dependency-free RGB 观察。ADS permutation null、CDA、NOS、ADE/FDE、
+四视角 CRC、Top-1 Regret 均先在 context 层计算，再做 context-block bootstrap 和严格
+context-ID 对齐的 paired comparison；三个 benchmark 都能生成 JSON、Markdown 和 HTML。
+8.1 节更广义 Toy tier 中的 Occluded-Object 仍是后续扩展，不属于 #10/Phase 2 退出条件。
+
 任务：
 
 - 实现 PointMass、BlockPush、Gripper-Catch；
@@ -1034,6 +1065,14 @@ CLI 验收要求：
 - CPU smoke test 在 5 分钟内完成。
 
 ### Phase 3：LIBERO-CF-Mini（第 8–10 周）
+
+当前进度（2026-07-15）：已固定 spatial/object/goal/long-horizon 四类任务的 BDDL、
+init-state 与上游 commit，批量生成 4 task × 4 branch × 8 step 的真实模拟器数据。每个任务
+均通过两次独立 restore、重复 no-op 与正反 branch order 检查，最大 integration-state 误差
+为 `0.0`；第二次整套运行在校验 JSON、snapshot、sidecar 和全部 PNG 后得到 4/4 cache hit。
+任务选择、MIT 许可证、完整 hash、零稀疏回报和适用边界见
+[`docs/benchmarks/LIBERO_CF_MINI.md`](benchmarks/LIBERO_CF_MINI.md)。扩大 init-state 数量、
+接入真实 WAM 预测与外部全新环境复现仍属于后续工作。
 
 任务：
 
@@ -1052,6 +1091,14 @@ CLI 验收要求：
 
 ### Phase 4：真实 WAM Adapter（第 11–13 周）
 
+当前进度（2026-07-15）：StarWAM matrix runner 已在一次模型加载中完成 4 task × 3 seed ×
+3 NFE 共 36 次真实推理，第二次运行得到 36/36 output-SHA-verified cache hit；随后从配对
+snapshot 执行全部动作块，并在 horizon 8/16/32 记录状态、回报和成功。预测与执行失败率
+均为 0，NFE 1/4/8 平均延迟为 0.780/0.972/1.216 秒，峰值约 11.39 GiB。所有短 horizon
+稀疏成功均为 0，EEF 平均位移随 horizon 为 0.1716/0.1121/0.0000，保留为“更长 rollout
+不单调改善控制”的负结果。候选 action mask/shuffle 因已验证 adapter 不接受候选 action
+输入而结构化跳过。模型卡、实验报告和 opt-in self-hosted GPU nightly 已补齐。
+
 任务：
 
 - 完成 StarWAM 或其他首选 adapter；
@@ -1067,6 +1114,20 @@ CLI 验收要求：
 - 失败样本和跳过原因全部进入报告。
 
 ### Phase 5：控制价值与 v0.1 发布（第 14–16 周）
+
+当前进度（2026-07-15）：已在 BlockPush-2D 与 Gripper-Catch 上运行 12-context 的传统
+视频指标/控制价值反例研究。`appearance-corrupted-oracle` 保持 FDE=0、CRC=1、Regret=0，
+但 PSNR 约 0.59 dB；PSNR 与 regret 的跨 profile Pearson 约为 -0.16，且两个 benchmark
+分别出现 3/9 和 5/9 个可比较排序冲突。最小 score-execute-observe 闭环也已落地：每次
+只执行 1 步并重规划，oracle future scorer 两任务 success 均为 1，noisy future scorer
+分别为 1.0/0.9167，三个 action-ignorance/wrong-direction 对照均为 0；离线 CRC 与闭环
+return 的 5-profile 描述性 Pearson 分别为 0.9855/1.0。全部结果、context-block CI 和限制
+见 [`examples/video-control-study/`](https://github.com/myheart521/WAMProbe/blob/main/examples/video-control-study/video-control-study.md)
+与 [`docs/experiments/TOY_CLOSED_LOOP_V0.1.md`](experiments/TOY_CLOSED_LOOP_V0.1.md)。
+`0.1.0rc1` 候选版本现已具备双构建 SHA 一致性、归档安全/metadata 审计、证据 manifest、
+离线干净 wheel 安装 smoke、手动 provenance attestation workflow，并提供可在 Overleaf
+直接编译的 5 页技术报告初稿。正式 PyPI/GitHub Release、上游 PR 和外部用户复现仍需
+维护者或第三方授权，未被自动触发。
 
 任务：
 
@@ -1111,6 +1172,11 @@ v0.1 发布门槛：
 | #18 | Add first real WAM adapter | P0 | 7–10 天 | #2、#5 |
 | #19 | Add GPU nightly smoke workflow | P1 | 2 天 | #18 |
 | #20 | Write benchmark card and v0.1 reproducibility guide | P0 | 4 天 | 全部 |
+
+代码落地状态（2026-07-15）：已补齐并验证 #6、#8、#10、#11、#13、#15、#16、#19
+以及 CRC；
+此前已完成 #1–#5、#7、#9、#12、#14、#17 的当前 v0.1 切片。#18 已有可运行的 StarWAM
+prediction artifact/adapter 切片，但真实 WAM 反事实控制评测仍需继续扩展。
 
 建议 labels：
 
@@ -1227,31 +1293,31 @@ priority:p1
 ### 功能
 
 - [ ] `pip install wamprobe` 可以安装核心包；
-- [ ] `wamprobe doctor` 能检查 capability/benchmark 兼容性；
-- [ ] Toy benchmark 可在 CPU 完整运行；
-- [ ] 至少 4 个 reference baselines；
-- [ ] 至少 1 个真实 WAM adapter；
-- [ ] 至少 6 个核心指标；
-- [ ] prediction cache 可恢复中断运行；
-- [ ] JSONL/JSON/HTML 输出齐全；
-- [ ] paired comparison 和 bootstrap CI 可用。
+- [x] `wamprobe doctor` 能检查 capability/benchmark 兼容性；
+- [x] Toy benchmark 可在 CPU 完整运行；
+- [x] 至少 4 个 reference baselines；
+- [x] 至少 1 个真实 WAM adapter；
+- [x] 至少 6 个核心指标；
+- [x] prediction cache 可恢复中断运行；
+- [x] JSONL/JSON/HTML 输出齐全；
+- [x] paired comparison 和 bootstrap CI 可用。
 
 ### 研究有效性
 
-- [ ] oracle 与错误 baseline 能被稳定区分；
-- [ ] action shuffle/mask 产生预期指标下降；
-- [ ] 噪声增加时准确性指标总体退化；
-- [ ] 至少一个 causal/ranking 指标与 simulator return 相关；
-- [ ] 报告传统视频指标与控制指标的差异；
-- [ ] 公开所有主要失败率和 skipped metrics。
+- [x] oracle 与错误 baseline 能被稳定区分；
+- [x] action shuffle/permutation 产生预期指标下降；
+- [x] 噪声增加时准确性指标总体退化；
+- [x] 至少一个 causal/ranking 指标与 simulator return 相关；
+- [x] 报告传统视频指标与控制指标的差异；
+- [x] 公开所有主要失败率和 skipped metrics。
 
 ### 工程质量
 
-- [ ] 核心 coverage ≥ 85%；
-- [ ] schema 有版本和兼容策略；
-- [ ] 所有 release artifact 可追溯；
-- [ ] README 15 分钟 quickstart 可执行；
-- [ ] benchmark/model/metric cards 完整；
+- [x] 核心 coverage ≥ 85%；
+- [x] schema 有版本和兼容策略；
+- [x] 所有 release artifact 可追溯；
+- [x] README 15 分钟 quickstart 可执行；
+- [x] benchmark/model/metric cards 完整；
 - [ ] 至少一个外部用户复现 smoke test。
 
 ---

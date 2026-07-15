@@ -1,0 +1,10 @@
+{
+  "model_id": "starwam-wan22-5b-mot-libero",
+  "future_representation": "none",
+  "predicts_actions": true,
+  "scores_actions": false,
+  "exposes_world_features": false,
+  "stochastic": true,
+  "deterministic_seed": true,
+  "supports_batching": false
+}

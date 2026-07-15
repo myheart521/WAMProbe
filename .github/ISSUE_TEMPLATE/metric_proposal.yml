@@ -1,0 +1,32 @@
+name: Metric proposal
+description: Propose a causal, dynamics, utility, uncertainty, or efficiency metric
+title: "[Metric]: "
+labels: ["area:metric", "needs-rfc"]
+body:
+  - type: textarea
+    id: failure
+    attributes:
+      label: Failure mode
+      description: What concrete WAM failure does this metric detect?
+    validations:
+      required: true
+  - type: textarea
+    id: definition
+    attributes:
+      label: Definition and capability requirements
+      description: Include directionality, aggregation unit, and stochastic-model handling.
+    validations:
+      required: true
+  - type: textarea
+    id: gaming
+    attributes:
+      label: How can the metric be gamed?
+    validations:
+      required: true
+  - type: textarea
+    id: baselines
+    attributes:
+      label: Expected reference-baseline behavior
+      description: State the expected ordering for oracle, copy-last, wrong-direction, and action-agnostic baselines.
+    validations:
+      required: true

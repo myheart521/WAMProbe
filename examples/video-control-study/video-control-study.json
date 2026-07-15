@@ -1,0 +1,152 @@
+{
+  "benchmarks": [
+    {
+      "benchmark_id": "blockpush-2d-v0.1",
+      "comparable_profile_pairs": 9,
+      "correlations": {
+        "global_ssim_vs_top1_regret_pearson": 0.10930884736089089,
+        "psnr_vs_crc_spearman_pearson": 0.15607102279384893,
+        "psnr_vs_top1_regret_pearson": -0.15802600519981216
+      },
+      "profiles": [
+        {
+          "candidate_ranking_spearman": 1.0,
+          "mean_global_ssim": 1.0,
+          "mean_psnr_db": 100.0,
+          "model_id": "oracle-simulator",
+          "samples": 360,
+          "state_fde": 0.0,
+          "top1_regret": 0.0,
+          "video_transform": "identity"
+        },
+        {
+          "candidate_ranking_spearman": 1.0,
+          "mean_global_ssim": -0.07902680360133017,
+          "mean_psnr_db": 0.5881582618368385,
+          "model_id": "appearance-corrupted-oracle",
+          "samples": 360,
+          "state_fde": 0.0,
+          "top1_regret": 0.0,
+          "video_transform": "invert-rgb"
+        },
+        {
+          "candidate_ranking_spearman": 1.0,
+          "mean_global_ssim": 0.9058261799885446,
+          "mean_psnr_db": 39.954938832526466,
+          "model_id": "noisy-dynamics",
+          "samples": 360,
+          "state_fde": 0.03553171008466385,
+          "top1_regret": 0.0,
+          "video_transform": "identity"
+        },
+        {
+          "candidate_ranking_spearman": 0.0,
+          "mean_global_ssim": 0.7489924374301328,
+          "mean_psnr_db": 38.45470238262374,
+          "model_id": "copy-last-frame",
+          "samples": 360,
+          "state_fde": 0.4368710030764564,
+          "top1_regret": 0.3,
+          "video_transform": "identity"
+        },
+        {
+          "candidate_ranking_spearman": -0.25,
+          "mean_global_ssim": 0.6928435422253573,
+          "mean_psnr_db": 37.640080722934805,
+          "model_id": "wrong-direction",
+          "samples": 360,
+          "state_fde": 0.7952908435996061,
+          "top1_regret": 0.3,
+          "video_transform": "identity"
+        },
+        {
+          "candidate_ranking_spearman": 0.0,
+          "mean_global_ssim": 0.6140902752012081,
+          "mean_psnr_db": 36.68982810196206,
+          "model_id": "action-agnostic",
+          "samples": 360,
+          "state_fde": 0.9391366999396707,
+          "top1_regret": 0.3,
+          "video_transform": "identity"
+        }
+      ],
+      "psnr_regret_order_disagreements": 3
+    },
+    {
+      "benchmark_id": "gripper-catch-v0.1",
+      "comparable_profile_pairs": 9,
+      "correlations": {
+        "global_ssim_vs_top1_regret_pearson": 0.17249470782312815,
+        "psnr_vs_crc_spearman_pearson": 0.16195906182300873,
+        "psnr_vs_top1_regret_pearson": -0.16195906182300873
+      },
+      "profiles": [
+        {
+          "candidate_ranking_spearman": 1.0,
+          "mean_global_ssim": 1.0,
+          "mean_psnr_db": 100.0,
+          "model_id": "oracle-simulator",
+          "samples": 240,
+          "state_fde": 0.0,
+          "top1_regret": 0.0,
+          "video_transform": "identity"
+        },
+        {
+          "candidate_ranking_spearman": 1.0,
+          "mean_global_ssim": -0.080095265950554,
+          "mean_psnr_db": 0.5856883976353673,
+          "model_id": "appearance-corrupted-oracle",
+          "samples": 240,
+          "state_fde": 0.0,
+          "top1_regret": 0.0,
+          "video_transform": "invert-rgb"
+        },
+        {
+          "candidate_ranking_spearman": 1.0,
+          "mean_global_ssim": 0.9046938602562767,
+          "mean_psnr_db": 38.21621729123946,
+          "model_id": "noisy-dynamics",
+          "samples": 240,
+          "state_fde": 0.03046040283421649,
+          "top1_regret": 0.0,
+          "video_transform": "identity"
+        },
+        {
+          "candidate_ranking_spearman": 0.0,
+          "mean_global_ssim": 0.5926650960386265,
+          "mean_psnr_db": 21.484879714071898,
+          "model_id": "copy-last-frame",
+          "samples": 240,
+          "state_fde": 1.0446933677159576,
+          "top1_regret": 1.0,
+          "video_transform": "identity"
+        },
+        {
+          "candidate_ranking_spearman": 0.0,
+          "mean_global_ssim": 0.8321954561324867,
+          "mean_psnr_db": 45.12254514262558,
+          "model_id": "wrong-direction",
+          "samples": 240,
+          "state_fde": 0.9662883683502264,
+          "top1_regret": 1.0,
+          "video_transform": "identity"
+        },
+        {
+          "candidate_ranking_spearman": 0.0,
+          "mean_global_ssim": 0.7702514993155695,
+          "mean_psnr_db": 42.714137158393655,
+          "model_id": "action-agnostic",
+          "samples": 240,
+          "state_fde": 1.155975033047959,
+          "top1_regret": 1.0,
+          "video_transform": "identity"
+        }
+      ],
+      "psnr_regret_order_disagreements": 5
+    }
+  ],
+  "contexts_per_benchmark": 12,
+  "interpretation": "The appearance-corrupted oracle preserves exact state/control predictions while deliberately lowering RGB fidelity. It is a metric counterexample, not a model quality claim: PSNR/global SSIM cannot replace CRC, regret, or state metrics.",
+  "schema_version": "0.1",
+  "seed": 7
+}

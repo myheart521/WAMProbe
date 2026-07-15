@@ -1,0 +1,112 @@
+{
+  "schema_version": "0.1",
+  "release_version": "0.1.0rc1",
+  "committed_evidence": [
+    {
+      "path": "release/evidence-manifest-v0.1.schema.json",
+      "kind": "release-schema",
+      "sha256": "5d4d7deaef2c67b42c0c440370a89d7bed09b7fefce322040f18f1d33aa66603"
+    },
+    {
+      "path": "configs/models/upstream_models.json",
+      "kind": "upstream-model-pins",
+      "sha256": "169ff5e6767f47dfd49eef15f5bc7fec6494da82392fbbc8c08e42878686d1cf"
+    },
+    {
+      "path": "configs/models/starwam-capabilities-v0.1.json",
+      "kind": "model-capability-manifest",
+      "sha256": "736bb77b1edc87760b4a1e6640d8df15db3693c1fe1331821873bb359e41ea49"
+    },
+    {
+      "path": "configs/benchmarks/libero_cf_mini_v0.1.json",
+      "kind": "benchmark-manifest",
+      "sha256": "1660ab49ec0e5aac58f4801f0ec9a12326053f21f5f1974dd3b6ea63260f78c3"
+    },
+    {
+      "path": "schemas/capability-v0.1.schema.json",
+      "kind": "public-schema",
+      "sha256": "ba6dc045b74ac526b35299186952a44580e8602f697b42685c70c8b9711a89cd"
+    },
+    {
+      "path": "schemas/intervention-v0.1.schema.json",
+      "kind": "public-schema",
+      "sha256": "c842e6c3de0b9fa07347081e6dd4c90aaa5edc7c1abcfa7cb852ad30474eae52"
+    },
+    {
+      "path": "schemas/result-v0.1.schema.json",
+      "kind": "public-schema",
+      "sha256": "a5edc7d1e06e7471f71fbf4f7323f84bf3be0d28228808a539ab78b420caf52f"
+    },
+    {
+      "path": "examples/pointmass-demo/summary.json",
+      "kind": "analytic-result",
+      "sha256": "26ae2d8288414ce321badd699d91726e9459fbe369eec2f0b7f8269089676735"
+    },
+    {
+      "path": "examples/blockpush-demo/summary.json",
+      "kind": "analytic-result",
+      "sha256": "28a52c8c85b4150552878b05ac55babd995538a9304f591dc8d8897f330f786e"
+    },
+    {
+      "path": "examples/gripper-catch-demo/summary.json",
+      "kind": "analytic-result",
+      "sha256": "52772e0abec6c249eeef4532657a94eea9b6484146667666f523303bb47312fc"
+    },
+    {
+      "path": "examples/video-control-study/video-control-study.json",
+      "kind": "video-control-result",
+      "sha256": "1de2009fa09a025db1f16ff55b07220ee679ba228f01971e08a9808e717b6cf4"
+    },
+    {
+      "path": "examples/closed-loop-study/closed-loop-study.json",
+      "kind": "closed-loop-result",
+      "sha256": "19d2a0108fc19580da4e81f15226a4706a40c9d2c0513857d6bc8dc9000189b3"
+    },
+    {
+      "path": "docs/benchmarks/libero_cf_mini_verified_v0.1.json",
+      "kind": "paired-simulator-verification",
+      "sha256": "8d2009d1ceb48da88858764ecda231df532cbf96eaeac054758db2d1f8baed04"
+    },
+    {
+      "path": "docs/experiments/STARWAM_LIBERO_CF_MINI_V0.1.md",
+      "kind": "real-model-experiment-report",
+      "sha256": "e86b9d171a75f4bd34f4e2a6a14ce6f838c0230ef7a19e414950491bf58c8a96"
+    },
+    {
+      "path": "paper/main.tex",
+      "kind": "technical-report-draft",
+      "sha256": "a5f78a0deec7d0f90c1a13c9e648001b6ecdf33933a4d6701af85a24942c9360"
+    },
+    {
+      "path": "paper/CLAIMS_CHECKLIST.md",
+      "kind": "claim-evidence-audit",
+      "sha256": "b5711af4ed8ae1b0074824d2465700f8b46683055849f4904a60f80747f44d0c"
+    }
+  ],
+  "external_evidence": [
+    {
+      "artifact_id": "starwam-prediction-matrix-v0.1",
+      "kind": "real-model-prediction-index",
+      "sha256": "61fd988ea648922652ef2ab23f08b14a9849d37353d2e4894eb839fe3dfdb12d",
+      "location": "runs/starwam-libero-cf-mini-v0.1/matrix-index.json",
+      "availability": "release-bundle-pending",
+      "reason_not_committed": "Index refers to ignored model predictions and host-local artifact paths."
+    },
+    {
+      "artifact_id": "starwam-execution-index-v0.1",
+      "kind": "real-model-simulator-execution-index",
+      "sha256": "3bb9d5bdab9437cf07b0ed6567a8ddb146191447931a59a098b853e2fd3e9846",
+      "location": "runs/starwam-libero-cf-mini-v0.1/execution-index.json",
+      "availability": "release-bundle-pending",
+      "reason_not_committed": "Index refers to ignored simulator traces and host-local snapshots."
+    },
+    {
+      "artifact_id": "libero-cf-mini-generation-index-v0.1",
+      "kind": "paired-simulator-raw-index",
+      "sha256": "70f2523ebb86151c687d2c4c9768df78b39e65b6e6490252d2115fd5489eb042",
+      "location": "runs/libero-cf-mini-v0.1/index.json",
+      "availability": "local-only",
+      "reason_not_committed": "Raw RGB/state branches are generated data and remain outside Git."
+    }
+  ]
+}

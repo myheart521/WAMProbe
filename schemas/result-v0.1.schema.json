@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/myheart521/WAMProbe/schemas/result-v0.1.schema.json",
+  "title": "WAMProbe evaluation summary v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "benchmark", "results"],
+  "properties": {
+    "schema_version": {"const": "0.1"},
+    "benchmark": {"type": "string", "minLength": 1},
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "schema_version",
+          "model_id",
+          "benchmark",
+          "contexts",
+          "metrics",
+          "context_results"
+        ],
+        "properties": {
+          "schema_version": {"const": "0.1"},
+          "model_id": {"type": "string", "minLength": 1},
+          "benchmark": {"type": "string", "minLength": 1},
+          "contexts": {"type": "integer", "minimum": 1},
+          "metrics": {
+            "type": "object",
+            "additionalProperties": {"type": "number"}
+          },
+          "context_results": {"type": "array"}
+        }
+      }
+    },
+    "statistics": {"type": "object"},
+    "paired_comparisons": {"type": "array"}
+  }
+}

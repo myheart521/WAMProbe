@@ -1,0 +1,294 @@
+\documentclass[10pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage[expansion=false]{microtype}
+
+\title{WAMProbe: Capability-Aware Counterfactual Evaluation\\for World Action Models}
+\author{WAMProbe Contributors}
+\date{Technical Report Draft, July 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+World Action Models (WAMs) combine future prediction with robot action modeling, but the
+role of the predicted future is difficult to identify from task success or video fidelity
+alone. We present WAMProbe, an open-source evaluation toolkit organized around paired
+action interventions from a shared initial state. The toolkit routes metrics through an
+explicit capability declaration and reports causal response, state accuracy, candidate
+ranking, control regret, and compute cost as a profile rather than a composite score.
+The current release candidate contains three analytic benchmarks, a four-family paired LIBERO
+simulator pilot, and a pinned StarWAM action-prediction adapter. Reference baselines show
+the intended failure signatures: a wrong-direction model responds to action while
+predicting reversed dynamics, and action-ignoring models fail candidate ranking. A
+controlled appearance corruption preserves exact state prediction and zero regret while
+reducing PSNR to approximately 0.59 dB, which shows that pixel fidelity cannot replace
+control-grounded measures. In an analytic score-execute-observe study, offline Candidate
+Ranking Correlation has descriptive Pearson association 0.9855 and 1.0000 with mean
+closed-loop return on BlockPush and Gripper-Catch, respectively, across five deliberately
+separated future scorers. A separate 36-sample StarWAM matrix executes every predicted
+action chunk successfully in LIBERO but obtains zero sparse task success at the tested
+short horizons. We retain this negative result and do not infer real-model closed-loop
+utility from the analytic study.
+\end{abstract}
+
+\section{Introduction}
+
+Task success is necessary for robot policy evaluation, but it does not identify why a
+system succeeds or fails. Recent WAM diagnostics report differences in motion
+consistency, target progress, distractor motion, and runtime that disappear in a single
+success number \cite{mai2026beyond}. A second ambiguity arises when a predicted video is
+plausible but incompatible with the action that supposedly caused it
+\cite{ruan2026compatible}. Explicit future generation can also add inference cost without
+providing a corresponding control gain \cite{yuan2026fastwam}. These findings motivate a
+more direct question: under the same observation, do different proposed actions lead to
+the correct different futures, and do those futures select actions that improve control?
+
+WAMProbe treats a shared initial state with multiple action branches as the primary
+evaluation unit. This design supports paired comparisons and prevents context variation
+from being mistaken for action sensitivity. It also exposes simple failure modes that a
+single rollout hides. A copy-last predictor ignores action. A wrong-direction predictor
+is action-dependent but causally incorrect. An action-agnostic success prior predicts the
+same attractive outcome for every candidate and therefore cannot rank them.
+
+The toolkit makes three practical choices. First, an adapter declares whether it predicts
+pixels, states, latents, actions, candidate scores, or world features. Unsupported metrics
+are skipped with a reason. Second, uncertainty resamples complete contexts rather than
+correlated branches or frames. Third, reports retain metric profiles and negative results;
+WAMProbe does not publish a single total score.
+
+\section{Related Evaluation Problems}
+
+WAMs cover several interfaces, including imagine-then-execute systems, joint video-action
+models, feature-conditioned policies, and action predictors trained with future-prediction
+objectives. Their outputs are not interchangeable. Dynamic-consistency work argues for
+checking whether predicted state changes agree with actions and warns that static
+backgrounds can make failed trajectories appear consistent \cite{ruan2026compatible}.
+Adaptive execution work identifies a separate deployment problem: a fixed action chunk
+can continue after the observed state has diverged from the imagined future
+\cite{wang2026trust}. WAMProbe addresses these concerns with action branches, explicit
+no-op and transition-magnitude diagnostics, prefix execution, and replanning.
+
+LIBERO provides task suites, simulator states, and standardized manipulation settings for
+lifelong robot learning \cite{liu2023libero}. WAMProbe uses pinned LIBERO tasks as a paired
+data-generation tier, not as a new policy leaderboard. The current real-model integration
+targets the released StarWAM observation-to-action path \cite{pan2026starwam}. Because
+that interface does not accept candidate actions or emit action-conditioned future states
+or videos, candidate-action and future-fidelity metrics are structurally unavailable for
+this adapter.
+
+\section{Counterfactual Evaluation}
+
+Let $c$ denote a context containing the observation, task, initial simulator state, and
+goal. A candidate generator provides actions $\mathcal{A}(c)=\{a_1,\ldots,a_K\}$. For each
+candidate, an adapter predicts a future $\hat{\tau}_i$, while a simulator or paired dataset
+provides the reference future $\tau_i$. WAMProbe stores every branch under the same context
+identifier and verifies that simulator branches begin from an identical snapshot.
+
+\subsection{Causal and dynamics profile}
+
+Action Dependence measures separation among predicted branch endpoints relative to the
+separation among reference endpoints. It detects response to action but not correctness.
+Counterfactual Direction compares predicted and true displacement directions. State ADE
+and FDE measure trajectory and terminal error after semantic state alignment. No-op
+fidelity checks the explicit no-op reference; it does not assume that a passive world,
+such as a falling object, should freeze.
+
+The use of separate measures is important. If $\hat{\tau}(a)$ follows the negative of the
+true action effect, its branches remain well separated and Action Dependence can be high,
+while direction and state error correctly identify the failure.
+
+\subsection{Candidate ranking and regret}
+
+A fixed task scorer $R(c,\tau)$ converts each future into a candidate value. Candidate
+Ranking Correlation (CRC) reports Spearman correlation, Kendall $\tau_b$, NDCG, and
+pairwise preference accuracy with explicit tie handling. Top-1 Regret is
+
+\begin{equation}
+\operatorname{Regret}(c)=
+\max_{a_i\in\mathcal{A}(c)}R(c,\tau_i)
+- R(c,\tau_{\hat\imath}),
+\quad
+\hat\imath=\arg\max_i R(c,\hat\tau_i).
+\end{equation}
+
+This definition keeps prediction and control semantics separate: the adapter predicts a
+future, a fixed scorer values it, and regret is evaluated with the true branch outcome.
+
+\subsection{Closed-loop utility}
+
+The minimal closed-loop evaluator repeats four operations: score the legal candidate set,
+select the highest-scoring future, execute only a prefix under true dynamics, and construct
+the next context from the resulting state. The scoring prefix is capped by the remaining
+episode budget. Without this cap, an exact fixed-horizon model can be penalized for a
+terminal state beyond the steps that will actually be executed. The report records the
+candidate order, execution prefix, total control steps, selected action sequence, final
+return, success, and gap to a greedy simulator-future scorer for every context.
+
+\section{Benchmarks and Implementation}
+
+The dependency-free tier contains PointMass-2D, BlockPush-2D, and Gripper-Catch. PointMass
+provides exact planar motion. BlockPush adds a pre-contact phase followed by directed
+object motion. Gripper-Catch requires spatial alignment and an explicit close command
+before a falling object becomes attached. The latter two benchmarks expose exact state
+and a deterministic $64\times64$ RGB observation.
+
+LIBERO-CF-Mini fixes four tasks spanning spatial, object, articulated-goal, and long-horizon
+families. Each context branches into no-op, positive and negative end-effector motion, and
+gripper closure for eight steps from the same simulator snapshot. The snapshot includes
+MuJoCo integration state and Python-side controller, observable, gripper, clock, and random
+state. Generation verifies two independent restores, a repeated branch, and forward versus
+reverse branch order.
+
+The package contains deterministic JSONL intervention data, content-addressed prediction
+caches with payload checksums, context-level bootstrap intervals, exact-context paired
+comparisons, and JSON, Markdown, and HTML reports. Python 3.11--3.13 continuous integration
+runs formatting, linting, strict type checking, tests, and an 85\% coverage floor.
+
+\section{Experiments}
+
+\subsection{Reference baseline sanity checks}
+
+Table~\ref{tab:pointmass} shows the PointMass profile. Oracle dynamics attain exact state
+prediction and ranking. The wrong-direction baseline has maximal Action Dependence but
+direction score $-1$, CRC $-0.686$, and the largest regret. Copy-last and action-agnostic
+baselines have zero Action Dependence and zero CRC. BlockPush and Gripper-Catch reproduce
+the same qualitative ordering while testing contact and attachment semantics.
+
+\begin{table}[t]
+\centering
+\small
+\caption{PointMass-2D reference profile over 12 shared contexts. Higher ADS, direction,
+and CRC are better; lower FDE and regret are better.}
+\label{tab:pointmass}
+\begin{tabular}{lrrrrr}
+\toprule
+Model & ADS & Direction & FDE & CRC & Regret \\
+\midrule
+Oracle & 1.000 & 1.000 & 0.000 & 1.000 & 0.000 \\
+Noisy linear & 0.989 & 0.997 & 0.093 & 0.977 & 0.000 \\
+Copy last & 0.000 & 0.000 & 0.800 & 0.000 & 1.000 \\
+Wrong direction & 1.000 & -1.000 & 1.600 & -0.686 & 2.000 \\
+Action agnostic & 0.000 & 0.000 & 1.166 & 0.000 & 1.000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Paired LIBERO data generation}
+
+The LIBERO-CF-Mini pilot contains four tasks, four branches per task, eight post-action
+steps, and two camera views. All independent restore, repeat, and branch-order checks pass;
+the maximum integration-state error is 0.0. A second complete invocation validates the
+snapshot sidecars, structured records, and every PNG by size and SHA256, then returns four
+cache hits without opening the simulator. All diagnostic branch returns and sparse success
+values are zero. This tier therefore validates paired data generation and branch
+separation, not policy quality.
+
+\subsection{StarWAM action prediction and execution}
+
+The StarWAM matrix contains four tasks, three diffusion seeds, and action NFE values 1, 4,
+and 8, for 36 predictions. Every inference succeeds, a repeated run obtains 36 verified
+cache hits, and all 36 action chunks execute from their paired LIBERO snapshots. Mean
+latencies are 0.780, 0.972, and 1.216 seconds for NFE 1, 4, and 8; peak allocated GPU memory
+is approximately 11.39 GiB. Mean end-effector displacement for executed prefixes 8, 16,
+and 32 is 0.1716, 0.1121, and 0.0000 meters. Longer execution is not monotonically more
+useful in this diagnostic. Sparse return and success remain zero for every sample, so a
+success correlation is undefined and no LIBERO task-solving claim is made.
+
+\subsection{Video fidelity is not control value}
+
+We evaluate six profiles on 12 BlockPush and 12 Gripper-Catch contexts. An
+appearance-corrupted oracle inverts every predicted RGB value but preserves the exact
+state future. It retains FDE 0, CRC 1, and regret 0 while obtaining PSNR 0.588 and 0.586 dB
+on the two benchmarks. PSNR and regret ordering disagree on 3 of 9 and 5 of 9 comparable
+profile pairs. The Pearson association between PSNR and regret is approximately $-0.16$
+in each benchmark profile. This constructed counterexample does not imply that appearance
+is irrelevant. It establishes the narrower claim that PSNR and a whole-frame global SSIM
+diagnostic cannot substitute for state accuracy, ranking, or regret.
+
+\subsection{Offline ranking and analytic closed-loop return}
+
+Table~\ref{tab:closedloop} reports score-execute-observe evaluation with one executed step
+per replan and 1,000 context-block bootstrap resamples. Oracle and noisy future scorers
+solve BlockPush; the noisy scorer reaches 91.7\% exact-reference success on Gripper-Catch
+with mean return 0.9967. Copy-last, wrong-direction, and action-agnostic future scorers have
+zero success on both tasks. CRC and mean closed-loop return have Pearson association 0.9855
+for BlockPush and 1.0000 for Gripper-Catch across the five future scorers. Regret and return
+have association $-1.0000$ in both cases.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Analytic closed-loop results over 12 contexts. Correlations use only the five
+future-scorer rows; they are descriptive rather than population estimates.}
+\label{tab:closedloop}
+\begin{tabular}{llrrr}
+\toprule
+Task & Future scorer & Offline CRC & Mean return & Success \\
+\midrule
+BlockPush & Oracle & 1.000 & 0.000 & 1.000 \\
+BlockPush & Noisy & 1.000 & 0.000 & 1.000 \\
+BlockPush & Copy last & 0.000 & -0.300 & 0.000 \\
+BlockPush & Wrong direction & -0.250 & -0.300 & 0.000 \\
+BlockPush & Action agnostic & 0.000 & -0.300 & 0.000 \\
+Gripper-Catch & Oracle & 1.000 & 1.000 & 1.000 \\
+Gripper-Catch & Noisy & 1.000 & 0.997 & 0.917 \\
+Gripper-Catch & Copy last & 0.000 & 0.000 & 0.000 \\
+Gripper-Catch & Wrong direction & 0.000 & 0.000 & 0.000 \\
+Gripper-Catch & Action agnostic & 0.000 & 0.000 & 0.000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The result confirms the evaluator path from offline ranking to repeated execution on two
+controlled tasks. It does not show that a learned WAM improves control: the five profiles
+are intentionally separated analytic baselines, three weak profiles tie on return, and a
+fixed action-only policy also reaches the task optimum.
+
+\section{Reproducibility and Release Discipline}
+
+Model weights, raw RGB, simulator states, and generated predictions remain outside Git.
+Committed manifests pin upstream revisions and configuration hashes, while reports retain
+the hashes of local evidence indexes. A release-candidate command fixes the source date to
+the commit timestamp, builds wheel and source distributions twice, requires byte-identical
+SHA256 values, rejects unsafe or forbidden archive paths, checks committed evidence, and
+installs the wheel without network access in a fresh virtual environment. Public release
+is separate from candidate construction and requires independent reproduction and
+maintainer approval.
+
+\section{Limitations}
+
+The analytic benchmarks have known low-dimensional dynamics and cannot establish visual,
+physical, or task-distribution transfer. The closed-loop correlations contain five
+designed profiles and should not be interpreted as statistical evidence over trained
+models. LIBERO-CF-Mini has one initial state per task family and diagnostic actions rather
+than expert candidates. The StarWAM slice exposes actions but no action-conditioned future
+artifact, preventing the central candidate-future metrics on that model. The real-model
+matrix contains short open-loop executions with constant sparse return. A paper-level
+claim about WAM control utility requires more initial states and at least one adapter that
+can score the same candidate set through predicted futures.
+
+The current whole-frame global SSIM implementation is a dependency-free diagnostic, not
+the standard windowed metric. Pixel metrics are secondary. The toolkit also does not
+provide real-robot safety certification, and it does not normalize all robot action spaces
+into a universal representation.
+
+\section{Conclusion}
+
+WAMProbe turns action conditioning from an informal expectation into a paired evaluation
+contract. Its current evidence supports three limited conclusions: reference metrics
+separate known causal failures, pixel fidelity cannot replace control-grounded evaluation,
+and offline candidate ranking tracks closed-loop return in two analytic sanity tasks. The
+real StarWAM experiment establishes a reproducible action-prediction and execution path but
+does not yet establish task success or candidate-future utility. Preserving these boundaries
+is central to the project: unsupported metrics are skipped, negative results remain visible,
+and every public claim is linked to structured evidence.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

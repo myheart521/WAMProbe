@@ -1,0 +1,40 @@
+site_name: WAMProbe
+site_description: Counterfactual evaluation for World Action Models
+site_url: https://myheart521.github.io/WAMProbe/
+repo_url: https://github.com/myheart521/WAMProbe
+repo_name: myheart521/WAMProbe
+docs_dir: docs
+site_dir: site
+strict: true
+
+theme:
+  name: readthedocs
+
+markdown_extensions:
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Quick start: QUICKSTART.md
+  - Design:
+      - Scope and capabilities: rfcs/0001-scope-and-capabilities.md
+      - Counterfactual metrics: rfcs/0002-counterfactual-metrics.md
+      - Detailed project plan: WAMProbe_PLAN.md
+  - Research:
+      - WAM/VLA failure cases: research/WAM_VLA_FAILURE_CASES.md
+      - Adapter selection: research/ADAPTER_SELECTION.md
+  - Benchmarks:
+      - Toy benchmarks: benchmarks/TOY_BENCHMARKS.md
+      - LIBERO-CF-Mini: benchmarks/LIBERO_CF_MINI.md
+  - Metrics: metrics/CORE_METRICS.md
+  - Models:
+      - StarWAM: models/STARWAM.md
+  - Experiments:
+      - StarWAM on LIBERO-CF-Mini: experiments/STARWAM_LIBERO_CF_MINI_V0.1.md
+      - Toy closed loop: experiments/TOY_CLOSED_LOOP_V0.1.md
+  - Reproducibility:
+      - Guide: reproducibility/REPRODUCIBILITY.md
+      - External report template: reproducibility/EXTERNAL_REPRODUCTION_TEMPLATE.md
+      - GPU nightly: reproducibility/GPU_NIGHTLY.md

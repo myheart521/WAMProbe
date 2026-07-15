@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install project
+        run: python -m pip install -e '.[dev]'
+      - name: Check formatting
+        run: ruff format --check .
+      - name: Lint
+        run: ruff check .
+      - name: Type check
+        run: mypy
+      - name: Validate JSON Schemas and Markdown links
+        if: matrix.python-version == '3.11'
+        run: python scripts/validate_repository.py
+      - name: Build documentation site
+        if: matrix.python-version == '3.11'
+        run: mkdocs build --strict
+      - name: Test with coverage
+        run: pytest --cov=wamprobe --cov-report=term-missing --cov-fail-under=85
+
+  package-candidate:
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - uses: astral-sh/setup-uv@v8.3.2
+        with:
+          version: "0.11.6"
+          enable-cache: true
+      - name: Install locked development environment
+        run: uv sync --extra dev --locked
+      - name: Build, reproduce, audit, and smoke candidate
+        run: .venv/bin/python scripts/build_release_candidate.py --dist-dir dist/ci-candidate
