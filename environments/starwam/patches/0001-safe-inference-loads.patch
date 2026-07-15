@@ -1,0 +1,44 @@
+diff --git a/examples/libero/rollout.py b/examples/libero/rollout.py
+index ad0574f..22ea9a2 100644
+--- a/examples/libero/rollout.py
++++ b/examples/libero/rollout.py
+@@ -116,7 +116,7 @@ def _load_checkpoint(model: torch.nn.Module, checkpoint: str | Path) -> dict[str
+             path = checkpoint / name
+             if not path.is_file():
+                 continue
+-            payload = torch.load(path, map_location="cpu", weights_only=False)
++            payload = torch.load(path, map_location="cpu", weights_only=True)
+             state = _extract_checkpoint_state(payload)
+             _load_model_state(model, state)
+             return _checkpoint_meta(payload, path)
+@@ -135,7 +135,7 @@ def _load_checkpoint(model: torch.nn.Module, checkpoint: str | Path) -> dict[str
+             f"Unsupported checkpoint directory {checkpoint}. Expected model.pt, pytorch_model.bin, or *.safetensors."
+         )
+ 
+-    payload = torch.load(checkpoint, map_location="cpu", weights_only=False)
++    payload = torch.load(checkpoint, map_location="cpu", weights_only=True)
+     state = _extract_checkpoint_state(payload)
+     _load_model_state(model, state)
+     return _checkpoint_meta(payload, checkpoint)
+diff --git a/starwam/backbone/wan22.py b/starwam/backbone/wan22.py
+index 9a14d12..056b570 100644
+--- a/starwam/backbone/wan22.py
++++ b/starwam/backbone/wan22.py
+@@ -602,7 +602,7 @@ class T5EncoderModel:
+             dtype=dtype,
+             device=device).eval().requires_grad_(False)
+         logging.info(f'loading {checkpoint_path}')
+-        model.load_state_dict(torch.load(checkpoint_path, map_location='cpu', weights_only=False))
++        model.load_state_dict(torch.load(checkpoint_path, map_location='cpu', weights_only=True))
+         self.model = model
+         if shard_fn is not None:
+             self.model = shard_fn(self.model, sync_module_states=False)
+@@ -1490,7 +1490,7 @@ def _video_vae(pretrained_path=None, z_dim=16, dim=160, device="cpu", **kwargs):
+     # load checkpoint
+     logging.info(f"loading {pretrained_path}")
+     model.load_state_dict(
+-        torch.load(pretrained_path, map_location=device, weights_only=False), assign=True)
++        torch.load(pretrained_path, map_location=device, weights_only=True), assign=True)
+ 
+     return model
+ 

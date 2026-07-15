@@ -1,7 +1,7 @@
 # First real WAM adapter selection
 
 - Decision date: 2026-07-15
-- Status: provisional implementation decision
+- Status: implementation preflight passed
 - Target: first GPU-backed adapter after the CPU PointMass vertical slice
 
 ## Decision
@@ -72,6 +72,23 @@ An adapter is eligible only when all of the following can be checked:
 
 Pins record what was audited. They should be updated only through a reviewed compatibility
 change, not silently moved to an upstream default branch.
+
+## Implementation preflight result
+
+The pinned Wan2.2 and StarWAM artifacts were downloaded and verified on 2026-07-15. The
+required files total 46.25 GB, both model groups pass `wamprobe doctor --verify-hashes`,
+and no incomplete fragments remain. An isolated Python 3.11 / PyTorch 2.6.0+cu124
+environment imports the pinned StarWAM source successfully.
+
+Restricted checkpoint inspection found only tensor mappings in the StarWAM, Wan VAE, and
+Wan T5 payloads. A meta-device architecture build matched all 3,300 checkpoint keys with
+zero missing or unexpected entries. A load-only test on one RTX 4090 peaked at 12.16 GB
+allocated and 12.38 GB reserved, used deterministic seed 42 and evaluation mode, and
+released the allocation afterward.
+
+These results clear artifact, environment, architecture, and loadability gates only. No
+LIBERO observation was executed, so action correctness, preprocessing correctness, runtime
+latency, and rollout success remain unverified.
 
 ## First adapter implementation slice
 

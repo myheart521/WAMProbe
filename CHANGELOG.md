@@ -18,3 +18,5 @@ All notable changes to WAMProbe will be documented here.
   checksums for the first StarWAM integration.
 - `wamprobe doctor` with safe manifest parsing, revision/size/hash validation, and JSON
   output for local model artifacts.
+- Reproducible StarWAM environment preflight and a narrow patch that restricts verified
+  inference checkpoint loads to PyTorch's weights-only deserializer.
