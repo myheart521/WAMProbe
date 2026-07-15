@@ -46,6 +46,10 @@ source .venv/bin/activate
 python -m pip install -e .
 
 wamprobe demo --contexts 12 --seed 7 --output runs/pointmass-demo
+
+# Contact and attachment diagnostics use the same report pipeline.
+wamprobe demo --benchmark blockpush --horizon 6 --output runs/blockpush-demo
+wamprobe demo --benchmark gripper-catch --horizon 5 --output runs/gripper-catch-demo
 ```
 
 The command creates:
@@ -57,8 +61,10 @@ runs/pointmass-demo/
 └── report.html   # standalone interactive-friendly report
 ```
 
-See the committed [example report](examples/pointmass-demo/report.md) for the expected
-baseline ordering.
+See the committed [PointMass](examples/pointmass-demo/report.md),
+[BlockPush](examples/blockpush-demo/report.md), and
+[Gripper-Catch](examples/gripper-catch-demo/report.md) reports for the expected baseline
+profiles.
 
 Real-model weights are never committed to Git. Before running the StarWAM integration, follow the
 [model-store layout and download rules](checkpoints/README.md); the first spike requires
@@ -81,10 +87,12 @@ PYTHONPATH=src python -m wamprobe demo --output runs/pointmass-demo
 
 - typed, model-agnostic `WAMAdapter` and `ActionPredictorAdapter` protocols;
 - capability manifest data model and JSON Schema;
-- paired PointMass-2D counterfactual interventions;
+- paired PointMass-2D, contact-aware BlockPush-2D, and attachment-aware Gripper-Catch
+  counterfactual interventions, including dependency-free RGB observations;
 - oracle, noisy-linear, copy-last-frame, wrong-direction, and action-agnostic baselines;
 - Action Dependence with a within-context permutation null, Counterfactual Direction
-  Accuracy, No-op Stability, state ADE/FDE, and Top-1 Regret;
+  Accuracy, No-op Stability, state ADE/FDE, four-view Candidate Ranking Correlation,
+  and Top-1 Regret;
 - context-block bootstrap intervals and exact-context paired model comparisons;
 - versioned JSON plus Markdown and standalone HTML reports;
 - `wamprobe doctor` model layout, revision, size, Git LFS pointer, and SHA256 checks;
@@ -98,15 +106,17 @@ PYTHONPATH=src python -m wamprobe demo --output runs/pointmass-demo
 
 The next milestones are:
 
-1. a small image-rendered BlockPush benchmark;
-2. the versioned intervention dataset loader;
-3. expand the LIBERO-CF-Mini pilot from one context to 3–5 task families;
-4. execute cached StarWAM candidate actions, then add LingBot-VA as a published reference;
-5. add a GPU nightly workflow for the isolated real-model integration.
+1. the versioned intervention dataset loader;
+2. expand the LIBERO-CF-Mini pilot from one context to 3–5 task families;
+3. execute cached StarWAM candidate actions, then add LingBot-VA as a published reference;
+4. add a GPU nightly workflow for the isolated real-model integration;
+5. add the Occluded-Object memory diagnostic to the broader Toy tier.
 
 See the [detailed Chinese project plan](docs/WAMProbe_PLAN.md),
 [quick-start notes](docs/QUICKSTART.md), [failure-case evidence map](docs/research/WAM_VLA_FAILURE_CASES.md),
 [adapter selection record](docs/research/ADAPTER_SELECTION.md), and [design RFCs](docs/rfcs/).
+The exact toy dynamics and limitations are documented in the
+[toy benchmark card](docs/benchmarks/TOY_BENCHMARKS.md).
 
 ## Development
 

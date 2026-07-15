@@ -11,6 +11,16 @@ from wamprobe.api.counterfactual import (
     RobotStateFrame,
     SimulatorSnapshotDescriptor,
 )
+from wamprobe.api.manipulation import (
+    ManipulationAction,
+    ManipulationAdapter,
+    ManipulationBenchmark,
+    ManipulationContext,
+    ManipulationInterventionGroup,
+    ManipulationInterventionSuite,
+    ManipulationState,
+    ManipulationTrajectory,
+)
 from wamprobe.api.model import ActionPredictorAdapter, WAMAdapter
 from wamprobe.api.robotics import ActionPrediction, InferenceRuntime, RGBFrame, RobotObservation
 from wamprobe.api.types import (
@@ -34,6 +44,14 @@ __all__ = [
     "InterventionSuite",
     "InferenceRuntime",
     "ModelCapabilities",
+    "ManipulationAction",
+    "ManipulationAdapter",
+    "ManipulationBenchmark",
+    "ManipulationContext",
+    "ManipulationInterventionGroup",
+    "ManipulationInterventionSuite",
+    "ManipulationState",
+    "ManipulationTrajectory",
     "RGBFrame",
     "RGBFrameReference",
     "RobotAction",

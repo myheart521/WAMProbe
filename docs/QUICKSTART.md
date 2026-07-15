@@ -6,6 +6,7 @@ From a source checkout:
 
 ```bash
 PYTHONPATH=src python -m wamprobe demo \
+  --benchmark pointmass \
   --contexts 12 \
   --seed 7 \
   --output runs/pointmass-demo
@@ -19,12 +20,29 @@ The output directory contains `summary.json`, `report.md`, and a standalone
 `report.html`. The JSON preserves per-context values, descriptive statistics,
 context-block bootstrap intervals, and paired model differences.
 
+Run the contact and attachment variants through the same evaluator:
+
+```bash
+wamprobe demo --benchmark blockpush --contexts 12 --seed 7 --horizon 6 \
+  --output runs/blockpush-demo
+wamprobe demo --benchmark gripper-catch --contexts 12 --seed 7 --horizon 5 \
+  --output runs/gripper-catch-demo
+```
+
+BlockPush has an explicit pre-contact approach followed by object motion only under a
+directed contact. Gripper-Catch requires both alignment and a close command before the
+falling object attaches. Both expose exact state and dependency-free 64×64 RGB
+observations. See the [toy benchmark card](benchmarks/TOY_BENCHMARKS.md) for equations,
+state fields, and limitations.
+
 ## Built-in baselines
 
 | Baseline | Behavior | Diagnostic purpose |
 |---|---|---|
 | `oracle-pointmass` | Uses exact dynamics | Expected upper bound |
 | `noisy-linear` | Applies the action plus seeded transition noise | Checks smooth accuracy degradation |
+| `oracle-simulator` | Uses exact BlockPush/Gripper-Catch dynamics | Manipulation upper bound |
+| `noisy-dynamics` | Adds content-addressed transition noise | Contact/grasp robustness check |
 | `copy-last-frame` | Predicts no movement | Detects action ignorance |
 | `wrong-direction` | Applies the negative action | Separates dependence from correctness |
 | `action-agnostic` | Moves to the goal for every action | Mimics a plausible success prior |
@@ -38,13 +56,17 @@ context-block bootstrap intervals, and paired model differences.
   is reported separately; neither value replaces direction or dynamics metrics.
 - **Counterfactual Direction Accuracy** is mean cosine alignment between predicted and
   true non-noop displacement. `1` is aligned, `0` is uninformative, and `-1` is reversed.
-- **No-op Stability** is the fraction of no-op predictions whose final state remains at
-  the shared initial position.
+- **No-op Stability** checks a stationary no-op in PointMass. In a passive dynamic scene
+  such as a falling object, the same field measures agreement with the true no-op future
+  rather than incorrectly requiring the world to freeze.
 - **State ADE** is average Euclidean state error over branches and time; lower is better.
 - **State FDE** is final-state Euclidean error averaged over every branch, including the
   no-op branch; lower is better.
 - **Top-1 Regret** measures how much true return is lost by selecting the candidate that
   looks best under the predicted future; lower is better.
+- **Candidate Ranking Correlation (CRC)** compares all predicted candidate returns with
+  simulator returns. WAMProbe reports Spearman, Kendall tau-b, NDCG, and pairwise
+  preference accuracy rather than hiding their different tie behavior in one number.
 
 WAMProbe intentionally reports a metric profile, not a composite score. A model may be
 action-dependent but physically wrong, or visually accurate but useless for candidate

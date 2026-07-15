@@ -28,6 +28,11 @@ def test_reference_baselines_have_expected_metric_ordering() -> None:
     assert action_agnostic.metrics["top1_regret"] > oracle.metrics["top1_regret"]
     assert oracle.metrics["action_dependence_permutation_effect"] > 1.0
     assert copy_last.metrics["action_dependence_permutation_effect"] == 0.0
+    assert oracle.metrics["candidate_ranking_spearman"] == 1.0
+    assert oracle.metrics["candidate_ranking_kendall_tau"] == 1.0
+    assert oracle.metrics["candidate_ranking_ndcg"] == 1.0
+    assert oracle.metrics["candidate_ranking_pairwise_accuracy"] == 1.0
+    assert action_agnostic.metrics["candidate_ranking_spearman"] == 0.0
     assert all(result.metrics for result in oracle.context_results)
 
 

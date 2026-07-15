@@ -15,10 +15,21 @@ from wamprobe.adapters.baselines import (
     OraclePointMassAdapter,
     WrongDirectionAdapter,
 )
+from wamprobe.adapters.manipulation import (
+    ActionAgnosticManipulationAdapter,
+    CopyLastManipulationAdapter,
+    NoisyManipulationAdapter,
+    OracleManipulationAdapter,
+    WrongDirectionManipulationAdapter,
+)
+from wamprobe.api.manipulation import ManipulationAdapter, ManipulationBenchmark
 from wamprobe.api.model import WAMAdapter
+from wamprobe.benchmarks.blockpush import BlockPush2D
+from wamprobe.benchmarks.gripper_catch import GripperCatch
 from wamprobe.benchmarks.pointmass import PointMass2D
 from wamprobe.doctor import ModelManifestError, check_model_store, load_manifest
-from wamprobe.evaluation import evaluate
+from wamprobe.evaluation import EvaluationResult, evaluate
+from wamprobe.manipulation_evaluation import evaluate_manipulation
 from wamprobe.reporting import write_reports
 
 
@@ -28,7 +39,13 @@ def _build_parser() -> argparse.ArgumentParser:
         description="Counterfactual evaluation for World Action Models",
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
-    demo = subparsers.add_parser("demo", help="run the PointMass-2D baseline comparison")
+    demo = subparsers.add_parser("demo", help="run an analytic baseline comparison")
+    demo.add_argument(
+        "--benchmark",
+        choices=("pointmass", "blockpush", "gripper-catch"),
+        default="pointmass",
+        help="analytic benchmark to evaluate",
+    )
     demo.add_argument("--contexts", type=int, default=12, help="number of shared contexts")
     demo.add_argument("--seed", type=int, default=7, help="deterministic suite seed")
     demo.add_argument("--horizon", type=int, default=4, help="prediction horizon")
@@ -60,7 +77,7 @@ def _build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _run_demo(args: argparse.Namespace) -> int:
+def _pointmass_results(args: argparse.Namespace) -> tuple[str, list[EvaluationResult]]:
     benchmark = PointMass2D(horizon=args.horizon)
     suite = benchmark.make_suite(contexts=args.contexts, seed=args.seed)
     adapters: list[WAMAdapter] = [
@@ -71,9 +88,36 @@ def _run_demo(args: argparse.Namespace) -> int:
         ActionAgnosticAdapter(),
     ]
     results = [evaluate(adapter, benchmark, suite, seed=args.seed) for adapter in adapters]
+    return benchmark.benchmark_id, results
+
+
+def _manipulation_results(args: argparse.Namespace) -> tuple[str, list[EvaluationResult]]:
+    benchmark: ManipulationBenchmark
+    if args.benchmark == "blockpush":
+        benchmark = BlockPush2D(horizon=args.horizon)
+    else:
+        benchmark = GripperCatch(horizon=args.horizon)
+    suite = benchmark.make_suite(contexts=args.contexts, seed=args.seed)
+    adapters: list[ManipulationAdapter] = [
+        OracleManipulationAdapter(benchmark),
+        NoisyManipulationAdapter(benchmark),
+        CopyLastManipulationAdapter(),
+        WrongDirectionManipulationAdapter(benchmark),
+        ActionAgnosticManipulationAdapter(benchmark),
+    ]
+    results = [
+        evaluate_manipulation(adapter, benchmark, suite, seed=args.seed) for adapter in adapters
+    ]
+    return benchmark.benchmark_id, results
+
+
+def _run_demo(args: argparse.Namespace) -> int:
+    benchmark_id, results = (
+        _pointmass_results(args) if args.benchmark == "pointmass" else _manipulation_results(args)
+    )
     summary_path, report_path, html_path = write_reports(
         args.output,
-        benchmark=benchmark.benchmark_id,
+        benchmark=benchmark_id,
         results=results,
         seed=args.seed,
     )

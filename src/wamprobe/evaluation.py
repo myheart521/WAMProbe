@@ -12,6 +12,7 @@ from wamprobe.benchmarks.pointmass import PointMass2D
 from wamprobe.metrics import (
     action_dependence,
     action_dependence_permutation_test,
+    candidate_ranking_correlation,
     counterfactual_direction_accuracy,
     noop_stability,
     state_ade,
@@ -98,6 +99,7 @@ def evaluate(
             permutations=128,
             seed=permutation_seed,
         )
+        ranking_result = candidate_ranking_correlation(predicted_scores, true_scores)
         context_metrics = {
             "action_dependence": action_dependence([samples]),
             "action_dependence_permutation_effect": permutation_result.effect_size,
@@ -106,6 +108,10 @@ def evaluate(
             "noop_stability": noop_stability(samples),
             "state_ade": state_ade(samples),
             "state_fde": state_fde(samples),
+            "candidate_ranking_spearman": ranking_result.spearman,
+            "candidate_ranking_kendall_tau": ranking_result.kendall_tau,
+            "candidate_ranking_ndcg": ranking_result.ndcg,
+            "candidate_ranking_pairwise_accuracy": (ranking_result.pairwise_preference_accuracy),
             "top1_regret": regret,
         }
         context_results.append(

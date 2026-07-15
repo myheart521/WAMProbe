@@ -19,10 +19,19 @@ _METRIC_COLUMNS = (
     ("noop_stability", "No-op Stability"),
     ("state_ade", "State ADE ↓"),
     ("state_fde", "State FDE ↓"),
+    ("candidate_ranking_spearman", "CRC Spearman"),
+    ("candidate_ranking_kendall_tau", "CRC Kendall τ"),
+    ("candidate_ranking_ndcg", "CRC NDCG"),
+    ("candidate_ranking_pairwise_accuracy", "CRC Pairwise Accuracy"),
     ("top1_regret", "Top-1 Regret ↓"),
 )
 
 StatisticsByModel = dict[str, dict[str, MetricSummary]]
+
+
+def _report_title(results: list[EvaluationResult]) -> str:
+    benchmark = results[0].benchmark if results else "evaluation"
+    return f"WAMProbe {benchmark} Demo"
 
 
 def _stable_seed(seed: int, *parts: str) -> int:
@@ -80,7 +89,7 @@ def render_markdown(
 
     headers = ["Model", *(label for _, label in _METRIC_COLUMNS)]
     lines = [
-        "# WAMProbe PointMass-2D Demo",
+        f"# {_report_title(results)}",
         "",
         "This report compares action-aware and deliberately broken reference baselines.",
         "",
@@ -139,9 +148,9 @@ def render_markdown(
     lines.extend(
         [
             "",
-            "A high Action Dependence score is not sufficient: the wrong-direction baseline",
-            "depends on the action but fails Counterfactual Direction Accuracy. WAMProbe",
-            "therefore reports a metric profile rather than a single composite score.",
+            "Action separation alone does not establish correct direction, state dynamics,",
+            "or control ranking. WAMProbe therefore reports a metric profile rather than a",
+            "single composite score.",
             "",
         ]
     )
@@ -156,6 +165,7 @@ def render_html(
 ) -> str:
     """Render a standalone, dependency-free HTML report."""
 
+    title = _report_title(results)
     metric_headers = "".join(f"<th>{escape(label)}</th>" for _, label in _METRIC_COLUMNS)
     result_rows: list[str] = []
     for result in results:
@@ -197,7 +207,7 @@ def render_html(
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>WAMProbe PointMass-2D Demo</title>
+  <title>{escape(title)}</title>
   <style>
     :root {{ color-scheme: light; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }}
     body {{ margin: 0 auto; max-width: 1480px; padding: 2rem; color: #172033;
@@ -214,7 +224,7 @@ def render_html(
   </style>
 </head>
 <body>
-  <h1>WAMProbe PointMass-2D Demo</h1>
+  <h1>{escape(title)}</h1>
   <p class="note">Action-aware and deliberately broken baselines are shown as a metric
   profile. No composite score is produced.</p>
   <section>
@@ -260,6 +270,8 @@ def write_reports(
 
     if not results:
         raise ValueError("at least one evaluation result is required")
+    if any(result.benchmark != benchmark for result in results):
+        raise ValueError("all evaluation results must match the report benchmark")
     statistics, comparisons = _build_statistics(results, resamples=resamples, seed=seed)
     output_dir.mkdir(parents=True, exist_ok=True)
     summary_path = output_dir / "summary.json"

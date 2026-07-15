@@ -5,10 +5,14 @@ from __future__ import annotations
 from dataclasses import dataclass
 from itertools import combinations
 from itertools import permutations as generate_permutations
-from math import factorial, sqrt
+from math import factorial, isfinite, log2, sqrt
 from random import Random
+from typing import TYPE_CHECKING
 
 from wamprobe.api.types import Context2D, Trajectory2D, Vec2
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping, Sequence
 
 
 def _displacement(context: Context2D, trajectory: Trajectory2D) -> Vec2:
@@ -72,6 +76,16 @@ class PermutationTestResult:
     permutations: int
 
 
+@dataclass(frozen=True, slots=True)
+class CandidateRankingResult:
+    """Per-context candidate ranking agreement with simulator returns."""
+
+    spearman: float
+    kendall_tau: float
+    ndcg: float
+    pairwise_preference_accuracy: float
+
+
 def _pearson(left: list[float], right: list[float]) -> float:
     if len(left) != len(right):
         raise ValueError("correlation vectors must have equal lengths")
@@ -97,9 +111,21 @@ def _pearson(left: list[float], right: list[float]) -> float:
     return max(-1.0, min(1.0, correlation))
 
 
-def _pairwise_distances(states: list[Vec2]) -> list[float]:
+def _vector_distance(left: Sequence[float], right: Sequence[float]) -> float:
+    if len(left) != len(right):
+        raise ValueError("state vectors must have equal dimensions")
+    return sqrt(
+        sum(
+            (left_value - right_value) ** 2
+            for left_value, right_value in zip(left, right, strict=True)
+        )
+    )
+
+
+def _pairwise_vector_distances(states: Sequence[Sequence[float]]) -> list[float]:
     return [
-        (states[left] - states[right]).norm() for left, right in combinations(range(len(states)), 2)
+        _vector_distance(states[left], states[right])
+        for left, right in combinations(range(len(states)), 2)
     ]
 
 
@@ -145,15 +171,40 @@ def action_dependence_permutation_test(
     if len(context_ids) != 1:
         raise ValueError("permutation samples must share one context")
 
-    truth_distances = _pairwise_distances([truth.final_state for _, _, truth in samples])
-    predicted_states = [predicted.final_state for _, predicted, _ in samples]
-    observed = _pearson(truth_distances, _pairwise_distances(predicted_states))
+    return action_dependence_permutation_vectors(
+        predicted_endpoints=[
+            (predicted.final_state.x, predicted.final_state.y) for _, predicted, _ in samples
+        ],
+        truth_endpoints=[(truth.final_state.x, truth.final_state.y) for _, _, truth in samples],
+        permutations=permutations,
+        seed=seed,
+    )
 
-    indices = _permutation_indices(len(samples), count=permutations, seed=seed)
+
+def action_dependence_permutation_vectors(
+    *,
+    predicted_endpoints: Sequence[Sequence[float]],
+    truth_endpoints: Sequence[Sequence[float]],
+    permutations: int = 128,
+    seed: int = 0,
+) -> PermutationTestResult:
+    """Evaluate action/future geometry for arbitrary fixed-width state vectors."""
+
+    if len(predicted_endpoints) != len(truth_endpoints):
+        raise ValueError("predicted and true endpoints must have equal lengths")
+    if len(predicted_endpoints) < 2:
+        raise ValueError("permutation testing requires at least two action branches")
+    if permutations <= 0:
+        raise ValueError("permutations must be positive")
+
+    truth_distances = _pairwise_vector_distances(truth_endpoints)
+    observed = _pearson(truth_distances, _pairwise_vector_distances(predicted_endpoints))
+
+    indices = _permutation_indices(len(predicted_endpoints), count=permutations, seed=seed)
     null_scores = [
         _pearson(
             truth_distances,
-            _pairwise_distances([predicted_states[index] for index in permutation]),
+            _pairwise_vector_distances([predicted_endpoints[index] for index in permutation]),
         )
         for permutation in indices
     ]
@@ -171,6 +222,98 @@ def action_dependence_permutation_test(
         effect_size=effect_size,
         p_value=p_value,
         permutations=len(null_scores),
+    )
+
+
+def _average_ranks(scores: Mapping[str, float], names: Sequence[str]) -> list[float]:
+    ordered = sorted(names, key=lambda name: (scores[name], name))
+    rank_by_name: dict[str, float] = {}
+    start = 0
+    while start < len(ordered):
+        end = start + 1
+        while end < len(ordered) and scores[ordered[end]] == scores[ordered[start]]:
+            end += 1
+        average_rank = ((start + 1) + end) / 2.0
+        for index in range(start, end):
+            rank_by_name[ordered[index]] = average_rank
+        start = end
+    return [rank_by_name[name] for name in names]
+
+
+def candidate_ranking_correlation(
+    predicted_scores: Mapping[str, float],
+    true_scores: Mapping[str, float],
+) -> CandidateRankingResult:
+    """Compare candidate ordering with simulator returns using four CRC views."""
+
+    if predicted_scores.keys() != true_scores.keys():
+        raise ValueError("predicted and true candidate names must match exactly")
+    if len(predicted_scores) < 2:
+        raise ValueError("candidate ranking requires at least two candidates")
+    if any(
+        not isfinite(value)
+        for scores in (predicted_scores, true_scores)
+        for value in scores.values()
+    ):
+        raise ValueError("candidate scores must be finite")
+
+    names = sorted(predicted_scores)
+    predicted_ranks = _average_ranks(predicted_scores, names)
+    true_ranks = _average_ranks(true_scores, names)
+    spearman = _pearson(predicted_ranks, true_ranks)
+
+    concordant = 0
+    discordant = 0
+    predicted_only_ties = 0
+    truth_only_ties = 0
+    preference_total = 0
+    preference_score = 0.0
+    for left, right in combinations(names, 2):
+        predicted_delta = predicted_scores[left] - predicted_scores[right]
+        true_delta = true_scores[left] - true_scores[right]
+        if predicted_delta == 0.0 and true_delta == 0.0:
+            continue
+        if predicted_delta == 0.0:
+            predicted_only_ties += 1
+        elif true_delta == 0.0:
+            truth_only_ties += 1
+        elif predicted_delta * true_delta > 0.0:
+            concordant += 1
+        else:
+            discordant += 1
+
+        if true_delta != 0.0:
+            preference_total += 1
+            if predicted_delta == 0.0:
+                preference_score += 0.5
+            elif predicted_delta * true_delta > 0.0:
+                preference_score += 1.0
+
+    denominator = sqrt(
+        (concordant + discordant + predicted_only_ties)
+        * (concordant + discordant + truth_only_ties)
+    )
+    kendall_tau = (concordant - discordant) / denominator if denominator > 1e-15 else 0.0
+    pairwise_accuracy = preference_score / preference_total if preference_total else 0.0
+
+    minimum_relevance = min(true_scores.values())
+
+    def discounted_gain(order: Sequence[str]) -> float:
+        gain = 0.0
+        for index, name in enumerate(order):
+            relevance = true_scores[name] - minimum_relevance
+            gain += (pow(2.0, relevance) - 1.0) / log2(index + 2)
+        return gain
+
+    predicted_order = sorted(names, key=lambda name: (-predicted_scores[name], name))
+    ideal_order = sorted(names, key=lambda name: (-true_scores[name], name))
+    ideal_gain = discounted_gain(ideal_order)
+    ndcg = discounted_gain(predicted_order) / ideal_gain if ideal_gain > 1e-15 else 1.0
+    return CandidateRankingResult(
+        spearman=spearman,
+        kendall_tau=kendall_tau,
+        ndcg=max(0.0, min(1.0, ndcg)),
+        pairwise_preference_accuracy=pairwise_accuracy,
     )
 
 
