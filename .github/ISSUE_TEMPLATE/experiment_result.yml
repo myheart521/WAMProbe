@@ -12,7 +12,7 @@ body:
     id: wamprobe_revision
     attributes:
       label: WAMProbe version and commit
-      placeholder: 0.1.0rc1 / full Git commit SHA
+      placeholder: 0.1.0 / full Git commit SHA
     validations:
       required: true
   - type: textarea

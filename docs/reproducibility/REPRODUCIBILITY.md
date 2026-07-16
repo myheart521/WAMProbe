@@ -57,10 +57,13 @@ byte-reproducible distributions, a `release-manifest.json`, a passing offline cl
 install, and matching evidence hashes. See
 [`release/README.md`](https://github.com/myheart521/WAMProbe/blob/main/release/README.md).
 
-## Independent reproduction report
+## Maintainer acceptance and optional independent reports
 
-An external reproducer should record the Git commit/tag, operating system, Python version,
-install command, exact smoke command, exit status, output JSON SHA256, elapsed time, and any
-deviation. A template is provided in
-[`EXTERNAL_REPRODUCTION_TEMPLATE.md`](EXTERNAL_REPRODUCTION_TEMPLATE.md). Maintainers must
-not mark the external-smoke release gate complete from a run on their own machine.
+The `v0.1.0` release uses a documented maintainer clean-install check as its package
+acceptance gate. The report must record the Git tag, operating system, Python version,
+install command, exact smoke command, exit status, output JSON SHA256, elapsed time, and
+any deviation. Issue #2 preserves the public record.
+
+Independent reports remain welcome as additional evidence. A template is provided in
+[`EXTERNAL_REPRODUCTION_TEMPLATE.md`](EXTERNAL_REPRODUCTION_TEMPLATE.md). A maintainer-run
+check must always be labeled as maintainer evidence and never described as independent.

@@ -33,26 +33,31 @@ provenance attestations. It is manual-dispatch only.
 
 ## Public release boundary
 
-The audited `v0.1.0rc1` artifacts are available from the
-[GitHub pre-release](https://github.com/myheart521/WAMProbe/releases/tag/v0.1.0rc1), and
-the wheel and sdist have GitHub build-provenance attestations. The independent clean-smoke
-request is tracked in [Issue #2](https://github.com/myheart521/WAMProbe/issues/2). The same
-artifacts are published as
-[`wamprobe==0.1.0rc1`](https://pypi.org/project/wamprobe/0.1.0rc1/); PyPI SHA256 values
-match the audited release manifest.
+The audited stable artifacts are available from the
+[`v0.1.0` GitHub Release](https://github.com/myheart521/WAMProbe/releases/tag/v0.1.0), and
+the wheel and sdist have GitHub build-provenance attestations. The same artifacts are
+published as [`wamprobe==0.1.0`](https://pypi.org/project/wamprobe/0.1.0/); PyPI SHA256
+values match the audited release manifest.
 
-Before promoting a final release, a maintainer must review the candidate manifest, confirm
-the version and changelog, obtain one independent clean-environment smoke report, and
-approve both the Git tag and GitHub Release text. Final `v0.1.0` publication remains a
-separate maintainer decision after the release-candidate review.
+The project owner selected a documented maintainer clean-environment smoke as the final
+package acceptance gate. [Issue #2](https://github.com/myheart521/WAMProbe/issues/2)
+records installs from both public GitHub/PyPI artifacts, exact commands, environment,
+elapsed time, and output hashes. This is maintainer evidence and is not described as
+independent external reproduction. Third-party reports remain optional additional
+evidence.
+
+Before publishing a final release, a maintainer must review the candidate manifest,
+confirm the version and changelog, complete the clean-install smoke, and approve both the
+Git tag and GitHub Release text.
 
 The guarded `Publish to PyPI` workflow is manual-dispatch only, runs only when the selected
 ref is a tag, requires the typed confirmation to equal that tag, verifies that
 `v<pyproject-version>` equals the tag, rebuilds the clean candidate, and uses short-lived
 GitHub OIDC through the protected `pypi` environment. It contains no API token and does not
 create a GitHub Release. The PyPI Trusted Publisher configuration for this repository was
-verified by the successful `v0.1.0rc1` publication on 2026-07-16.
+first verified by the successful `v0.1.0rc1` publication on 2026-07-16 and is reused
+without a long-lived token.
 
-Rollback for a bad pre-release means yanking the affected PyPI file (without deleting its
-audit record), marking the GitHub Release as a pre-release with a warning, and preparing a
-new version. Published filenames and tags are immutable and must never be overwritten.
+Rollback for a bad release means yanking the affected PyPI file without deleting its audit
+record, adding a warning to the GitHub Release, and preparing a new version. Published
+filenames and tags are immutable and must never be overwritten.

@@ -2,6 +2,31 @@
 
 All notable changes to WAMProbe will be documented here.
 
+## [0.1.0] - 2026-07-16
+
+This stable release promotes the audited CPU core and real-model evaluation slice after
+repeated maintainer clean-install checks from both GitHub artifacts and public PyPI. The
+evidence is recorded in
+[Issue #2](https://github.com/myheart521/WAMProbe/issues/2). These owner-run checks are
+maintainer acceptance, not independent external reproduction.
+
+### Added
+
+- English and complete Simplified Chinese READMEs with generated project diagrams and an
+  actual PointMass report preview.
+- A tested custom state-future adapter starter that writes the standard JSON, JSONL,
+  Markdown, and HTML report contract.
+- A detailed adapter integration guide, dependency-aware roadmap, structured result and
+  reproduction forms, repository Topics, and labeled contribution-sized Issues.
+
+### Changed
+
+- Promoted package, citation, model-card, evidence-manifest, and documentation metadata to
+  stable `0.1.0`.
+- Included project documentation and the adapter starter in the source distribution.
+- Made optional external reproduction distinct from the documented maintainer package
+  acceptance used for this release.
+
 ## [0.1.0rc1] - 2026-07-15
 
 This candidate was tagged and published as a

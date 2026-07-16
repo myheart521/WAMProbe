@@ -990,8 +990,9 @@ CLI 验收要求：
 当前进度（2026-07-15）：15 个文献失败模式和首个 Adapter 审计已经完成，见
 [`docs/research/WAM_VLA_FAILURE_CASES.md`](research/WAM_VLA_FAILURE_CASES.md) 与
 [`docs/research/ADAPTER_SELECTION.md`](research/ADAPTER_SELECTION.md)。MkDocs 文档站、
-严格站点构建、仓库内 Markdown 链接检查和公开 JSON Schema/规范实例验证也已进入 CI；
-外部研究者 README 理解度检查仍需人工完成。
+严格站点构建、仓库内 Markdown 链接检查和公开 JSON Schema/规范实例验证也已进入 CI。
+原计划中的外部研究者 README 理解度检查已降级为可选的后续反馈，不作为 `v0.1`
+发布门槛；当前没有作出独立外部验证声明。
 
 任务：
 
@@ -1010,7 +1011,7 @@ CLI 验收要求：
 
 退出条件：
 
-- 至少一个外部研究者能根据文档解释 WAMProbe 与普通视频/VLA 评测的区别；
+- README 能明确解释 WAMProbe 与普通视频/VLA 评测的区别，并通过仓库链接检查；
 - 首个 adapter 的模型能力和许可证已经核实。
 
 ### Phase 1：核心 API 与数据格式（第 3–4 周）
@@ -1124,15 +1125,18 @@ snapshot 执行全部动作块，并在 horizon 8/16/32 记录状态、回报和
 return 的 5-profile 描述性 Pearson 分别为 0.9855/1.0。全部结果、context-block CI 和限制
 见 [`examples/video-control-study/`](https://github.com/myheart521/WAMProbe/blob/main/examples/video-control-study/video-control-study.md)
 与 [`docs/experiments/TOY_CLOSED_LOOP_V0.1.md`](experiments/TOY_CLOSED_LOOP_V0.1.md)。
-`0.1.0rc1` 候选版本现已具备双构建 SHA 一致性、归档安全/metadata 审计、证据 manifest、
+`0.1.0rc1` 候选版本已具备双构建 SHA 一致性、归档安全/metadata 审计、证据 manifest、
 离线干净 wheel 安装 smoke、手动 provenance attestation workflow，并提供可在 Overleaf
 直接编译的 5 页技术报告初稿。`v0.1.0rc1` 已作为 GitHub pre-release 发布，wheel 与
-sdist 的 provenance attestation 已登记；外部复现请求见
+sdist 的 provenance attestation 已登记；维护者复现记录见
 [`WAMProbe#2`](https://github.com/myheart521/WAMProbe/issues/2)，StarWAM 第三方评测入口见
 [`StarWAM#2`](https://github.com/shaohua-pan/StarWAM/pull/2)。2026-07-16 已通过 GitHub
 OIDC Trusted Publishing 将 `wamprobe==0.1.0rc1` 发布到 PyPI，并在全新 Python 3.13 环境
-用标准 `pip install wamprobe` 完成 CLI/demo smoke；Overleaf 上传仍等待可用的账户登录态，
-独立用户 smoke 在收到真实第三方报告前保持未完成。
+用标准 `pip install wamprobe` 完成 CLI/demo smoke。2026-07-16，项目所有者决定以透明记录的
+维护者干净环境 smoke 作为 `v0.1` 包验收门槛，不再等待外部用户；该证据记录在
+[`WAMProbe#2`](https://github.com/myheart521/WAMProbe/issues/2)，并明确不称为独立外部
+复现。稳定版 `v0.1.0` 随后通过相同的可复现构建、GitHub provenance 和 PyPI OIDC
+流程发布。Overleaf 上传继续暂缓。
 
 任务：
 
@@ -1149,7 +1153,7 @@ v0.1 发布门槛：
 - 6 个以上核心指标；
 - 端到端复现脚本；
 - 结构化报告与统计置信区间；
-- 一个外部用户成功复现 smoke test。
+- 维护者在全新环境从公开发行包安装并成功复现 smoke test，记录命令、耗时和输出哈希。
 
 ---
 
@@ -1323,7 +1327,8 @@ priority:p1
 - [x] 所有 release artifact 可追溯；
 - [x] README 15 分钟 quickstart 可执行；
 - [x] benchmark/model/metric cards 完整；
-- [ ] 至少一个外部用户复现 smoke test。
+- [x] 维护者从公开发行包在全新环境复现 smoke test，并公开命令、耗时和输出哈希；
+- 独立外部复现尚未完成，且不作为 `v0.1` 发布门槛；维护者运行不得称为独立证据。
 
 ---
 
