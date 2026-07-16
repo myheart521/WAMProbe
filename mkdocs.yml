@@ -25,6 +25,8 @@ nav:
   - Research:
       - WAM/VLA failure cases: research/WAM_VLA_FAILURE_CASES.md
       - Adapter selection: research/ADAPTER_SELECTION.md
+  - Adapters:
+      - Connect a custom model: adapters/CUSTOM_ADAPTER.md
   - Benchmarks:
       - Toy benchmarks: benchmarks/TOY_BENCHMARKS.md
       - LIBERO-CF-Mini: benchmarks/LIBERO_CF_MINI.md
@@ -38,3 +40,4 @@ nav:
       - Guide: reproducibility/REPRODUCIBILITY.md
       - External report template: reproducibility/EXTERNAL_REPRODUCTION_TEMPLATE.md
       - GPU nightly: reproducibility/GPU_NIGHTLY.md
+  - Next steps: NEXT_STEPS.md

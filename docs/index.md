@@ -21,10 +21,12 @@ It intentionally does not publish a single composite score.
 ## Start here
 
 - Follow the [15-minute quick start](QUICKSTART.md) for dependency-free CPU experiments.
+- Connect a model with the tested [custom adapter starter guide](adapters/CUSTOM_ADAPTER.md).
 - Read the [scope and capability RFC](rfcs/0001-scope-and-capabilities.md) before adding an adapter.
 - Use the [core metric cards](metrics/CORE_METRICS.md) to select capability-compatible metrics.
 - Review the [reproducibility guide](reproducibility/REPRODUCIBILITY.md) before comparing results.
 - Inspect the [StarWAM model card](models/STARWAM.md) for the first real-model integration.
+- Check [Next steps](NEXT_STEPS.md) for milestone dependencies and contribution-sized tasks.
 
 Install the dependency-free core with `pip install wamprobe`. Committed example reports
 and audited release artifacts remain available on

@@ -1,0 +1,82 @@
+name: External reproduction
+description: Report an independent clean-install WAMProbe smoke reproduction
+title: "[External reproduction]: "
+labels: ["reproduction"]
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        Thank you for independently checking WAMProbe. This form records the
+        evidence needed for the external-smoke release gate. Failed attempts are
+        useful too. Do not post credentials or private machine paths.
+  - type: input
+    id: reproducer
+    attributes:
+      label: Reproducer name or handle
+    validations:
+      required: true
+  - type: input
+    id: date
+    attributes:
+      label: Date and timezone
+      placeholder: 2026-07-16 UTC
+    validations:
+      required: true
+  - type: input
+    id: revision
+    attributes:
+      label: WAMProbe tag or full commit SHA
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Clean environment
+      description: Include OS/architecture, Python version, and whether this was a new venv, container, or machine.
+    validations:
+      required: true
+  - type: textarea
+    id: commands
+    attributes:
+      label: Installation and smoke commands
+      render: shell
+    validations:
+      required: true
+  - type: dropdown
+    id: result
+    attributes:
+      label: Result
+      options:
+        - PASS
+        - FAIL
+    validations:
+      required: true
+  - type: input
+    id: exit_status
+    attributes:
+      label: Exit status and elapsed time
+      placeholder: exit 0; 42 seconds
+    validations:
+      required: true
+  - type: input
+    id: output_hash
+    attributes:
+      label: Output summary.json SHA256
+    validations:
+      required: true
+  - type: textarea
+    id: deviations
+    attributes:
+      label: Deviations, errors, or notes
+      description: Write "None" when the documented procedure was followed exactly. For a failure, include the smallest non-sensitive error output.
+    validations:
+      required: true
+  - type: checkboxes
+    id: independence
+    attributes:
+      label: Independence confirmation
+      options:
+        - label: I performed this install and smoke test independently; this is not a maintainer-run substitute for an external user.
+          required: true
+        - label: I reviewed the form and removed tokens, credentials, private paths, and other secrets.
+          required: true

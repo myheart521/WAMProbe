@@ -241,6 +241,15 @@ Start with the [scope and capability RFC](docs/rfcs/0001-scope-and-capabilities.
 [counterfactual metrics RFC](docs/rfcs/0002-counterfactual-metrics.md), and the
 [adapter selection record](docs/research/ADAPTER_SELECTION.md).
 
+For a working integration instead of pseudocode, run the tested
+[custom adapter starter kit](examples/custom_adapter/README.md) and follow the
+[step-by-step adapter guide](docs/adapters/CUSTOM_ADAPTER.md):
+
+```bash
+python -m examples.custom_adapter.run \
+  --output runs/custom-adapter --contexts 8 --seed 7
+```
+
 ## Real-model artifacts
 
 Model weights are never committed to Git. The first StarWAM spike requires approximately
@@ -280,11 +289,14 @@ Review the [reproducibility guide](docs/reproducibility/REPRODUCIBILITY.md) and
 | Run the CPU demo | [Quick start](docs/QUICKSTART.md) |
 | Understand the scientific motivation | [WAM/VLA failure-case evidence map](docs/research/WAM_VLA_FAILURE_CASES.md) |
 | Interpret a score correctly | [Core metric cards](docs/metrics/CORE_METRICS.md) |
-| Add a model integration | [Scope and capability RFC](docs/rfcs/0001-scope-and-capabilities.md) |
+| Add a model integration | [Custom adapter starter guide](docs/adapters/CUSTOM_ADAPTER.md) |
+| Submit a structured experiment | [Experiment result form](https://github.com/myheart521/WAMProbe/issues/new?template=experiment_result.yml) |
+| Reproduce independently | [External reproduction form](https://github.com/myheart521/WAMProbe/issues/new?template=external_reproduction.yml) |
 | Reproduce LIBERO-CF-Mini | [Benchmark card](docs/benchmarks/LIBERO_CF_MINI.md) |
 | Inspect the closed-loop protocol | [Experiment card](docs/experiments/TOY_CLOSED_LOOP_V0.1.md) |
 | Audit the release | [Reproducibility guide](docs/reproducibility/REPRODUCIBILITY.md) |
 | Read the full implementation plan | [Detailed Chinese project plan](docs/WAMProbe_PLAN.md) |
+| Choose the next milestone | [Dependency-aware roadmap](docs/NEXT_STEPS.md) |
 | Browse all documentation | [Published documentation site](https://myheart521.github.io/WAMProbe/) |
 
 ## Project status and roadmap
@@ -293,7 +305,8 @@ The `v0.1.0rc1` engineering scope is implemented and published. The remaining fo
 acceptance item is one genuine independent clean-install smoke report in
 [Issue #2](https://github.com/myheart521/WAMProbe/issues/2).
 
-Next research milestones:
+The [dependency-aware roadmap](docs/NEXT_STEPS.md) tracks evidence gates separately from
+repository work. Next research milestones:
 
 1. expand LIBERO initial-state coverage;
 2. evaluate action-conditioned real-WAM futures when an adapter exposes that capability;
@@ -305,6 +318,11 @@ Next research milestones:
 Contributions are welcome—especially adapters, paired benchmark generators, metric
 anti-gaming tests, and independent reproductions. New metrics must document the failure
 they detect and include a sanity check against reference baselines.
+
+Start with a labeled
+[`good first issue`](https://github.com/myheart521/WAMProbe/labels/good%20first%20issue),
+an [Adapter proposal](https://github.com/myheart521/WAMProbe/issues/new?template=adapter_proposal.yml),
+or the [Experiment result form](https://github.com/myheart521/WAMProbe/issues/new?template=experiment_result.yml).
 
 ```bash
 python -m pip install -e '.[dev]'
