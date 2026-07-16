@@ -38,10 +38,16 @@ packages = ["src/wamprobe"]
 include = [
   "/CHANGELOG.md",
   "/CITATION.cff",
+  "/CONTRIBUTING.md",
   "/LICENSE",
   "/README.md",
   "/README.zh-CN.md",
+  "/docs/**/*.md",
   "/docs/assets/*.png",
+  "/examples/__init__.py",
+  "/examples/custom_adapter/*.md",
+  "/examples/custom_adapter/*.py",
+  "/mkdocs.yml",
   "/pyproject.toml",
   "/src/wamprobe",
 ]
@@ -62,6 +68,7 @@ exclude = [
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 addopts = [
   "--strict-markers",
 ]
