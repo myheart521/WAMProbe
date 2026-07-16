@@ -328,7 +328,7 @@ If WAMProbe supports your work, cite the software release using
   title   = {WAMProbe: Counterfactual Evaluation for World Action Models},
   author  = {{WAMProbe contributors}},
   year    = {2026},
-  version = {0.1.0-rc.1},
+  version = {0.1.0rc1},
   url     = {https://github.com/myheart521/WAMProbe}
 }
 ```
