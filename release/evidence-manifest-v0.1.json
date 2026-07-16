@@ -1,6 +1,6 @@
 {
   "schema_version": "0.1",
-  "release_version": "0.1.0rc1",
+  "release_version": "0.1.0",
   "committed_evidence": [
     {
       "path": "release/evidence-manifest-v0.1.schema.json",

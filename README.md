@@ -30,10 +30,11 @@
   <a href="CONTRIBUTING.md"><strong>Contributing</strong></a>
 </p>
 
-> **Release status:** [`v0.1.0rc1`](https://github.com/myheart521/WAMProbe/releases/tag/v0.1.0rc1)
-> is published on [PyPI](https://pypi.org/project/wamprobe/0.1.0rc1/) as a release
-> candidate. The dependency-free CPU core is ready to use; the external reproduction
-> report remains open in [Issue #2](https://github.com/myheart521/WAMProbe/issues/2).
+> **Release status:** [`v0.1.0`](https://github.com/myheart521/WAMProbe/releases/tag/v0.1.0)
+> is the stable release on [PyPI](https://pypi.org/project/wamprobe/0.1.0/).
+> The dependency-free CPU core and maintainer clean-install acceptance are complete.
+> [Issue #2](https://github.com/myheart521/WAMProbe/issues/2) records that evidence;
+> no independent external reproduction is claimed.
 
 ## The problem WAMProbe tests
 
@@ -87,7 +88,7 @@ runs/pointmass-demo/
 For an exactly pinned installation:
 
 ```bash
-python -m pip install wamprobe==0.1.0rc1
+python -m pip install wamprobe==0.1.0
 ```
 
 ## Read the result
@@ -291,7 +292,7 @@ Review the [reproducibility guide](docs/reproducibility/REPRODUCIBILITY.md) and
 | Interpret a score correctly | [Core metric cards](docs/metrics/CORE_METRICS.md) |
 | Add a model integration | [Custom adapter starter guide](docs/adapters/CUSTOM_ADAPTER.md) |
 | Submit a structured experiment | [Experiment result form](https://github.com/myheart521/WAMProbe/issues/new?template=experiment_result.yml) |
-| Reproduce independently | [External reproduction form](https://github.com/myheart521/WAMProbe/issues/new?template=external_reproduction.yml) |
+| Share an optional independent reproduction | [External reproduction form](https://github.com/myheart521/WAMProbe/issues/new?template=external_reproduction.yml) |
 | Reproduce LIBERO-CF-Mini | [Benchmark card](docs/benchmarks/LIBERO_CF_MINI.md) |
 | Inspect the closed-loop protocol | [Experiment card](docs/experiments/TOY_CLOSED_LOOP_V0.1.md) |
 | Audit the release | [Reproducibility guide](docs/reproducibility/REPRODUCIBILITY.md) |
@@ -301,17 +302,18 @@ Review the [reproducibility guide](docs/reproducibility/REPRODUCIBILITY.md) and
 
 ## Project status and roadmap
 
-The `v0.1.0rc1` engineering scope is implemented and published. The remaining formal
-acceptance item is one genuine independent clean-install smoke report in
-[Issue #2](https://github.com/myheart521/WAMProbe/issues/2).
+The `v0.1.0` engineering scope and maintainer clean-install acceptance are complete.
+[Issue #2](https://github.com/myheart521/WAMProbe/issues/2) records owner-run checks from
+both the public wheel and PyPI. These checks are intentionally described as maintainer
+evidence, not independent external reproduction.
 
-The [dependency-aware roadmap](docs/NEXT_STEPS.md) tracks evidence gates separately from
-repository work. Next research milestones:
+The [dependency-aware roadmap](docs/NEXT_STEPS.md) separates completed release gates from
+the next research milestones:
 
 1. expand LIBERO initial-state coverage;
 2. evaluate action-conditioned real-WAM futures when an adapter exposes that capability;
 3. add the Occluded-Object memory diagnostic to the broader toy tier;
-4. review external reproduction evidence and promote a final `v0.1.0` release.
+4. archive the stable release with a DOI and collect optional third-party reports.
 
 ## Contributing
 
@@ -346,7 +348,7 @@ If WAMProbe supports your work, cite the software release using
   title   = {WAMProbe: Counterfactual Evaluation for World Action Models},
   author  = {{WAMProbe contributors}},
   year    = {2026},
-  version = {0.1.0rc1},
+  version = {0.1.0},
   url     = {https://github.com/myheart521/WAMProbe}
 }
 ```

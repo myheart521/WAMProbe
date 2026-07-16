@@ -16,9 +16,10 @@ Thank you for helping make WAM evaluation more causal, reproducible, and control
 - **Share a run:** use the
   [Experiment result](https://github.com/myheart521/WAMProbe/issues/new?template=experiment_result.yml)
   form with standard artifacts and hashes.
-- **Reproduce independently:** use the
+- **Share an optional independent reproduction:** use the
   [External reproduction](https://github.com/myheart521/WAMProbe/issues/new?template=external_reproduction.yml)
-  form. A maintainer-controlled run cannot satisfy the external-user gate.
+  form. A maintainer-controlled run must be labeled as maintainer evidence, never as an
+  independent report.
 - **Pick a bounded task:** see the
   [roadmap](docs/NEXT_STEPS.md) and issues labeled
   [`good first issue`](https://github.com/myheart521/WAMProbe/labels/good%20first%20issue).

@@ -2,7 +2,8 @@ cff-version: 1.2.0
 message: "If you use WAMProbe, please cite the software release."
 title: "WAMProbe: Counterfactual Evaluation for World Action Models"
 type: software
-version: 0.1.0rc1
+version: 0.1.0
+date-released: "2026-07-16"
 license: Apache-2.0
 repository-code: "https://github.com/myheart521/WAMProbe"
 authors:

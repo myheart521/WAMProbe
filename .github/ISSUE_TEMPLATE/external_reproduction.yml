@@ -1,14 +1,14 @@
-name: External reproduction
-description: Report an independent clean-install WAMProbe smoke reproduction
+name: Optional external reproduction
+description: Share an independent clean-install WAMProbe smoke reproduction
 title: "[External reproduction]: "
 labels: ["reproduction"]
 body:
   - type: markdown
     attributes:
       value: >-
-        Thank you for independently checking WAMProbe. This form records the
-        evidence needed for the external-smoke release gate. Failed attempts are
-        useful too. Do not post credentials or private machine paths.
+        Thank you for independently checking WAMProbe. External reports are useful
+        additional evidence but are not a v0.1 release gate. Failed attempts are useful
+        too. Do not post credentials or private machine paths.
   - type: input
     id: reproducer
     attributes:
