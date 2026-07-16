@@ -26,5 +26,7 @@ It intentionally does not publish a single composite score.
 - Review the [reproducibility guide](reproducibility/REPRODUCIBILITY.md) before comparing results.
 - Inspect the [StarWAM model card](models/STARWAM.md) for the first real-model integration.
 
-Committed example reports and release artifacts remain available in the
+Install the dependency-free core with `pip install wamprobe`. Committed example reports
+and audited release artifacts remain available on
+[PyPI](https://pypi.org/project/wamprobe/) and in the
 [GitHub repository](https://github.com/myheart521/WAMProbe).
