@@ -50,8 +50,8 @@ The guarded `Publish to PyPI` workflow is manual-dispatch only, runs only when t
 ref is a tag, requires the typed confirmation to equal that tag, verifies that
 `v<pyproject-version>` equals the tag, rebuilds the clean candidate, and uses short-lived
 GitHub OIDC through the protected `pypi` environment. It contains no API token and does not
-create a GitHub Release. The repository Trusted Publisher was verified by the successful
-`v0.1.0rc1` publication on 2026-07-16.
+create a GitHub Release. The PyPI Trusted Publisher configuration for this repository was
+verified by the successful `v0.1.0rc1` publication on 2026-07-16.
 
 Rollback for a bad pre-release means yanking the affected PyPI file (without deleting its
 audit record), marking the GitHub Release as a pre-release with a warning, and preparing a

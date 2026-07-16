@@ -1,6 +1,6 @@
 # Quick start and metric interpretation
 
-## Install the release candidate
+## Install WAMProbe
 
 ```bash
 python -m venv .venv
