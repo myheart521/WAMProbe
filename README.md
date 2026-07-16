@@ -1,6 +1,7 @@
 # WAMProbe
 
 [![CI](https://github.com/myheart521/WAMProbe/actions/workflows/ci.yml/badge.svg)](https://github.com/myheart521/WAMProbe/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/wamprobe?include_prereleases&label=PyPI)](https://pypi.org/project/wamprobe/)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
 
@@ -20,9 +21,11 @@ the same initial state
 └── expert act  → predicted future / true future
 ```
 
-The project is preparing a `0.1.0rc1` source candidate. Its dependency-free core includes an analytic
-PointMass-2D benchmark, while opt-in isolated runners now cover one released StarWAM
-observation-to-action path and a four-family paired LIBERO-CF-Mini simulator pilot.
+The `0.1.0rc1` release candidate is available from
+[PyPI](https://pypi.org/project/wamprobe/0.1.0rc1/) and GitHub. Its dependency-free core
+includes an analytic PointMass-2D benchmark, while opt-in isolated runners cover one
+released StarWAM observation-to-action path and a four-family paired LIBERO-CF-Mini
+simulator pilot.
 
 ## Why another evaluation project?
 
@@ -41,11 +44,9 @@ model from looking correct.
 ## Quick start
 
 ```bash
-git clone https://github.com/myheart521/WAMProbe.git
-cd WAMProbe
 python -m venv .venv
 source .venv/bin/activate
-python -m pip install -e .
+python -m pip install wamprobe
 
 wamprobe demo --contexts 12 --seed 7 --output runs/pointmass-demo
 
@@ -147,9 +148,9 @@ PYTHONPATH=src python -m wamprobe demo --output runs/pointmass-demo
 [`v0.1.0rc1`](https://github.com/myheart521/WAMProbe/releases/tag/v0.1.0rc1) is
 available as a GitHub pre-release with an audited wheel, source distribution, release
 manifest, and GitHub build-provenance attestations. Independent users can report a clean
-installation smoke in [Issue #2](https://github.com/myheart521/WAMProbe/issues/2). PyPI
-publication remains pending the one-time Trusted Publisher registration for this new
-project; until then, install the wheel attached to the GitHub pre-release.
+installation smoke in [Issue #2](https://github.com/myheart521/WAMProbe/issues/2). The
+same audited wheel and source distribution are published on
+[PyPI](https://pypi.org/project/wamprobe/0.1.0rc1/) through GitHub OIDC Trusted Publishing.
 
 ## Roadmap
 
@@ -158,8 +159,8 @@ The next milestones are:
 1. expand LIBERO initial states and evaluate action-conditioned real-WAM futures when an
    adapter exposes that capability;
 2. add the Occluded-Object memory diagnostic to the broader Toy tier;
-3. finish the one-time PyPI Trusted Publisher registration, obtain an independent
-   reproduction smoke, then review the candidate for a final `v0.1.0` release.
+3. obtain an independent reproduction smoke, then review the candidate for a final
+   `v0.1.0` release.
 
 See the [detailed Chinese project plan](docs/WAMProbe_PLAN.md),
 [quick-start notes](docs/QUICKSTART.md), [failure-case evidence map](docs/research/WAM_VLA_FAILURE_CASES.md),

@@ -1129,9 +1129,10 @@ return 的 5-profile 描述性 Pearson 分别为 0.9855/1.0。全部结果、con
 直接编译的 5 页技术报告初稿。`v0.1.0rc1` 已作为 GitHub pre-release 发布，wheel 与
 sdist 的 provenance attestation 已登记；外部复现请求见
 [`WAMProbe#2`](https://github.com/myheart521/WAMProbe/issues/2)，StarWAM 第三方评测入口见
-[`StarWAM#2`](https://github.com/shaohua-pan/StarWAM/pull/2)。PyPI 首次发布仍等待在 PyPI
-登记 Pending Trusted Publisher，Overleaf 上传仍等待可用的账户登录态；独立用户 smoke
-在收到真实第三方报告前保持未完成。
+[`StarWAM#2`](https://github.com/shaohua-pan/StarWAM/pull/2)。2026-07-16 已通过 GitHub
+OIDC Trusted Publishing 将 `wamprobe==0.1.0rc1` 发布到 PyPI，并在全新 Python 3.13 环境
+用标准 `pip install wamprobe` 完成 CLI/demo smoke；Overleaf 上传仍等待可用的账户登录态，
+独立用户 smoke 在收到真实第三方报告前保持未完成。
 
 任务：
 
@@ -1296,7 +1297,7 @@ priority:p1
 
 ### 功能
 
-- [ ] `pip install wamprobe` 可以安装核心包；
+- [x] `pip install wamprobe` 可以安装核心包；
 - [x] `wamprobe doctor` 能检查 capability/benchmark 兼容性；
 - [x] Toy benchmark 可在 CPU 完整运行；
 - [x] 至少 4 个 reference baselines；

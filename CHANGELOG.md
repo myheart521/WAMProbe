@@ -6,7 +6,9 @@ All notable changes to WAMProbe will be documented here.
 
 This candidate is published as a
 [GitHub pre-release](https://github.com/myheart521/WAMProbe/releases/tag/v0.1.0rc1) for
-reproducibility review. It is not yet published to PyPI or as a final GitHub Release.
+reproducibility review and on
+[PyPI](https://pypi.org/project/wamprobe/0.1.0rc1/) through OIDC Trusted Publishing. It is
+not a final GitHub Release.
 
 ### Added
 

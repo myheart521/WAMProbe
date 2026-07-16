@@ -1,11 +1,19 @@
 # Quick start and metric interpretation
 
-## Run the diagnostic suite
-
-From a source checkout:
+## Install the release candidate
 
 ```bash
-PYTHONPATH=src python -m wamprobe demo \
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install wamprobe
+```
+
+## Run the diagnostic suite
+
+From the installed CLI:
+
+```bash
+wamprobe demo \
   --benchmark pointmass \
   --contexts 12 \
   --seed 7 \
