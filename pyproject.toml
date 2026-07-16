@@ -40,6 +40,8 @@ include = [
   "/CITATION.cff",
   "/LICENSE",
   "/README.md",
+  "/README.zh-CN.md",
+  "/docs/assets/*.png",
   "/pyproject.toml",
   "/src/wamprobe",
 ]
