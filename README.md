@@ -1,183 +1,300 @@
-# WAMProbe
+<p align="center">
+  <img src="docs/assets/wamprobe-hero.svg" alt="WAMProbe — counterfactual evaluation for World Action Models" width="100%">
+</p>
 
-[![CI](https://github.com/myheart521/WAMProbe/actions/workflows/ci.yml/badge.svg)](https://github.com/myheart521/WAMProbe/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/wamprobe?include_prereleases&label=PyPI)](https://pypi.org/project/wamprobe/)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
-[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
+<h1 align="center">WAMProbe</h1>
 
-**Counterfactual evaluation for World Action Models.**
+<p align="center">
+  <strong>Counterfactual evaluation for World Action Models.</strong><br>
+  Test whether predicted futures respond to the action, follow the right dynamics, and help a robot choose what to do.
+</p>
 
-Documentation: [myheart521.github.io/WAMProbe](https://myheart521.github.io/WAMProbe/)
+<p align="center">
+  <a href="https://github.com/myheart521/WAMProbe/actions/workflows/ci.yml"><img src="https://github.com/myheart521/WAMProbe/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
+  <a href="https://github.com/myheart521/WAMProbe/actions/workflows/docs.yml"><img src="https://github.com/myheart521/WAMProbe/actions/workflows/docs.yml/badge.svg" alt="Documentation status"></a>
+  <a href="https://pypi.org/project/wamprobe/"><img src="https://img.shields.io/pypi/v/wamprobe?include_prereleases&amp;label=PyPI" alt="PyPI version"></a>
+  <a href="https://github.com/myheart521/WAMProbe/releases"><img src="https://img.shields.io/github/v/release/myheart521/WAMProbe?include_prereleases&amp;label=release" alt="GitHub release"></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.11--3.13-3776AB.svg" alt="Python 3.11 through 3.13"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-0f766e.svg" alt="Apache-2.0 license"></a>
+</p>
 
-WAMProbe tests whether a World Action Model (WAM) predicts futures that are causally
-controlled by the input action and useful for choosing robot actions. It complements
-task-success and video-quality benchmarks with paired interventions:
+<p align="center">
+  <a href="https://myheart521.github.io/WAMProbe/"><strong>Documentation</strong></a> ·
+  <a href="#60-second-start"><strong>Quick start</strong></a> ·
+  <a href="#read-the-result"><strong>Example results</strong></a> ·
+  <a href="docs/metrics/CORE_METRICS.md"><strong>Metric cards</strong></a> ·
+  <a href="CONTRIBUTING.md"><strong>Contributing</strong></a>
+</p>
 
-```text
-the same initial state
-├── no-op       → predicted future / true future
-├── move left   → predicted future / true future
-├── move right  → predicted future / true future
-└── expert act  → predicted future / true future
-```
+> **Release status:** [`v0.1.0rc1`](https://github.com/myheart521/WAMProbe/releases/tag/v0.1.0rc1)
+> is published on [PyPI](https://pypi.org/project/wamprobe/0.1.0rc1/) as a release
+> candidate. The dependency-free CPU core is ready to use; the external reproduction
+> report remains open in [Issue #2](https://github.com/myheart521/WAMProbe/issues/2).
 
-The `0.1.0rc1` release candidate is available from
-[PyPI](https://pypi.org/project/wamprobe/0.1.0rc1/) and GitHub. Its dependency-free core
-includes an analytic PointMass-2D benchmark, while opt-in isolated runners cover one
-released StarWAM observation-to-action path and a four-family paired LIBERO-CF-Mini
-simulator pilot.
+## The problem WAMProbe tests
 
-## Why another evaluation project?
+A World Action Model can generate a convincing success video while quietly ignoring the
+candidate action. It can also react strongly to an action but predict motion in exactly
+the wrong direction. A single video-quality or task-success number cannot distinguish
+these failures.
 
-A model can generate a realistic-looking success video while ignoring the candidate
-action. WAMProbe separates three questions that should not be collapsed into one score:
+WAMProbe restores **the same initial state** before every action branch and asks three
+separate questions:
 
-1. **Action dependence:** do different actions produce different predicted futures?
-2. **Direction correctness:** do those differences agree with true dynamics?
-3. **Control utility:** does the predicted future select a better candidate action?
+| Question | What is tested | Example failure caught |
+|---|---|---|
+| **Does the action matter?** | Separation and geometry of predicted futures across actions | Every action produces the same plausible future |
+| **Is the response correct?** | Direction, state error, no-op behavior, and reference agreement | The model moves, but in the opposite direction |
+| **Is the future useful?** | Candidate ranking, top-1 regret, and closed-loop return | Predictions look accurate but select a worse action |
 
-For example, the built-in `wrong-direction` baseline receives a high Action Dependence
-score because it reacts to actions, but a negative Counterfactual Direction score because
-it predicts the opposite motion. This sanity check prevents a superficially responsive
-model from looking correct.
+WAMProbe reports these as a **metric profile**, never as one opaque composite score.
 
-## Quick start
+<p align="center">
+  <img src="docs/assets/evaluation-pipeline.svg" alt="WAMProbe restores a shared context, branches candidate actions, compares predicted and reference futures, and evaluates control utility" width="100%">
+</p>
+
+## 60-second start
+
+The core package has no runtime dependencies and the built-in benchmarks run on CPU.
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install wamprobe
 
-wamprobe demo --contexts 12 --seed 7 --output runs/pointmass-demo
-
-# Resume identical evaluations from verified content-addressed results.
-wamprobe demo --contexts 12 --seed 7 --cache-dir runs/cache --output runs/resumed
-
-# Export, verify, compare, and rebuild reports without rerunning a model.
-wamprobe dataset-export --benchmark pointmass --contexts 12 --output data/pointmass.jsonl
-wamprobe dataset-validate data/pointmass.jsonl
-wamprobe compare runs/pointmass-demo runs/resumed \
-  --left-model oracle-pointmass --right-model copy-last-frame \
-  --metric state_fde --output runs/comparison.json
-wamprobe report runs/pointmass-demo --output runs/rebuilt-report
-
-# Contact and attachment diagnostics use the same report pipeline.
-wamprobe demo --benchmark blockpush --horizon 6 --output runs/blockpush-demo
-wamprobe demo --benchmark gripper-catch --horizon 5 --output runs/gripper-catch-demo
-
-# Contrast rendered-video fidelity with control-grounded metrics.
-wamprobe video-control-study --contexts 12 --seed 7 \
-  --output runs/video-control-study
-
-# Score a candidate set, execute one true-dynamics step, observe, and replan.
-wamprobe closed-loop-study --contexts 12 --seed 7 \
-  --output runs/closed-loop-study
+wamprobe demo \
+  --benchmark pointmass \
+  --contexts 12 \
+  --seed 7 \
+  --output runs/pointmass-demo
 ```
 
-The command creates:
+Open `runs/pointmass-demo/report.html` in a browser, or inspect the versioned JSON and
+Markdown outputs:
 
 ```text
 runs/pointmass-demo/
-├── summary.json  # versioned machine-readable results
-├── results.jsonl # one stable record per model and shared context
-├── report.md     # human-readable metric comparison
-└── report.html   # standalone interactive-friendly report
+├── summary.json   # machine-readable metrics, intervals, and paired differences
+├── results.jsonl  # one stable record per model and shared context
+├── report.md      # reviewable metric tables and interpretation
+└── report.html    # standalone report, with no server required
 ```
 
-See the committed [PointMass](examples/pointmass-demo/report.md),
-[BlockPush](examples/blockpush-demo/report.md), and
-[Gripper-Catch](examples/gripper-catch-demo/report.md) reports for the expected baseline
-profiles. The committed
-[video/control counterexample](examples/video-control-study/video-control-study.md) shows
-that an appearance-corrupted oracle can keep exact state predictions and zero regret while
-receiving very low PSNR and global SSIM. The
-[closed-loop study](examples/closed-loop-study/closed-loop-study.md) then runs a real
-score-execute-observe loop: oracle/noisy future scorers solve BlockPush and reach at least
-91.7% Gripper-Catch success, while action-ignoring scorers receive zero success.
+For an exactly pinned installation:
 
-Real-model weights are never committed to Git. Before running the StarWAM integration, follow the
-[model-store layout and download rules](checkpoints/README.md); the first spike requires
-approximately 46.3 GB of pinned StarWAM and Wan2.2 artifacts.
+```bash
+python -m pip install wamprobe==0.1.0rc1
+```
 
-Validate local artifacts without importing PyTorch or upstream model code:
+## Read the result
+
+The committed PointMass run includes an oracle and deliberately broken baselines. Three
+rows already show why action dependence cannot be interpreted alone:
+
+| Model | Action Dependence ↑ | Direction Alignment ↑ | Top-1 Regret ↓ | Diagnosis |
+|---|---:|---:|---:|---|
+| `oracle-pointmass` | 1.00 | 1.00 | 0.00 | Correct dynamics and selection |
+| `wrong-direction` | 1.00 | **−1.00** | **2.00** | Action-sensitive but reversed |
+| `action-agnostic` | **0.00** | 0.00 | **1.00** | Ignores the candidate action |
+
+<p align="center">
+  <img src="docs/assets/diagnostic-profile.svg" alt="PointMass diagnostic profile comparing oracle, wrong-direction, and action-agnostic baselines" width="100%">
+</p>
+
+These values come from the committed
+[12-context PointMass report](examples/pointmass-demo/report.md), not from a hand-written
+mockup. WAMProbe also commits expected profiles for
+[BlockPush](examples/blockpush-demo/report.md),
+[Gripper-Catch](examples/gripper-catch-demo/report.md), the
+[video/control counterexample](examples/video-control-study/video-control-study.md), and
+the [closed-loop study](examples/closed-loop-study/closed-loop-study.md).
+
+## What is included
+
+### Evaluation core
+
+- typed, model-agnostic `WAMAdapter` and `ActionPredictorAdapter` protocols;
+- capability declarations that prevent unsupported metrics from being silently reported;
+- paired interventions generated from exactly restored shared contexts;
+- context-block bootstrap intervals and exact-context paired model comparisons;
+- corruption-detecting, content-addressed prediction caching for resumable runs;
+- deterministic JSON/JSONL, Markdown, and standalone HTML reports;
+- CPU-only, dependency-free runtime core for the analytic tier.
+
+### Benchmarks and integrations
+
+| Component | Scope | What it validates | Runtime |
+|---|---|---|---|
+| **PointMass-2D** | Built-in analytic benchmark | Direction, action dependence, ranking, and regret | Dependency-free CPU |
+| **BlockPush-2D** | Contact-aware manipulation toy | Approach, contact, object motion, and rendered observations | Dependency-free CPU |
+| **Gripper-Catch** | Attachment-aware manipulation toy | Alignment, close command, falling object, and attachment | Dependency-free CPU |
+| **LIBERO-CF-Mini** | Four task families × four branches × eight steps | Exact simulator restore, repeatability, and branch-order independence | Opt-in isolated environment |
+| **StarWAM path** | Pinned observation-to-action integration | Typed action-chunk inference and multi-seed/NFE execution evidence | Opt-in GPU environment |
+
+The analytic benchmarks validate evaluator behavior; they are not evidence of transfer to
+real robots. LIBERO-CF-Mini currently validates paired data generation, not policy quality.
+The exact claims and limitations are recorded in the
+[toy benchmark card](docs/benchmarks/TOY_BENCHMARKS.md),
+[LIBERO-CF-Mini card](docs/benchmarks/LIBERO_CF_MINI.md), and
+[StarWAM model card](docs/models/STARWAM.md).
+
+## Metric profile
+
+| Metric | Core question | Preferred direction |
+|---|---|---|
+| **Action Dependence** | Do predicted endpoints separate across candidate actions? | Higher, with other checks |
+| **Permutation Effect / p-value** | Does predicted branch geometry match the true action geometry beyond label permutations? | Larger effect / smaller p-value |
+| **Counterfactual Direction** | Is predicted displacement aligned with true displacement? | `1` aligned, `−1` reversed |
+| **No-op Stability** | Does the no-op prediction agree with the true no-op future? | Higher |
+| **State ADE / FDE** | How far is the predicted trajectory/final state from reference dynamics? | Lower |
+| **Candidate Ranking Correlation** | Does the model order candidate actions like the simulator? | Higher |
+| **Top-1 Regret** | How much true return is lost by choosing the model's favorite action? | Lower |
+| **Closed-loop return / success** | Does score–execute–observe replanning actually work? | Higher |
+
+Definitions, capability requirements, tie behavior, anti-gaming notes, and reference
+baselines live in the [core metric cards](docs/metrics/CORE_METRICS.md). Traditional RGB
+PSNR and global SSIM are available as diagnostics, but are intentionally kept separate
+from state accuracy and control value.
+
+## CLI map
+
+| Command | Purpose |
+|---|---|
+| `wamprobe demo` | Run PointMass, BlockPush, or Gripper-Catch baseline diagnostics |
+| `wamprobe report` | Rebuild reports from a saved `summary.json` without model inference |
+| `wamprobe compare` | Compare two models over exactly aligned shared contexts |
+| `wamprobe dataset-export` | Export a deterministic intervention JSONL suite |
+| `wamprobe dataset-validate` | Validate dataset records and checksums |
+| `wamprobe video-control-study` | Contrast rendered-video fidelity with control metrics |
+| `wamprobe closed-loop-study` | Run minimal score–execute–observe replanning controls |
+| `wamprobe experiment-report` | Analyze a cached real-model prediction/execution matrix |
+| `wamprobe doctor` | Validate pinned model files, revisions, sizes, and hashes |
+| `wamprobe release-audit` | Audit distributions and reproducibility evidence |
+
+Run `wamprobe <command> --help` for the complete interface. The
+[15-minute quick start](docs/QUICKSTART.md) covers every CPU-first workflow.
+
+## Reuse results without rerunning a model
+
+```bash
+# Resume identical requests from content-addressed predictions.
+wamprobe demo --contexts 12 --seed 7 \
+  --cache-dir runs/cache --output runs/resumed
+
+# Export and verify the exact intervention suite.
+wamprobe dataset-export --benchmark pointmass --contexts 12 \
+  --output data/pointmass.jsonl
+wamprobe dataset-validate data/pointmass.jsonl
+
+# Compare exact shared contexts, then rebuild presentation artifacts.
+wamprobe compare runs/pointmass-demo runs/resumed \
+  --left-model oracle-pointmass \
+  --right-model copy-last-frame \
+  --metric state_fde \
+  --output runs/comparison.json
+wamprobe report runs/pointmass-demo --output runs/rebuilt-report
+```
+
+## Use your own model
+
+WAMProbe keeps adapters small on purpose. A state-future model implements `WAMAdapter`;
+a model that directly predicts robot action chunks implements `ActionPredictorAdapter`.
+Both expose a typed capability declaration so the evaluator can distinguish supported,
+derived, and unavailable evidence.
+
+```python
+from wamprobe.api.capabilities import ModelCapabilities
+from wamprobe.api.model import WAMAdapter
+
+
+class MyWorldModel:
+    @property
+    def capabilities(self) -> ModelCapabilities:
+        ...
+
+    def predict_future(self, context, action, *, horizon: int, seed: int):
+        ...
+
+    def close(self) -> None:
+        ...
+```
+
+Before publishing an adapter:
+
+1. declare the actual output and runtime capabilities;
+2. pin the upstream model revision and preprocessing contract;
+3. run paired actions from identical context IDs;
+4. add an expected baseline ordering and at least one failure-mode test;
+5. document unsupported metrics instead of substituting a proxy.
+
+Start with the [scope and capability RFC](docs/rfcs/0001-scope-and-capabilities.md),
+[counterfactual metrics RFC](docs/rfcs/0002-counterfactual-metrics.md), and the
+[adapter selection record](docs/research/ADAPTER_SELECTION.md).
+
+## Real-model artifacts
+
+Model weights are never committed to Git. The first StarWAM spike requires approximately
+46.3 GB of pinned StarWAM and Wan2.2 artifacts. Follow the
+[model-store layout and download rules](checkpoints/README.md), then validate everything
+without importing PyTorch or upstream model code:
 
 ```bash
 wamprobe doctor
-wamprobe doctor --verify-hashes  # streams the 12 GB StarWAM SHA256 check
+wamprobe doctor --verify-hashes
 ```
 
-You can also run the module directly:
+The isolated StarWAM and LIBERO environments, GPU preflight, preprocessing provenance,
+and smoke commands are documented in
+[`environments/starwam/README.md`](environments/starwam/README.md) and
+[`environments/libero/README.md`](environments/libero/README.md).
 
-```bash
-PYTHONPATH=src python -m wamprobe demo --output runs/pointmass-demo
-```
+## Reproducibility by design
 
-## Current runnable scope
+- deterministic seeded suites and stable context/action identifiers;
+- checksummed intervention datasets and prediction artifacts;
+- whole-context bootstrap resampling, never correlated frames or branches;
+- exact-context alignment for paired comparisons;
+- a versioned public JSON Schema and evidence manifest;
+- byte-reproducible wheel/sdist builds and archive auditing;
+- offline clean-wheel smoke tests and GitHub build-provenance attestations;
+- Python 3.11–3.13 CI, linting, strict typing, coverage, schema validation, link checking,
+  CodeQL, and strict documentation builds.
 
-- typed, model-agnostic `WAMAdapter` and `ActionPredictorAdapter` protocols;
-- capability manifest data model and JSON Schema;
-- paired PointMass-2D, contact-aware BlockPush-2D, and attachment-aware Gripper-Catch
-  counterfactual interventions, including dependency-free RGB observations;
-- oracle, noisy-linear, copy-last-frame, wrong-direction, and action-agnostic baselines;
-- Action Dependence with a within-context permutation null, Counterfactual Direction
-  Accuracy, No-op Stability, state ADE/FDE, four-view Candidate Ranking Correlation,
-  and Top-1 Regret;
-- context-block bootstrap intervals and exact-context paired model comparisons;
-- deterministic checksummed intervention JSONL with strict typed round trips;
-- corruption-detecting, content-addressed prediction cache for resumable runs;
-- versioned JSON/JSONL plus Markdown and standalone HTML reports, with standalone
-  `report` and exact-context `compare` commands;
-- `wamprobe doctor` model layout, revision, size, Git LFS pointer, and SHA256 checks;
-- typed robot observations, action predictions, deterministic prediction artifacts, and a
-  pinned StarWAM/LIBERO runner with multi-seed/NFE action execution reports;
-- dependency-free robot action-branch/future contracts plus four task families × four
-  branches × eight steps in LIBERO-CF-Mini, with exact restore and branch-order validation;
-- dependency-free RGB PSNR/global SSIM diagnostics and a two-benchmark counterexample study
-  that keeps traditional video fidelity separate from state accuracy and control value;
-- a minimal receding-horizon evaluator with random, fixed-policy, simulator-oracle, and
-  five future-scorer controls, per-context traces, bootstrap intervals, and offline/closed-loop
-  association analysis;
-- a versioned evidence manifest, byte-reproducible wheel/sdist builder, archive audit,
-  offline clean-wheel demo smoke, manual provenance-attestation workflow, and LaTeX
-  technical-report draft;
-- Python 3.11–3.13 CI with linting, strict typing, coverage, public JSON Schema validation,
-  repository-local Markdown link checking, and a strict documentation build.
+Review the [reproducibility guide](docs/reproducibility/REPRODUCIBILITY.md) and
+[candidate release procedure](release/README.md) before comparing or publishing results.
 
-## Release candidate
+## Documentation map
 
-[`v0.1.0rc1`](https://github.com/myheart521/WAMProbe/releases/tag/v0.1.0rc1) is
-available as a GitHub pre-release with an audited wheel, source distribution, release
-manifest, and GitHub build-provenance attestations. Independent users can report a clean
-installation smoke in [Issue #2](https://github.com/myheart521/WAMProbe/issues/2). The
-same audited wheel and source distribution are published on
-[PyPI](https://pypi.org/project/wamprobe/0.1.0rc1/) through GitHub OIDC Trusted Publishing.
+| If you want to… | Start here |
+|---|---|
+| Run the CPU demo | [Quick start](docs/QUICKSTART.md) |
+| Understand the scientific motivation | [WAM/VLA failure-case evidence map](docs/research/WAM_VLA_FAILURE_CASES.md) |
+| Interpret a score correctly | [Core metric cards](docs/metrics/CORE_METRICS.md) |
+| Add a model integration | [Scope and capability RFC](docs/rfcs/0001-scope-and-capabilities.md) |
+| Reproduce LIBERO-CF-Mini | [Benchmark card](docs/benchmarks/LIBERO_CF_MINI.md) |
+| Inspect the closed-loop protocol | [Experiment card](docs/experiments/TOY_CLOSED_LOOP_V0.1.md) |
+| Audit the release | [Reproducibility guide](docs/reproducibility/REPRODUCIBILITY.md) |
+| Read the full implementation plan | [Detailed Chinese project plan](docs/WAMProbe_PLAN.md) |
+| Browse all documentation | [Published documentation site](https://myheart521.github.io/WAMProbe/) |
 
-## Roadmap
+## Project status and roadmap
 
-The next milestones are:
+The `v0.1.0rc1` engineering scope is implemented and published. The remaining formal
+acceptance item is one genuine independent clean-install smoke report in
+[Issue #2](https://github.com/myheart521/WAMProbe/issues/2).
 
-1. expand LIBERO initial states and evaluate action-conditioned real-WAM futures when an
-   adapter exposes that capability;
-2. add the Occluded-Object memory diagnostic to the broader Toy tier;
-3. obtain an independent reproduction smoke, then review the candidate for a final
-   `v0.1.0` release.
+Next research milestones:
 
-See the [detailed Chinese project plan](docs/WAMProbe_PLAN.md),
-[quick-start notes](docs/QUICKSTART.md), [failure-case evidence map](docs/research/WAM_VLA_FAILURE_CASES.md),
-[adapter selection record](docs/research/ADAPTER_SELECTION.md), and [design RFCs](docs/rfcs/).
-The exact toy dynamics and limitations are documented in the
-[toy benchmark card](docs/benchmarks/TOY_BENCHMARKS.md),
-[LIBERO-CF-Mini benchmark card](docs/benchmarks/LIBERO_CF_MINI.md),
-[StarWAM model card](docs/models/STARWAM.md), and
-[core metric cards](docs/metrics/CORE_METRICS.md). The exact closed-loop protocol and
-limitations are recorded in the
-[toy closed-loop experiment card](docs/experiments/TOY_CLOSED_LOOP_V0.1.md).
-Release reviewers can start with the
-[reproducibility guide](docs/reproducibility/REPRODUCIBILITY.md),
-[candidate procedure](release/README.md), and
-[technical report source](paper/main.tex).
+1. expand LIBERO initial-state coverage;
+2. evaluate action-conditioned real-WAM futures when an adapter exposes that capability;
+3. add the Occluded-Object memory diagnostic to the broader toy tier;
+4. review external reproduction evidence and promote a final `v0.1.0` release.
 
-## Development
+## Contributing
+
+Contributions are welcome—especially adapters, paired benchmark generators, metric
+anti-gaming tests, and independent reproductions. New metrics must document the failure
+they detect and include a sanity check against reference baselines.
 
 ```bash
 python -m pip install -e '.[dev]'
@@ -186,15 +303,34 @@ ruff check .
 mypy
 python scripts/validate_repository.py
 mkdocs build --strict
-pytest --cov=wamprobe --cov-report=term-missing
+pytest --cov=wamprobe --cov-report=term-missing --cov-fail-under=85
 ```
 
-Contributions are welcome. New metrics must include a documented failure mode and a
-sanity test against the reference baselines; see [CONTRIBUTING.md](CONTRIBUTING.md).
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
+
+## Citation
+
+If WAMProbe supports your work, cite the software release using
+[`CITATION.cff`](CITATION.cff) or:
+
+```bibtex
+@software{wamprobe_2026,
+  title   = {WAMProbe: Counterfactual Evaluation for World Action Models},
+  author  = {{WAMProbe contributors}},
+  year    = {2026},
+  version = {0.1.0-rc.1},
+  url     = {https://github.com/myheart521/WAMProbe}
+}
+```
 
 ## 中文说明
 
-WAMProbe 不是新的 WAM 训练框架，而是一套“给 WAM 做反事实考试”的工具。它在完全
-相同的初始状态下执行多个不同动作，比较模型预测未来与模拟器真实未来，并检查这些
-预测是否能帮助机器人选出更好的动作。详细设计见
-[WAMProbe 开源项目规划](docs/WAMProbe_PLAN.md)。
+WAMProbe 不是新的 WAM 训练框架，而是一套“给 WAM 做反事实考试”的开源评测工具。
+它从完全相同的初始状态出发执行多个候选动作，比较模型预测未来与模拟器或数据中的
+参考未来，分别检查：模型是否真正响应动作、响应方向和动力学是否正确、预测结果是否
+能帮助机器人选出更好的动作。CPU 核心可以直接通过 `pip install wamprobe` 安装，完整
+设计与实施记录见 [WAMProbe 中文规划文档](docs/WAMProbe_PLAN.md)。
+
+## License
+
+WAMProbe is released under the [Apache License 2.0](LICENSE).
